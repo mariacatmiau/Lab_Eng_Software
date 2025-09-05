@@ -32,16 +32,9 @@ O sistema tem como objetivo **reduzir o desperdício de alimentos em supermercad
 - PostgreSQL 15+  
 - Conta AWS configurada  
 
-### Passos
-```bash
-# Clonar o repositório
-git clone https://github.com/seuusuario/seuprojeto.git
-
-# Entrar na pasta do projeto
-cd seuprojeto
-
-# Instalar dependências
-npm install
-
-# Rodar aplicação
-npm start
+## Equipe
+- Felipe Carvalho – RA  
+- Giulia Araki – RA 2345678   
+- Maria Gabriela de Barros – RA 4567890
+- Raphaela Polonis - RA
+- Samuel Zheng - RA
