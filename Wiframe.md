@@ -12,7 +12,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Botão "Entrar"
 - Link "Esqueci minha senha"
 
-![Wireframe Login](imagens/wireframe-login.png)
 
 ---
 
@@ -21,7 +20,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Lista de produtos próximos ao vencimento
 - Botões de acesso rápido: cadastrar produto, selecionar ONG, relatórios
 
-![Wireframe Dashboard](imagens/wireframe-dashboard.png)
 
 ---
 
@@ -29,7 +27,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Formulário com nome, categoria, validade, quantidade, preço e lote
 - Botão "Salvar"
 
-![Wireframe Cadastro](imagens/wireframe-cadastro.png)
 
 ---
 
@@ -37,7 +34,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Tabela com nome, quantidade, validade e status
 - Ações rápidas: destinar à doação, aplicar desconto, editar
 
-![Wireframe Produtos Vencimento](imagens/wireframe-vencimento.png)
 
 ---
 
@@ -46,7 +42,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Botão para seleção
 - Campo para agendamento de retirada
 
-![Wireframe ONG](imagens/wireframe-ong.png)
 
 ---
 
@@ -55,7 +50,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Seleção de data e horário
 - Botão "Confirmar retirada"
 
-![Wireframe Retirada](imagens/wireframe-retirada.png)
 
 ---
 
@@ -63,7 +57,6 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 - Gráficos e tabelas com dados de doações
 - Filtros por período e categoria
 
-![Wireframe Relatórios](imagens/wireframe-relatorios.png)
 
 ---
 
