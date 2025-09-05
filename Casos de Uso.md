@@ -1,4 +1,4 @@
-# 📑 Casos de Uso – Sistema de Gestão e Doação de Alimentos
+# Casos de Uso – Sistema de Gestão e Doação de Alimentos
 
 Este documento descreve os principais casos de uso do sistema.  
 Cada caso de uso inclui: **objetivo, atores, pré-condições, pós-condições e fluxos principais/alternativos**.
