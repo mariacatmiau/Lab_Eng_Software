@@ -1,5 +1,3 @@
-# Casos de Uso – Sistema de Gestão e Doação de Alimentos
-
 ## Cadastrar Produto
 **Objetivo:** registrar um novo item no estoque com validade e quantidade.  
 **Atores:** Funcionário do Supermercado.  
