@@ -33,8 +33,8 @@ O sistema tem como objetivo **reduzir o desperdício de alimentos em supermercad
 - Conta AWS configurada  
 
 ## Equipe
-- Felipe Carvalho – RA  
-- Giulia Araki – RA 2345678   
-- Maria Gabriela de Barros – RA 4567890
-- Raphaela Polonis - RA
+- Felipe Carvalho – RA 10409804
+- Giulia Araki – RA 10408954 
+- Maria Gabriela de Barros – RA 10409037
+- Raphaela Polonis - RA 10408843
 - Samuel Zheng - RA
