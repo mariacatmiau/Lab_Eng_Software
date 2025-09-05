@@ -5,133 +5,27 @@
 
 # Funcionário do Supermercado
 
-@startuml
-actor "Funcionário do Supermercado" as Func
+<img width="2556" height="366" alt="image" src="https://github.com/user-attachments/assets/372f6c10-4bfd-4e8f-a966-6072530a353a" />
 
-rectangle Sistema {
-  usecase "Cadastrar Produto" as UC1
-  usecase "Atualizar Produto" as UC2
-  usecase "Consultar Produtos Próximos ao Vencimento" as UC3
-  usecase "Selecionar ONG para Doação" as UC4
-  usecase "Registrar Retirada da Doação" as UC5
-  usecase "Gerenciar ONGs" as UC6
-  usecase "Emitir Relatórios" as UC7
-}
-
-Func --> UC1
-Func --> UC2
-Func --> UC3
-Func --> UC4
-Func --> UC5
-Func --> UC6
-Func --> UC7
-@enduml
 
 
 # Administrador do Sistema
 
-@startuml
-actor "Administrador do Sistema" as Admin
-
-rectangle Sistema {
-  usecase "Gerenciar Usuários" as UC12
-  usecase "Configurar Sistema" as UC13
-  usecase "Auditar Logs" as UC14
-}
-
-Admin --> UC12
-Admin --> UC13
-Admin --> UC14
-@enduml
+<img width="1130" height="400" alt="image" src="https://github.com/user-attachments/assets/26d28857-6784-45a0-ae03-9c647077e937" />
 
 
 # Sistema de Notificação
 
-@startuml
-actor "Sistema de Notificação" as Notif
-
-rectangle Sistema {
-  usecase "Enviar Notificação Automática" as UC15
-  usecase "Registrar Status de Entrega" as UC16
-}
-
-Notif --> UC15
-Notif --> UC16
-@enduml
+<img width="1055" height="422" alt="image" src="https://github.com/user-attachments/assets/09270661-bd36-44c2-a90b-6ed560d84101" />
 
 
 # Diagrama de Classes (versão simplificada)
 
-@startuml
-class Produto {
-  - id: int
-  - nome: string
-  - categoria: string
-  - validade: date
-  - quantidade: int
-  - preco: float
-}
+<img width="762" height="1630" alt="image" src="https://github.com/user-attachments/assets/34d0d80f-4e99-4185-b8f5-3c3d3da8db89" />
 
-class Supermercado {
-  - id: int
-  - nome: string
-  - endereco: string
-}
-
-class ONG {
-  - id: int
-  - nome: string
-  - contato: string
-}
-
-class Notificacao {
-  - id: int
-  - data: date
-  - status: string
-}
-
-class Usuario {
-  - id: int
-  - login: string
-  - senha: string
-  - perfil: string
-}
-
-Supermercado "1" --> "*" Produto
-Produto "1" --> "0..1" Notificacao
-Supermercado "1" --> "*" ONG : doa para >
-ONG "1" --> "*" Notificacao
-Usuario "1" --> "*" Supermercado
-@enduml
 
 # Arquitetura (visão em camadas)
 
-@startuml
-rectangle "Interface (Front-end)" {
-  [React.js]  
-}
+<img width="1198" height="1434" alt="image" src="https://github.com/user-attachments/assets/2607845d-6772-449e-be42-4622617d2296" />
 
-rectangle "Lógica (Back-end)" {
-  [Node.js + Express]
-}
-
-rectangle "Banco de Dados" {
-  [PostgreSQL]
-}
-
-rectangle "Integrações" {
-  [API Notificações]
-}
-
-rectangle "Infraestrutura" {
-  [AWS EC2] 
-  [AWS RDS]
-}
-
-[React.js] --> [Node.js + Express]
-[Node.js + Express] --> [PostgreSQL]
-[Node.js + Express] --> [API Notificações]
-[Node.js + Express] --> [AWS EC2]
-[PostgreSQL] --> [AWS RDS]
-@enduml
 
