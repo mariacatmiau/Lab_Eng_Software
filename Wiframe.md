@@ -1,11 +1,11 @@
-# 📐 Wireframes – Sistema de Gestão e Doação de Alimentos
+# Wireframes – Sistema de Gestão e Doação de Alimentos
 
 Este documento reúne os protótipos de baixa fidelidade (wireframes) do sistema.  
 O objetivo é visualizar as principais telas e o fluxo básico dos usuários antes do desenvolvimento.
 
 ---
 
-## 🎨 Telas do Sistema
+## Telas do Sistema
 
 ### 1. Tela de Login
 - Campos de usuário e senha
@@ -60,7 +60,7 @@ O objetivo é visualizar as principais telas e o fluxo básico dos usuários ant
 
 ---
 
-## 🔄 Fluxo do Usuário
+## Fluxo do Usuário
 1. Funcionário faz login  
 2. Acessa o dashboard  
 3. Cadastra produtos e monitora os próximos ao vencimento  
