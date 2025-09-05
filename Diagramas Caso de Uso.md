@@ -19,11 +19,6 @@
 <img width="1055" height="422" alt="image" src="https://github.com/user-attachments/assets/09270661-bd36-44c2-a90b-6ed560d84101" />
 
 
-# Diagrama de Classes (versão simplificada)
-
-<img width="762" height="1630" alt="image" src="https://github.com/user-attachments/assets/34d0d80f-4e99-4185-b8f5-3c3d3da8db89" />
-
-
 # Arquitetura (visão em camadas)
 
 <img width="1198" height="1434" alt="image" src="https://github.com/user-attachments/assets/2607845d-6772-449e-be42-4622617d2296" />
