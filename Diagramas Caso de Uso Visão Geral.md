@@ -1,4 +1,4 @@
-# Diagrama de Caso de Uso – Visão Geral
+# Diagrama de Caso de Uso Geral
 
 <img width="808" height="1554" alt="image" src="https://github.com/user-attachments/assets/4382abc4-e504-4e42-b3f0-893a67dfbe3c" />
 
