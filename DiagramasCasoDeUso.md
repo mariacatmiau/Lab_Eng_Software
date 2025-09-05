@@ -1,52 +1,6 @@
 # Diagrama de Caso de Uso – Visão Geral
 
-@startuml
-left to right direction
-actor "Funcionário do Supermercado" as Func
-actor "ONG/Instituição" as ONG
-actor "Administrador do Sistema" as Admin
-actor "Sistema de Notificação" as Notif
-
-rectangle Sistema {
-  usecase "Cadastrar Produto" as UC1
-  usecase "Atualizar Produto" as UC2
-  usecase "Consultar Produtos Próximos ao Vencimento" as UC3
-  usecase "Selecionar ONG para Doação" as UC4
-  usecase "Registrar Retirada da Doação" as UC5
-  usecase "Gerenciar ONGs" as UC6
-  usecase "Emitir Relatórios" as UC7
-
-  usecase "Receber Notificação de Doação" as UC8
-  usecase "Confirmar Retirada" as UC9
-  usecase "Consultar Histórico de Doações" as UC10
-
-  usecase "Gerenciar Usuários" as UC11
-  usecase "Configurar Sistema" as UC12
-  usecase "Auditar Logs" as UC13
-
-  usecase "Enviar Notificação Automática" as UC14
-  usecase "Registrar Status de Entrega" as UC15
-}
-
-Func --> UC1
-Func --> UC2
-Func --> UC3
-Func --> UC4
-Func --> UC5
-Func --> UC6
-Func --> UC7
-
-ONG --> UC8
-ONG --> UC9
-ONG --> UC10
-
-Admin --> UC11
-Admin --> UC12
-Admin --> UC13
-
-Notif --> UC14
-Notif --> UC15
-@enduml
+<img width="808" height="1554" alt="image" src="https://github.com/user-attachments/assets/4382abc4-e504-4e42-b3f0-893a67dfbe3c" />
 
 
 # Funcionário do Supermercado
