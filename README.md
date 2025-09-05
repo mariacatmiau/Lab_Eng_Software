@@ -33,10 +33,4 @@ O sistema tem como objetivo **reduzir o desperdício de alimentos em supermercad
 
 ---
 
-## Como Executar o Projeto
-### Pré-requisitos
-- Java 17+ 
-- Maven 3+
-- Conta AWS configurada
-- PostgreSQL 15+
 
