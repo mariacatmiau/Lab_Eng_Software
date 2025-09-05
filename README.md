@@ -17,8 +17,8 @@ O sistema tem como objetivo **reduzir o desperdício de alimentos em supermercad
 ---
 
 ## Tecnologias Utilizadas
-- **Front-end:** React.js  
-- **Back-end:** Node.js + Express  
+- **Front-end:** HTML,CSS,JavaScript 
+- **Back-end:** Java + Spring Boot
 - **Banco de Dados:** PostgreSQL  
 - **Integração/API:** Notificações (e-mail/WhatsApp)  
 - **Nuvem:** AWS (EC2 + RDS)  
@@ -28,9 +28,10 @@ O sistema tem como objetivo **reduzir o desperdício de alimentos em supermercad
 
 ## Como Executar o Projeto
 ### Pré-requisitos
-- Node.js 18+  
-- PostgreSQL 15+  
-- Conta AWS configurada  
+- Java 17+ 
+- Maven 3+
+- Conta AWS configurada
+- PostgreSQL 15+
 
 ## Equipe
 - Felipe Carvalho – RA 10409804
