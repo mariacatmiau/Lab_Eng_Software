@@ -12,10 +12,10 @@
 
 ## Atualizar Produto
 
-**Objetivo:** alterar dados de um produto existente (validade, preço, quantidade).
-**Atores:** Funcionário do Supermercado.
-**Pré:** produto existe; permissão de edição.
-**Pós:** produto atualizado e auditado.
+**Objetivo:** alterar dados de um produto existente (validade, preço, quantidade). 
+**Atores:** Funcionário do Supermercado. 
+**Pré:** produto existe; permissão de edição. 
+**Pós:** produto atualizado e auditado. 
 
 
 <img width="1430" height="309" alt="image" src="https://github.com/user-attachments/assets/31149d90-5d7a-4f4a-9c7d-b1469053a402" />
