@@ -5,7 +5,7 @@ Cada caso de uso inclui: **objetivo, atores, pré-condições, pós-condições 
 
 ---
 
-## UC-01 – Cadastrar Produto
+## Cadastrar Produto
 **Atores:** Funcionário do Supermercado  
 **Objetivo:** Registrar um novo produto no estoque.  
 **Pré-condições:** Funcionário autenticado.  
@@ -19,7 +19,7 @@ Cada caso de uso inclui: **objetivo, atores, pré-condições, pós-condições 
 
 ---
 
-## UC-02 – Selecionar ONG para Doação
+## Selecionar ONG para Doação
 **Atores:** Funcionário do Supermercado  
 **Objetivo:** Destinar produtos próximos ao vencimento para uma ONG.  
 **Pré-condições:** Produtos cadastrados no sistema.  
@@ -32,7 +32,7 @@ Cada caso de uso inclui: **objetivo, atores, pré-condições, pós-condições 
 
 ---
 
-## UC-03 – Confirmar Retirada
+## Confirmar Retirada
 **Atores:** ONG  
 **Objetivo:** Confirmar e agendar a retirada da doação.  
 **Pré-condições:** ONG notificada.  
@@ -44,7 +44,7 @@ Cada caso de uso inclui: **objetivo, atores, pré-condições, pós-condições 
 
 ---
 
-## UC-04 – Registrar Retirada
+## Registrar Retirada
 **Atores:** Funcionário, ONG  
 **Objetivo:** Confirmar a entrega física dos alimentos.  
 **Pré-condições:** Pedido confirmado.  
