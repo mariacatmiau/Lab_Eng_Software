@@ -5,7 +5,7 @@
 - Giulia Araki – RA 10408954  
 - Maria Gabriela de Barros – RA 10409037  
 - Raphaela Polonis - RA 10408843  
-- Samuel Zheng - RA  
+- Samuel Zheng - RA 10395781
 
 ## Descrição
 Este projeto foi desenvolvido na disciplina **Laboratório de Engenharia de Software (2025)** da Universidade Presbiteriana Mackenzie.  
