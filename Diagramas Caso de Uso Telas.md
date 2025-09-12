@@ -1,4 +1,4 @@
-# 📑 Casos de Uso por Tela – Sistema de Gestão e Doação de Alimentos
+# Casos de Uso por Tela – Sistema de Gestão e Doação de Alimentos
 
 > Catálogo de ações do sistema (pensado por “telinha”).  
 > Papéis: **Funcionário do Supermercado**, **ONG/Instituição**, **Administrador do Sistema**.  
@@ -6,7 +6,7 @@
 
 ---
 
-## 🔎 Sumário
+## Sumário
 - [A. Acesso e Conta](#a-acesso-e-conta)
 - [B. Produtos / Estoque (Funcionário)](#b-produtos--estoque-funcionário)
 - [C. Vencimento e Promoção (Funcionário)](#c-vencimento-e-promoção-funcionário)
