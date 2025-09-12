@@ -6,13 +6,6 @@
 
 ---
 
-
-
-<img width="538" height="2372" alt="image" src="https://github.com/user-attachments/assets/41ccdccd-3f6e-453c-be37-848c29c7468f" />
-
-
-
-
 ## Sumário
 - [A. Acesso e Conta](#a-acesso-e-conta)
 - [B. Produtos / Estoque (Funcionário)](#b-produtos--estoque-funcionário)
@@ -59,6 +52,9 @@
 - **Pós:** solicitação registrada (pendente de aprovação do Admin).
 - **Passos:** preencher dados → enviar → sistema cria “pedido de cadastro”.
 
+<img width="504" height="394" alt="image" src="https://github.com/user-attachments/assets/e8ef5f59-c79b-46d0-9933-268ba872c615" />
+
+
 ---
 
 ## B. Produtos / Estoque (Funcionário)
@@ -99,6 +95,9 @@
 - **Pós:** arquivo gerado para download.
 - **Passos:** clicar **Exportar** → sistema gera CSV.
 
+<img width="493" height="464" alt="image" src="https://github.com/user-attachments/assets/c56105ea-79c7-4a6c-b34b-afc131583cad" />
+
+
 ---
 
 ## C. Vencimento e Promoção (Funcionário)
@@ -126,6 +125,9 @@
 - **Pré:** motivo de descarte válido.
 - **Pós:** item sai do estoque; registro em relatório de perdas.
 - **Passos:** selecionar item → **Descartar** → motivo → confirmar.
+
+<img width="477" height="346" alt="image" src="https://github.com/user-attachments/assets/a988faca-1d52-4ef5-a8b5-6ea1f4a2ca0f" />
+
 
 ---
 
@@ -167,6 +169,9 @@
 - **Pós:** itens *Doado*; comprovante gerado; relatórios atualizados.
 - **Passos:** abrir pedido do dia → conferir → registrar retirada → emitir comprovante.
 
+<img width="531" height="434" alt="image" src="https://github.com/user-attachments/assets/79c6833e-f07f-49c2-9297-ea46d91a3f89" />
+
+
 ---
 
 ## E. ONGs (Funcionário)
@@ -188,6 +193,9 @@
 - **Pré:** cadastro existente.
 - **Pós:** lista exibida; acesso a detalhes e histórico.
 - **Passos:** abrir **ONGs** → filtrar → visualizar.
+
+<img width="475" height="241" alt="image" src="https://github.com/user-attachments/assets/9a3c6157-3048-4dfc-ace8-f59b70f90f7b" />
+
 
 ---
 
@@ -211,6 +219,9 @@
 - **Pós:** tabela/gráficos; export.
 - **Passos:** **Relatórios** → “ONGs” → filtros → gerar.
 
+<img width="538" height="269" alt="image" src="https://github.com/user-attachments/assets/ae3907ed-03e8-4043-ae69-43e3a78da1f0" />
+
+
 ---
 
 ## G. Conta e Perfil (ONG)
@@ -232,6 +243,9 @@
 - **Pré:** doações e eventos gerados.
 - **Pós:** status lidos/reenviados.
 - **Passos:** **Notificações** → abrir mensagem → acionar reenvio (se permitido).
+
+<img width="399" height="268" alt="image" src="https://github.com/user-attachments/assets/5046738e-b95f-4f9e-ace6-61a8a16f5f93" />
+
 
 ---
 
@@ -267,6 +281,9 @@
 - **Pós:** auditoria exibida/exportável.
 - **Passos:** **Logs** → filtros → visualizar/exportar.
 
+<img width="454" height="388" alt="image" src="https://github.com/user-attachments/assets/7965e0e5-742e-4170-99d2-5818b361a8f8" />
+
+
 ---
 
 ## I. Integrações e Notificações
@@ -295,5 +312,13 @@
 - **Pós:** itens reprocessados; KPIs exibidos.
 - **Passos:** **Fila** → filtrar → reenviar/descartar → ver métricas.
 
+<img width="531" height="468" alt="image" src="https://github.com/user-attachments/assets/0ec1afc2-088e-4978-9fef-e5e36630b2a5" />
+
+
 ---
+
+## Visão Geral – todos os atores e casos principais
+
+<img width="538" height="2372" alt="image" src="https://github.com/user-attachments/assets/744b9dd6-6207-4b38-a259-b202ff1e5ce9" />
+
 
