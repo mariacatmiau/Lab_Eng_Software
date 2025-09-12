@@ -1,3 +1,5 @@
-# Diagrama de Classes (Versão Simplificada)
+# Diagrama de Classes 
 
-<img width="762" height="1630" alt="image" src="https://github.com/user-attachments/assets/a1e98b60-1ea9-4b76-a686-4eeb963fb056" />
+<img width="2990" height="1229" alt="image" src="https://github.com/user-attachments/assets/86c05f91-e6eb-49b0-872a-9f3def7cf346" />
+
+
