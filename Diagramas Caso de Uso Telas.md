@@ -45,7 +45,6 @@
 - **Pós:** senha definida; usuário pode logar.
 - **Passos:** abrir link → definir senha → confirmar.
 
-> Observação: **cadastro de contas** no supermercado e **conta da ONG** geralmente é criado por **Admin** (UC-H02/H03). Opcionalmente, manter:
 ### — **Solicitar cadastro de ONG**
 - **Descrição:** ONG preenche formulário público para solicitar acesso.
 - **Pré:** formulário disponível.
