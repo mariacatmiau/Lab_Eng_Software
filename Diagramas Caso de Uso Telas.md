@@ -6,6 +6,13 @@
 
 ---
 
+
+
+<img width="538" height="2372" alt="image" src="https://github.com/user-attachments/assets/41ccdccd-3f6e-453c-be37-848c29c7468f" />
+
+
+
+
 ## Sumário
 - [A. Acesso e Conta](#a-acesso-e-conta)
 - [B. Produtos / Estoque (Funcionário)](#b-produtos--estoque-funcionário)
