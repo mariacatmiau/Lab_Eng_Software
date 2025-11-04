@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .login-bg {
+      background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+        url('http://static.photos/food/1200x630/2');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex">
+          <div class="flex-shrink-0 flex items-center">
+            <a href="index.html">
+              <i data-feather="heart" class="text-green-500 h-8 w-8"></i>
+              <span class="ml-2 text-xl font-bold text-gray-900">DoaDoa</span>
+            </a>
+          </div>
+        </div>
+        <div class="hidden sm:ml-6 sm:flex sm:items-center">
+          <a href="register.html" class="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">
+            Não tem uma conta? <span class="text-green-600 ml-1">Cadastre-se</span>
+          </a>
+        </div>
+        <div class="-mr-2 flex items-center sm:hidden">
+          <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500" aria-controls="mobile-menu" aria-expanded="false">
+            <i data-feather="menu"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="sm:hidden hidden" id="mobile-menu">
+      <div class="pt-2 pb-3 space-y-1">
+        <a href="register.html" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
+          Não tem uma conta? Cadastre-se
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login Section -->
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 login-bg">
+    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-xl" data-aos="fade-up">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Entre na sua conta
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Ou <a href="register.html" class="font-medium text-green-600 hover:text-green-500">cadastre-se agora</a>
+        </p>
+      </div>
+
+      <!-- Formulário de Login -->
+      <form id="loginForm" class="mt-8 space-y-6">
+        <input type="hidden" name="remember" value="true">
+
+        <!-- Campo de Email -->
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="email-address" class="sr-only">Email</label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autocomplete="email"
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+              placeholder="Email"
+            >
+          </div>
+
+          <!-- Campo de Senha -->
+          <div>
+            <label for="password" class="sr-only">Senha</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+              placeholder="Senha"
+            >
+          </div>
+        </div>
+
+        <!-- Opções extras -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input
+              id="remember-me"
+              name="remember-me"
+              type="checkbox"
+              class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+            >
+            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+              Lembrar de mim
+            </label>
+          </div>
+
+          <div class="text-sm">
+            <a href="forgot-password.html" class="font-medium text-green-600 hover:text-green-500">
+              Esqueceu sua senha?
+            </a>
+          </div>
+        </div>
+
+        <!-- Botão de Entrar -->
+        <div>
+          <button
+            type="button"
+            onclick="window.location.href='dashboard.html'"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          >
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <i data-feather="lock" class="h-5 w-5 text-green-300 group-hover:text-green-200"></i>
+            </span>
+            Entrar
+          </button>
+        </div>
+
+        <!-- Linha divisória -->
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">
+              Ou entre com
+            </span>
+          </div>
+        </div>
+
+        <!-- Botões sociais -->
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <i data-feather="facebook" class="h-5 w-5 text-blue-600"></i>
+            <span class="ml-2">Facebook</span>
+          </button>
+          <button
+            type="button"
+            class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <i data-feather="google" class="h-5 w-5 text-red-600"></i>
+            <span class="ml-2">Google</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    document.querySelector('[aria-controls="mobile-menu"]').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+
+    // Initialize feather icons
+    feather.replace();
+  </script>
+</body>
+</html>
