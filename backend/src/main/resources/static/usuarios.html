@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Usuários | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .sidebar {
+      width: 280px;
+    }
+    .main-content {
+      margin-left: 280px;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        position: fixed;
+        z-index: 40;
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Sidebar -->
+  <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+      <i data-feather="heart" class="text-white h-6 w-6"></i>
+      <span class="ml-2 text-white font-bold">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4">
+      <div class="space-y-1">
+        <a href="dashboard.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="home" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Dashboard
+        </a>
+        <a href="cadastrar-produto.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="package" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Cadastrar Produto
+        </a>
+        <a href="produtos.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="list" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Gerenciar Produtos
+        </a>
+        <a href="produtos-vencimento.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="alert-triangle" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Produtos Próximos
+        </a>
+        <a href="ongs.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="users" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Gerenciar ONGs
+        </a>
+        <a href="doacoes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="gift" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Doações
+        </a>
+        <a href="relatorios.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="bar-chart-2" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Relatórios
+        </a>
+        <a href="usuarios.html" class="bg-green-100 text-green-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="user-check" class="text-green-500 mr-3 h-5 w-5"></i>
+          Usuários
+        </a>
+        <a href="configuracoes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="settings" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Configurações
+        </a>
+        <a href="auditoria.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="activity" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Auditoria
+        </a>
+        <a href="historico.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="archive" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Histórico de Doações
+        </a>
+        <a href="notificacoes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="bell" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Notificações
+        </a>
+        <a href="status-entrega.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="check-circle" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Status de Entrega
+        </a>
+      </div>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+      <a href="index.html" class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium">
+        <i data-feather="log-out" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+        Sair
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex justify-between items-center">
+          <h1 class="text-2xl font-bold text-gray-900">Gerenciar Usuários</h1>
+          <div class="flex items-center space-x-4">
+            <button class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500">
+              <i data-feather="bell"></i>
+            </button>
+            <div class="relative">
+              <button class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <img class="h-8 w-8 rounded-full" src="http://static.photos/people/200x200/1" alt="User profile">
+                <span class="ml-2 text-gray-700">João Silva</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+          <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Lista de Usuários</h3>
+            <p class="mt-1 text-sm text-gray-500">Gerencie os usuários e suas permissões no sistema.</p>
+          </div>
+          <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow flex items-center">
+            <i data-feather="user-plus" class="h-4 w-4 mr-2"></i>
+            Novo Usuário
+          </button>
+        </div>
+        <div class="px-6 py-5">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Perfil</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">João Silva</td>
+                <td class="px-6 py-4 whitespace-nowrap">joao@doadoa.com</td>
+                <td class="px-6 py-4 whitespace-nowrap">Admin</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <a href="#" class="text-green-600 hover:text-green-900">Editar</a>
+                  <span class="mx-2">|</span>
+                  <a href="#" class="text-red-600 hover:text-red-900">Remover</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">Maria Oliveira</td>
+                <td class="px-6 py-4 whitespace-nowrap">maria@doadoa.com</td>
+                <td class="px-6 py-4 whitespace-nowrap">Funcionário</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <a href="#" class="text-green-600 hover:text-green-900">Editar</a>
+                  <span class="mx-2">|</span>
+                  <a href="#" class="text-red-600 hover:text-red-900">Remover</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+    feather.replace();
+  </script>
+</body>
+</html>

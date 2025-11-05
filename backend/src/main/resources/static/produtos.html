@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Produtos | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .sidebar{width:280px}.main-content{margin-left:280px}
+    @media (max-width:768px){.sidebar{width:100%;position:fixed;z-index:40;transform:translateX(-100%)}.sidebar.active{transform:translateX(0)}.main-content{margin-left:0}}
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Sidebar -->
+  <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+      <i data-feather="heart" class="text-white h-6 w-6"></i>
+      <span class="ml-2 text-white font-bold">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4">
+      <div class="space-y-1">
+        <a href="dashboard.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="home" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Dashboard
+        </a>
+        <a href="cadastrar-produto.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="package" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Cadastrar Produto
+        </a>
+        <a href="produtos.html" class="bg-green-100 text-green-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="list" class="text-green-500 mr-3 h-5 w-5"></i>
+          Gerenciar Produtos
+        </a>
+        <a href="produtos-vencimento.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="alert-triangle" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Produtos Próximos
+        </a>
+        <a href="ongs.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="users" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Gerenciar ONGs
+        </a>
+        <a href="doacoes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="gift" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Doações
+        </a>
+        <a href="relatorios.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="bar-chart-2" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Relatórios
+        </a>
+        <a href="usuarios.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="user-check" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Usuários
+        </a>
+        <a href="configuracoes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="settings" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Configurações
+        </a>
+        <a href="auditoria.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="activity" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Auditoria
+        </a>
+        <a href="historico.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="archive" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Histórico de Doações
+        </a>
+        <a href="notificacoes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="bell" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Notificações
+        </a>
+        <a href="status-entrega.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <i data-feather="check-circle" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+          Status de Entrega
+        </a>
+      </div>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+      <a href="index.html" class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium">
+        <i data-feather="log-out" class="text-gray-400 group-hover:text-gray-500 mr-3 h-5 w-5"></i>
+        Sair
+      </a>
+    </div>
+  </div>
+  
+  <!-- Main -->
+  <div class="main-content">
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-900">Gerenciar Produtos</h1>
+        <a href="cadastrar-produto.html" class="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+          <i data-feather="plus" class="h-4 w-4 mr-2"></i>Novo Produto
+        </a>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <!-- Filtros -->
+      <div class="bg-white shadow rounded-lg p-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input id="q" type="text" placeholder="Buscar produto..." class="border border-gray-300 rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+          <select id="f-cat" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            <option value="">Categoria</option><option>Grãos</option><option>Laticínios</option><option>Padaria</option><option>Bebidas</option>
+          </select>
+          <select id="f-status" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+            <option value="">Status</option><option>Em Estoque</option><option>Reservado</option><option>Doado</option><option>Vencido</option>
+          </select>
+        </div>
+        <div class="flex gap-3">
+          <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200" onclick="limparFiltros()">Limpar</button>
+          <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700" onclick="aplicarFiltros()">
+            <i data-feather="filter" class="inline h-4 w-4 mr-2"></i>Filtrar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoria</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Validade</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Qtd</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody" class="bg-white divide-y divide-gray-200">
+            <!-- Linhas-exemplo -->
+            <tr>
+              <td class="px-6 py-4">Leite Integral</td>
+              <td class="px-6 py-4">Laticínios</td>
+              <td class="px-6 py-4">25/09/2025</td>
+              <td class="px-6 py-4">20</td>
+              <td class="px-6 py-4"><span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Em Estoque</span></td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <button class="text-blue-600 hover:text-blue-900" title="Editar" onclick="abrirEditar()"><i data-feather="edit"></i></button>
+                <button class="text-purple-600 hover:text-purple-900" title="Doar" onclick="abrirDoar()"><i data-feather="gift"></i></button>
+                <button class="text-red-600 hover:text-red-900" title="Excluir" onclick="confirm('Excluir este produto?') && alert('Excluído!')"><i data-feather="trash-2"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4">Arroz Branco</td>
+              <td class="px-6 py-4">Grãos</td>
+              <td class="px-6 py-4">10/10/2025</td>
+              <td class="px-6 py-4">50</td>
+              <td class="px-6 py-4"><span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">Reservado</span></td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <button class="text-blue-600 hover:text-blue-900" onclick="abrirEditar()"><i data-feather="edit"></i></button>
+                <button class="text-purple-600 hover:text-purple-900" onclick="abrirDoar()"><i data-feather="gift"></i></button>
+                <button class="text-red-600 hover:text-red-900" onclick="confirm('Excluir este produto?') && alert('Excluído!')"><i data-feather="trash-2"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modais -->
+      <!-- Editar Produto -->
+      <div id="modal-editar" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-lg">
+          <div class="px-6 py-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Atualizar Produto</h3>
+            <button onclick="fecharEditar()"><i data-feather="x"></i></button>
+          </div>
+          <div class="p-6 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-gray-700">Validade</label>
+                <input type="date" class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-700">Preço (R$)</label>
+                <input type="number" step="0.01" class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-700">Quantidade</label>
+                <input type="number" min="0" class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-700">Status</label>
+                <select class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+                  <option>Em Estoque</option><option>Reservado</option><option>Doado</option><option>Vencido</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="px-6 py-4 border-t flex justify-end gap-3">
+            <button class="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200" onclick="fecharEditar()">Cancelar</button>
+            <button class="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700" onclick="alert('Produto atualizado!');fecharEditar();">Salvar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selecionar ONG para Doação -->
+      <div id="modal-doar" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-lg">
+          <div class="px-6 py-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Selecionar ONG para Doação</h3>
+            <button onclick="fecharDoar()"><i data-feather="x"></i></button>
+          </div>
+          <div class="p-6 space-y-4">
+            <label class="block text-sm text-gray-700">ONG</label>
+            <select class="w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+              <option value="">Selecione...</option>
+              <option>Banco de Alimentos SP</option>
+              <option>ONG Semeando</option>
+              <option>Alimenta Brasil</option>
+            </select>
+            <label class="block text-sm text-gray-700">Observações</label>
+            <textarea class="w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500" rows="3"></textarea>
+          </div>
+          <div class="px-6 py-4 border-t flex justify-end gap-3">
+            <button class="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200" onclick="fecharDoar()">Cancelar</button>
+            <button class="px-4 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700" onclick="alert('Pedido de doação criado! Notificação enviada.');fecharDoar();">Criar Pedido</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    AOS.init({duration:800,easing:'ease-in-out',once:true}); feather.replace();
+
+    function aplicarFiltros(){ alert('Filtros aplicados (exemplo).'); }
+    function limparFiltros(){ document.getElementById('q').value=''; document.getElementById('f-cat').value=''; document.getElementById('f-status').value=''; }
+
+    function abrirEditar(){ document.getElementById('modal-editar').classList.remove('hidden'); document.getElementById('modal-editar').classList.add('flex'); feather.replace(); }
+    function fecharEditar(){ document.getElementById('modal-editar').classList.add('hidden'); document.getElementById('modal-editar').classList.remove('flex'); }
+
+    function abrirDoar(){ document.getElementById('modal-doar').classList.remove('hidden'); document.getElementById('modal-doar').classList.add('flex'); feather.replace(); }
+    function fecharDoar(){ document.getElementById('modal-doar').classList.add('hidden'); document.getElementById('modal-doar').classList.remove('flex'); }
+  </script>
+</body>
+</html>
