@@ -1,24 +1,36 @@
 package com.tcc.desperdicio_alimentos.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
+@Table(name = "doacoes")
 public class Doacao {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
-    private Produto produto;
-
-    @ManyToOne
-    @JoinColumn(name = "ong_id")
+    @ManyToOne(optional = false)
     private Ong ong;
 
-    private LocalDateTime dataDoacao = LocalDateTime.now();
+    @OneToOne(optional = false)
+    private Produto produto;
+
+    @ManyToOne(optional = false)
+    private Funcionario criadoPor;
+
+    @Enumerated(EnumType.STRING)
+    private StatusDoacao status = StatusDoacao.PENDENTE;
+
+    private LocalDateTime dataCriacao = LocalDateTime.now();
+    private LocalDateTime dataAceite;
+    private LocalDateTime dataRetirada;
+    private String motivoRecusa;
+
+    // getters/setters
+    // ...
 }

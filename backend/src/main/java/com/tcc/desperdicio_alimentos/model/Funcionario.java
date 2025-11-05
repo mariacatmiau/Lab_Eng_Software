@@ -1,21 +1,17 @@
 package com.tcc.desperdicio_alimentos.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
+@Table(name = "funcionarios")
 public class Funcionario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
-    private String email;
-    private String senha;
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    private Usuario usuario;
 
-    @OneToMany(mappedBy = "funcionario")
-    private List<Produto> produtosCadastrados;
-}

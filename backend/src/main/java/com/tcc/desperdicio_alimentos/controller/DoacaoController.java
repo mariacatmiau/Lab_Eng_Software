@@ -1,37 +1,48 @@
 package com.tcc.desperdicio_alimentos.controller;
 
-
+import com.tcc.desperdicio_alimentos.dto.CriarDoacaoRequest;
 import com.tcc.desperdicio_alimentos.model.Doacao;
 import com.tcc.desperdicio_alimentos.service.DoacaoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/doacoes")
+@RequestMapping("/api/doacoes")
+@CrossOrigin
 public class DoacaoController {
 
-    @Autowired
-    private DoacaoService doacaoService;
+    private final DoacaoService service;
+    public DoacaoController(DoacaoService s) { this.service = s; }
 
     @PostMapping
-    public Doacao cadastrarDoacao(@RequestBody Doacao doacao) {
-        return doacaoService.salvar(doacao);
+    public ResponseEntity<Doacao> criar(@RequestBody CriarDoacaoRequest req) {
+        return ResponseEntity.ok(service.criar(req));
     }
 
-    @GetMapping
-    public List<Doacao> listarDoacoes() {
-        return doacaoService.listarTodos();
+    @GetMapping("/pendentes")
+    public ResponseEntity<List<Doacao>> pendentes() {
+        return ResponseEntity.ok(service.listarPendentes());
     }
 
-    @GetMapping("/{id}")
-    public Doacao buscarDoacao(@PathVariable Long id) {
-        return doacaoService.buscarPorId(id);
+    @GetMapping("/pendentes/ong/{ongId}")
+    public ResponseEntity<List<Doacao>> pendentesDaOng(@PathVariable Long ongId) {
+        return ResponseEntity.ok(service.listarPendentesDaOng(ongId));
     }
 
-    @DeleteMapping("/{id}")
-    public void deletarDoacao(@PathVariable Long id) {
-        doacaoService.deletar(id);
+    @PutMapping("/{id}/aceitar")
+    public ResponseEntity<Doacao> aceitar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.aceitar(id));
+    }
+
+    @PutMapping("/{id}/recusar")
+    public ResponseEntity<Doacao> recusar(@PathVariable Long id, @RequestParam String motivo) {
+        return ResponseEntity.ok(service.recusar(id, motivo));
+    }
+
+    @PutMapping("/{id}/retirar")
+    public ResponseEntity<Doacao> retirar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.marcarRetirada(id));
     }
 }

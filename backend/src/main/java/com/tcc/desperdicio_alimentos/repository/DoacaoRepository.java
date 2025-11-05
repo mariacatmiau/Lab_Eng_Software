@@ -1,11 +1,12 @@
 package com.tcc.desperdicio_alimentos.repository;
 
 
-
-import com.tcc.desperdicio_alimentos.model.Doacao;
+import com.tcc.desperdicio_alimentos.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;
+
 public interface DoacaoRepository extends JpaRepository<Doacao, Long> {
+    List<Doacao> findByStatus(StatusDoacao status);
+    List<Doacao> findByOngAndStatus(Ong ong, StatusDoacao status);
 }

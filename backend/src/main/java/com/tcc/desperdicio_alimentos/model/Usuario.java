@@ -1,32 +1,30 @@
 package com.tcc.desperdicio_alimentos.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name = "USUARIO")
+@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nome;
+    @NotBlank private String nome;
 
-    @Column(nullable = false, unique = true)
+    @Email @NotBlank
     private String email;
 
-    @Column(nullable = false)
-    private String senha;
+    @NotBlank
+    private String senha; // para produção: hash (BCrypt)
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TipoUsuario tipo; // ONG ou MERCADO
+    private UsuarioTipo tipo; // FUNCIONARIO ou ONG
 
-    public enum TipoUsuario {
-        ONG,
-        MERCADO
-    }
+    // getters/setters
+    // ...
 }

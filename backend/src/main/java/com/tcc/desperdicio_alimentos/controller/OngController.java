@@ -1,36 +1,31 @@
 package com.tcc.desperdicio_alimentos.controller;
 
 import com.tcc.desperdicio_alimentos.model.Ong;
-import com.tcc.desperdicio_alimentos.service.OngService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.tcc.desperdicio_alimentos.repository.OngRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/ongs")
+@RequestMapping("/api/ongs")
+@CrossOrigin
 public class OngController {
 
-    @Autowired
-    private OngService ongService;
-
-    @PostMapping
-    public Ong cadastrarOng(@RequestBody Ong ong) {
-        return ongService.salvar(ong);
-    }
+    private final OngRepository repo;
+    public OngController(OngRepository r) { this.repo = r; }
 
     @GetMapping
-    public List<Ong> listarOngs() {
-        return ongService.listarTodos();
+    public ResponseEntity<List<Ong>> listar() {
+        return ResponseEntity.ok(repo.findAll());
     }
 
     @GetMapping("/{id}")
-    public Ong buscarOng(@PathVariable Long id) {
-        return ongService.buscarPorId(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletarOng(@PathVariable Long id) {
-        ongService.deletar(id);
+    public ResponseEntity<Ong> get(@PathVariable Long id) {
+        return ResponseEntity.of(repo.findById(id));
     }
 }

@@ -1,38 +1,39 @@
 package com.tcc.desperdicio_alimentos.controller;
 
 
-
+import com.tcc.desperdicio_alimentos.dto.CriarProdutoRequest;
 import com.tcc.desperdicio_alimentos.model.Produto;
 import com.tcc.desperdicio_alimentos.service.ProdutoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
+@CrossOrigin
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoService service;
+    public ProdutoController(ProdutoService s) { this.service = s; }
 
     @PostMapping
-    public Produto cadastrarProduto(@RequestBody Produto produto) {
-        return produtoService.salvar(produto);
+    public ResponseEntity<Produto> criar(@RequestBody CriarProdutoRequest req) {
+        return ResponseEntity.ok(service.criar(req));
     }
 
-    @GetMapping
-    public List<Produto> listarProdutos() {
-        return produtoService.listarTodos();
+    @GetMapping("/disponiveis")
+    public ResponseEntity<List<Produto>> disponiveis() {
+        return ResponseEntity.ok(service.listarDisponiveis());
     }
 
-    @GetMapping("/{id}")
-    public Produto buscarProduto(@PathVariable Long id) {
-        return produtoService.buscarPorId(id);
+    @GetMapping("/proximos-vencimento")
+    public ResponseEntity<List<Produto>> proximos(@RequestParam(defaultValue = "7") int dias) {
+        return ResponseEntity.ok(service.proximosVencimento(dias));
     }
 
-    @DeleteMapping("/{id}")
-    public void deletarProduto(@PathVariable Long id) {
-        produtoService.deletar(id);
+    @PutMapping("/{id}/indisponivel")
+    public ResponseEntity<Produto> indisponivel(@PathVariable Long id) {
+        return ResponseEntity.ok(service.marcarIndisponivel(id));
     }
 }
