@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/produtos.js" defer></script>
+</head>
+<body class="bg-gray-100">
+<div class="max-w-5xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+  <h1 class="text-2xl font-bold mb-4 text-green-700">Lista de Produtos</h1>
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+    <tr>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Categoria</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Validade</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Quantidade</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+    </tr>
+    </thead>
+    <tbody id="tabela-produtos" class="bg-white divide-y divide-gray-200 text-sm"></tbody>
+  </table>
+</div>
+</body>
+</html>

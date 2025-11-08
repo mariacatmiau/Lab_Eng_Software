@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Produto | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/cadastrar-produto.js" defer></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+  <h2 class="text-2xl font-bold mb-6 text-center text-green-700">Cadastrar Produto</h2>
+  <form id="form-cadastro-produto" class="space-y-4">
+    <input id="nome" type="text" placeholder="Nome do Produto" required class="border w-full px-3 py-2 rounded-md">
+    <input id="categoria" type="text" placeholder="Categoria" required class="border w-full px-3 py-2 rounded-md">
+    <input id="dataValidade" type="date" required class="border w-full px-3 py-2 rounded-md">
+    <input id="quantidade" type="number" min="1" placeholder="Quantidade" required class="border w-full px-3 py-2 rounded-md">
+    <button class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Cadastrar</button>
+  </form>
+  <p id="mensagem-sucesso" class="text-green-600 text-center mt-4 hidden">Produto cadastrado com sucesso!</p>
+  <p id="mensagem-erro" class="text-red-600 text-center mt-4 hidden">Erro ao cadastrar produto.</p>
+</div>
+
+</body>
+</html>

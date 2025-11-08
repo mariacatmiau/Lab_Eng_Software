@@ -1,0 +1,46 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("form-cadastro-produto");
+  const msgErro = document.getElementById("mensagem-erro");
+  const msgSucesso = document.getElementById("mensagem-sucesso");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const funcionarioId = localStorage.getItem("funcionarioId");
+    if (!funcionarioId) {
+      msgErro.textContent = "Funcionário não identificado. Faça login novamente.";
+      msgErro.classList.remove("hidden");
+      return;
+    }
+
+    const produto = {
+      nome: document.getElementById("nome").value.trim(),
+      categoria: document.getElementById("categoria").value.trim(),
+      dataValidade: document.getElementById("dataValidade").value,
+      quantidade: parseInt(document.getElementById("quantidade").value) || 1,
+      funcionarioId: parseInt(funcionarioId)
+    };
+
+    try {
+      const resp = await fetch("http://localhost:8080/api/produtos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(produto)
+      });
+
+      if (!resp.ok) throw new Error(await resp.text());
+
+      msgErro.classList.add("hidden");
+      msgSucesso.classList.remove("hidden");
+      msgSucesso.textContent = "Produto cadastrado com sucesso!";
+      form.reset();
+
+      setTimeout(() => window.location.href = "produtos.html", 1200);
+    } catch (err) {
+      console.error("Erro ao cadastrar produto:", err);
+      msgSucesso.classList.add("hidden");
+      msgErro.classList.remove("hidden");
+      msgErro.textContent = "Erro ao cadastrar produto. Verifique o backend.";
+    }
+  });
+});

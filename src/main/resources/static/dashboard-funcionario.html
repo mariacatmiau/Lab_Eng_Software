@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Funcionário | DoaDoa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="js/dashboard-funcionario.js" defer></script>
+    <style>
+        .sidebar { width: 280px; }
+        .main-content { margin-left: 280px; }
+        @media (max-width: 768px) {
+          .sidebar { width: 100%; position: fixed; z-index: 40; transform: translateX(-100%); transition: transform 0.3s ease; }
+          .sidebar.active { transform: translateX(0); }
+          .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Sidebar -->
+<div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+        <i data-feather="heart" class="text-white h-6 w-6"></i>
+        <span class="ml-2 text-white font-bold">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4">
+        <div class="space-y-1">
+            <a href="dashboard-funcionario.html" class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="home" class="text-green-500 mr-3 h-5 w-5"></i> Dashboard
+            </a>
+            <a href="cadastrar-produto.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="package" class="mr-3 h-5 w-5 text-gray-400"></i> Cadastrar Produto
+            </a>
+            <a href="produtos.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="list" class="mr-3 h-5 w-5 text-gray-400"></i> Produtos
+            </a>
+            <a href="doacoes-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="gift" class="mr-3 h-5 w-5 text-gray-400"></i> Doações
+            </a>
+            <a href="retiradas-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="truck" class="mr-3 h-5 w-5 text-gray-400"></i> Retiradas
+            </a>
+            <a href="ongs.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="users" class="mr-3 h-5 w-5 text-gray-400"></i> ONGs Parceiras
+            </a>
+        </div>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+        <a href="index.html" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+            <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+        </a>
+    </div>
+</div>
+
+<!-- Main -->
+<div class="main-content">
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-900">Dashboard - Funcionário</h1>
+            <div class="flex items-center gap-3">
+                <img src="https://i.pravatar.cc/40" class="rounded-full" alt="user">
+                <span class="text-gray-700">Funcionário</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+                <i data-feather="package" class="h-10 w-10 text-green-600"></i>
+                <div class="ml-4">
+                    <p class="text-sm text-gray-500">Produtos Cadastrados</p>
+                    <p id="total-produtos" class="text-2xl font-bold text-gray-900">--</p>
+                </div>
+            </div>
+            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+                <i data-feather="users" class="h-10 w-10 text-blue-600"></i>
+                <div class="ml-4">
+                    <p class="text-sm text-gray-500">ONGs Parceiras</p>
+                    <p id="total-ongs" class="text-2xl font-bold text-gray-900">--</p>
+                </div>
+            </div>
+            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+                <i data-feather="gift" class="h-10 w-10 text-purple-600"></i>
+                <div class="ml-4">
+                    <p class="text-sm text-gray-500">Doações Realizadas</p>
+                    <p id="total-doacoes" class="text-2xl font-bold text-gray-900">--</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">Últimos Produtos Cadastrados</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoria</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Validade</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tabela-produtos" class="bg-white divide-y divide-gray-200">
+                    <tr><td colspan="3" class="text-center py-4 text-gray-500">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    AOS.init();
+    feather.replace();
+</script>
+</body>
+</html>

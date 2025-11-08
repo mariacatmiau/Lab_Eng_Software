@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastrar | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+  <h1 class="text-2xl font-bold mb-6 text-green-700 text-center">Cadastro no DoaDoa</h1>
+
+  <form id="registerForm" class="space-y-4">
+    <select id="tipo" class="border rounded-md w-full px-3 py-2" required>
+      <option value="">Selecione o tipo de usuário</option>
+      <option value="FUNCIONARIO">Supermercado / Funcionário</option>
+      <option value="ONG">ONG</option>
+    </select>
+
+    <input type="text" id="nome" placeholder="Nome" class="border rounded-md w-full px-3 py-2" required />
+    <input type="email" id="email" placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required />
+    <input type="password" id="senha" placeholder="Senha" class="border rounded-md w-full px-3 py-2" required />
+
+    <div id="camposOng" class="hidden space-y-3">
+      <input type="text" id="endereco" placeholder="Endereço da ONG" class="border rounded-md w-full px-3 py-2" />
+      <input type="text" id="telefone" placeholder="Telefone" class="border rounded-md w-full px-3 py-2" />
+    </div>
+
+    <button class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Cadastrar</button>
+
+    <p class="text-center text-sm mt-4">
+      Já tem conta? <a href="login.html" class="text-green-700 hover:underline">Entrar</a>
+    </p>
+  </form>
+</div>
+
+<script>
+  const tipoSelect = document.getElementById("tipo");
+  const camposOng = document.getElementById("camposOng");
+
+  tipoSelect.addEventListener("change", () => {
+    camposOng.classList.toggle("hidden", tipoSelect.value !== "ONG");
+  });
+
+  document.getElementById("registerForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const novoUsuario = {
+      tipo: document.getElementById("tipo").value,
+      nome: document.getElementById("nome").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      senha: document.getElementById("senha").value.trim(),
+      endereco: document.getElementById("endereco").value.trim() || null,
+      telefone: document.getElementById("telefone").value.trim() || null,
+    };
+
+    if (!novoUsuario.tipo) {
+      alert("Selecione o tipo de usuário.");
+      return;
+    }
+
+    const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+
+    if (usuarios.some(u => u.email === novoUsuario.email)) {
+      alert("Este e-mail já está cadastrado!");
+      return;
+    }
+
+    usuarios.push(novoUsuario);
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+    alert("Cadastro realizado com sucesso!");
+    window.location.href = "login.html";
+  });
+</script>
+</body>
+</html>
