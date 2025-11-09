@@ -19,23 +19,33 @@ public class ProdutoController {
         this.service = service;
     }
 
+    // Listar todos (caso precise para debug)
+    @GetMapping
+    public ResponseEntity<List<Produto>> listarTodos() {
+        return ResponseEntity.ok(service.listarTodos());
+    }
+
+    // Criar produto
     @PostMapping
     public ResponseEntity<Produto> criar(@RequestBody CriarProdutoRequest req) {
         return ResponseEntity.ok(service.criar(req));
     }
 
+    // Listar produtos disponíveis (para ONG escolher, por exemplo)
     @GetMapping("/disponiveis")
-    public ResponseEntity<List<Produto>> disponiveis() {
+    public ResponseEntity<List<Produto>> listarDisponiveis() {
         return ResponseEntity.ok(service.listarDisponiveis());
     }
 
-    @GetMapping("/proximos-vencimento")
-    public ResponseEntity<List<Produto>> proximos(@RequestParam(defaultValue = "7") int dias) {
-        return ResponseEntity.ok(service.proximosVencimento(dias));
+    // Listar produtos por usuário (para funcionário ver o que ele cadastrou)
+    @GetMapping("/por-usuario/{id}")
+    public ResponseEntity<List<Produto>> listarPorUsuario(@PathVariable Long id) {
+        return ResponseEntity.ok(service.listarPorUsuario(id));
     }
 
+    // Marcar produto como indisponível
     @PutMapping("/{id}/indisponivel")
-    public ResponseEntity<Produto> indisponivel(@PathVariable Long id) {
+    public ResponseEntity<Produto> marcarIndisponivel(@PathVariable Long id) {
         return ResponseEntity.ok(service.marcarIndisponivel(id));
     }
 }

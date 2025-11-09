@@ -1,10 +1,14 @@
 package com.tcc.desperdicio_alimentos.controller;
 
 import com.tcc.desperdicio_alimentos.model.Usuario;
+import com.tcc.desperdicio_alimentos.model.UsuarioTipo;
 import com.tcc.desperdicio_alimentos.repository.UsuarioRepository;
+import com.tcc.desperdicio_alimentos.service.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -12,29 +16,57 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepo;
+    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioRepository usuarioRepo) {
-        this.usuarioRepo = usuarioRepo;
+    public UsuarioController(UsuarioService usuarioService, UsuarioRepository usuarioRepository) {
+        this.usuarioService = usuarioService;
+        this.usuarioRepository = usuarioRepository;
     }
 
-    // Registro
+    // --- REGISTRO (funcionário ou ONG)
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Usuario u) {
-        if (usuarioRepo.existsByEmail(u.getEmail())) {
-            return ResponseEntity.badRequest().body("E-mail já cadastrado.");
+    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
+        try {
+            if (usuario.getTipo() == null) {
+                return ResponseEntity.badRequest().body("Tipo de usuário é obrigatório (FUNCIONARIO ou ONG)");
+            }
+
+            usuario.setTipo(UsuarioTipo.valueOf(usuario.getTipo().toString().toUpperCase()));
+            Usuario novo = usuarioService.cadastrar(usuario);
+            return ResponseEntity.ok(novo);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail já cadastrado.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao registrar usuário: " + e.getMessage());
         }
-        usuarioRepo.save(u);
-        return ResponseEntity.ok(u);
     }
 
-    // Login
+    // --- LOGIN
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Usuario login) {
-        Optional<Usuario> usuario = usuarioRepo.findByEmail(login.getEmail());
-        if (usuario.isPresent() && usuario.get().getSenha().equals(login.getSenha())) {
-            return ResponseEntity.ok(usuario.get());
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String senha = body.get("senha");
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail não encontrado");
         }
-        return ResponseEntity.status(401).body("Credenciais inválidas.");
+
+        Usuario usuario = usuarioOpt.get();
+        if (!usuario.getSenha().equals(senha)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta");
+        }
+
+        return ResponseEntity.ok(usuario);
+    }
+
+    // --- LISTAR TODOS (debug)
+    @GetMapping
+    public ResponseEntity<?> listarTodos() {
+        return ResponseEntity.ok(usuarioService.listar());
     }
 }

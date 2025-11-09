@@ -7,4 +7,5 @@ public class CriarProdutoRequest {
     public String categoria;
     public LocalDate dataValidade;
     public Integer quantidade;
+    public Long usuarioId;
 }

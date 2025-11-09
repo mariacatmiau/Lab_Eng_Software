@@ -1,43 +1,35 @@
-// dashboard-funcionario.js
 const API_BASE = "http://localhost:8080";
 
-const userType = localStorage.getItem("userType");
-if (!userType) {
-  window.location.href = "login.html"; // segurança básica
-}
-
-// Exemplo: botão "voltar para dashboard"
-function voltarDashboard() {
-  if (userType === "ONG") {
-    window.location.href = "dashboard-ong.html";
-  } else {
-    window.location.href = "dashboard-funcionario.html";
-  }
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  if (!usuario || !usuario.tipo) {
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.replace("login.html");
+    return;
+  }
+
+  console.log("Usuário logado:", usuario);
+
   await carregarResumo();
   await carregarProdutosRecentes();
 });
 
 async function carregarResumo() {
   try {
-    const [produtosRes, vencendoRes, ongsRes, doacoesRes] = await Promise.all([
+    const [produtosRes, ongsRes, doacoesRes] = await Promise.all([
       fetch(`${API_BASE}/api/produtos`),
-      fetch(`${API_BASE}/api/produtos/vencimento`),
       fetch(`${API_BASE}/api/ongs`),
       fetch(`${API_BASE}/api/doacoes`)
     ]);
 
     const produtos = await produtosRes.json();
-    const vencendo = await vencendoRes.json();
     const ongs = await ongsRes.json();
     const doacoes = await doacoesRes.json();
 
+    // Contadores da dashboard
     document.getElementById("total-produtos").textContent = produtos.length;
-    document.getElementById("produtos-vencendo").textContent = vencendo.length;
     document.getElementById("total-ongs").textContent = ongs.length;
-    document.getElementById("total-doacoes").textContent = doacoes.length;
+    document.getElementById("total-doacoes").textContent = doacoes.filter(d => d.status !== "PENDENTE").length;
   } catch (err) {
     console.error("Erro ao carregar resumo:", err);
   }
@@ -45,16 +37,21 @@ async function carregarResumo() {
 
 async function carregarProdutosRecentes() {
   try {
-    const response = await fetch(`${API_BASE}/api/produtos`);
-    const produtos = await response.json();
+    const res = await fetch(`${API_BASE}/api/produtos`);
+    const produtos = await res.json();
 
     const tabela = document.getElementById("tabela-produtos");
     tabela.innerHTML = "";
 
+    if (!produtos.length) {
+      tabela.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">Nenhum produto cadastrado.</td></tr>`;
+      return;
+    }
+
     produtos.slice(-5).reverse().forEach(produto => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${produto.nome}</td>
+        <td>${produto.nome || "-"}</td>
         <td>${produto.categoria || "-"}</td>
         <td>${produto.dataValidade || "-"}</td>
       `;
@@ -66,6 +63,6 @@ async function carregarProdutosRecentes() {
 }
 
 function logout() {
-  localStorage.clear();
-  window.location.href = "login.html";
+  localStorage.removeItem("usuario");
+  window.location.replace("login.html");
 }

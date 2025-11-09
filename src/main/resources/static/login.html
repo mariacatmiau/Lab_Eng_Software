@@ -10,39 +10,22 @@
   <h1 class="text-2xl font-bold mb-6 text-green-700 text-center">Entrar no DoaDoa</h1>
 
   <form id="loginForm" class="space-y-4">
-    <input type="email" id="email" placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required />
-    <input type="password" id="senha" placeholder="Senha" class="border rounded-md w-full px-3 py-2" required />
+    <input type="email" id="email" name="email" autocomplete="email"
+           placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required />
+    <input type="password" id="senha" name="password" autocomplete="current-password"
+           placeholder="Senha" class="border rounded-md w-full px-3 py-2" required />
 
     <div class="flex justify-between items-center">
-      <button class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">Entrar</button>
+      <button type="submit"
+              class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
+        Entrar
+      </button>
       <a href="register.html" class="text-green-700 hover:underline text-sm">Cadastrar-se</a>
     </div>
   </form>
 </div>
 
-<script>
-  document.getElementById("loginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value.trim();
-    const senha = document.getElementById("senha").value.trim();
-
-    const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
-    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
-
-    if (!usuario) {
-      alert("E-mail ou senha incorretos!");
-      return;
-    }
-
-    localStorage.setItem("usuarioAtual", JSON.stringify(usuario));
-
-    if (usuario.tipo === "FUNCIONARIO") {
-      window.location.href = "dashboard-funcionario.html";
-    } else {
-      window.location.href = "dashboard-ong.html";
-    }
-  });
-</script>
+<!-- ✅ Importa o script de autenticação -->
+<script src="js/auth.js" defer></script>
 </body>
 </html>

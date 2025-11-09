@@ -41,35 +41,44 @@
     camposOng.classList.toggle("hidden", tipoSelect.value !== "ONG");
   });
 
-  document.getElementById("registerForm").addEventListener("submit", (e) => {
+  document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const novoUsuario = {
-      tipo: document.getElementById("tipo").value,
-      nome: document.getElementById("nome").value.trim(),
-      email: document.getElementById("email").value.trim(),
-      senha: document.getElementById("senha").value.trim(),
-      endereco: document.getElementById("endereco").value.trim() || null,
-      telefone: document.getElementById("telefone").value.trim() || null,
-    };
+    const tipo = document.getElementById("tipo").value;
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value.trim();
+    const endereco = document.getElementById("endereco").value.trim() || null;
+    const telefone = document.getElementById("telefone").value.trim() || null;
 
-    if (!novoUsuario.tipo) {
+    if (!tipo) {
       alert("Selecione o tipo de usuário.");
       return;
     }
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+    const novoUsuario = { tipo, nome, email, senha, endereco, telefone };
 
-    if (usuarios.some(u => u.email === novoUsuario.email)) {
-      alert("Este e-mail já está cadastrado!");
-      return;
+    try {
+      const res = await fetch("http://localhost:8080/api/usuarios/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoUsuario)
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
+      }
+
+      const data = await res.json();
+      console.log("Usuário cadastrado:", data);
+
+      alert("Cadastro realizado com sucesso!");
+      window.location.href = "login.html";
+    } catch (err) {
+      console.error("Erro no cadastro:", err);
+      alert("Erro ao cadastrar usuário. Verifique o backend.");
     }
-
-    usuarios.push(novoUsuario);
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-
-    alert("Cadastro realizado com sucesso!");
-    window.location.href = "login.html";
   });
 </script>
 </body>

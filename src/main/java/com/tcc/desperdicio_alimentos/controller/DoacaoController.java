@@ -1,113 +1,50 @@
 package com.tcc.desperdicio_alimentos.controller;
 
+import com.tcc.desperdicio_alimentos.dto.CriarDoacaoRequest;
 import com.tcc.desperdicio_alimentos.model.Doacao;
-import com.tcc.desperdicio_alimentos.model.Ong;
-import com.tcc.desperdicio_alimentos.model.Produto;
-import com.tcc.desperdicio_alimentos.model.StatusDoacao;
-import com.tcc.desperdicio_alimentos.repository.DoacaoRepository;
-import com.tcc.desperdicio_alimentos.repository.ProdutoRepository;
-import com.tcc.desperdicio_alimentos.repository.OngRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tcc.desperdicio_alimentos.service.DoacaoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/doacoes")
 @CrossOrigin(origins = "*")
 public class DoacaoController {
 
-    @Autowired private DoacaoRepository doacaoRepository;
-    @Autowired private ProdutoRepository produtoRepository;
-    @Autowired private OngRepository ongRepository;
+    private final DoacaoService service;
 
-    // ------- DTO para criação -------
-    public record CriarDoacaoDTO(Long produtoId, Long ongId, Integer quantidade) {}
-
-    // ------- Listar todas -------
-    @GetMapping("/doacoes")
-    public List<Doacao> listarDoacoes() {
-        return doacaoRepository.findAll();
+    public DoacaoController(DoacaoService service) {
+        this.service = service;
     }
 
-    // ------- (Opcional) apenas pendentes -------
-    @GetMapping("/doacoes/pendentes")
-    public List<Doacao> listarPendentes() {
-        return doacaoRepository.findAll()
-                .stream().filter(d -> d.getStatus() == StatusDoacao.PENDENTE).toList();
+    @PostMapping
+    public ResponseEntity<Doacao> criar(@RequestBody CriarDoacaoRequest req) {
+        return ResponseEntity.ok(service.criar(req));
     }
 
-    // ------- Criar doação (funcionário) -------
-    @PostMapping("/doacoes")
-    public ResponseEntity<?> criarDoacao(@RequestBody CriarDoacaoDTO dto) {
-        if (dto.produtoId() == null || dto.ongId() == null) {
-            return ResponseEntity.badRequest().body("produtoId e ongId são obrigatórios");
-        }
-
-        Optional<Produto> prodOpt = produtoRepository.findById(dto.produtoId());
-        Optional<Ong> ongOpt = ongRepository.findById(dto.ongId());
-
-        if (prodOpt.isEmpty() || ongOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Produto ou ONG inválidos.");
-        }
-
-        Doacao d = new Doacao();
-        d.setProduto(prodOpt.get());
-        d.setOng(ongOpt.get());
-        d.setQuantidade(dto.quantidade() != null ? dto.quantidade() : 1);
-        d.setStatus(StatusDoacao.PENDENTE);
-        d.setDataCriacao(LocalDateTime.now());
-
-        Doacao salvo = doacaoRepository.save(d);
-        return ResponseEntity.ok(salvo);
+    @PutMapping("/{id}/aceitar")
+    public ResponseEntity<Doacao> aceitar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.aceitar(id));
     }
 
-    // ------- ONG aceita -------
-    @PutMapping("/doacoes/{id}/aceitar")
-    public ResponseEntity<?> aceitar(@PathVariable Long id) {
-        Optional<Doacao> opt = doacaoRepository.findById(id);
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
-        Doacao d = opt.get();
-        d.setStatus(StatusDoacao.ACEITA);
-        doacaoRepository.save(d);
-        return ResponseEntity.ok("Doação aceita.");
+    @PutMapping("/{id}/recusar")
+    public ResponseEntity<Doacao> recusar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.recusar(id));
     }
 
-    // ------- ONG recusa -------
-    @PutMapping("/doacoes/{id}/recusar")
-    public ResponseEntity<?> recusar(@PathVariable Long id) {
-        Optional<Doacao> opt = doacaoRepository.findById(id);
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
-        Doacao d = opt.get();
-        d.setStatus(StatusDoacao.RECUSADA);
-        doacaoRepository.save(d);
-        return ResponseEntity.ok("Doação recusada.");
+    @PutMapping("/{id}/retirada")
+    public ResponseEntity<Doacao> retirada(@PathVariable Long id) {
+        return ResponseEntity.ok(service.confirmarRetirada(id));
     }
 
-    // ------- Confirmar retirada (funcionário) -------
-    @PutMapping("/retiradas/{id}/confirmar")
-    public ResponseEntity<?> confirmarRetirada(@PathVariable Long id) {
-        Optional<Doacao> opt = doacaoRepository.findById(id);
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
-        Doacao d = opt.get();
-        d.setStatus(StatusDoacao.RETIRADA_CONCLUIDA);
-        d.setDataRetirada(LocalDateTime.now());
-        doacaoRepository.save(d);
-        return ResponseEntity.ok("Retirada confirmada.");
+    @GetMapping
+    public ResponseEntity<List<Doacao>> listarTodas() {
+        return ResponseEntity.ok(service.listarTodas());
     }
 
-    // ------- Cancelar (funcionário) -------
-    @PutMapping("/retiradas/{id}/cancelar")
-    public ResponseEntity<?> cancelar(@PathVariable Long id) {
-        Optional<Doacao> opt = doacaoRepository.findById(id);
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
-        Doacao d = opt.get();
-        d.setStatus(StatusDoacao.CANCELADA);
-        doacaoRepository.save(d);
-        return ResponseEntity.ok("Doação cancelada.");
+    @GetMapping("/por-ong/{id}")
+    public ResponseEntity<List<Doacao>> listarPorOng(@PathVariable Long id) {
+        return ResponseEntity.ok(service.listarPorOng(id));
     }
 }

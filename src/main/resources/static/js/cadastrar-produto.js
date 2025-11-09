@@ -6,9 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const funcionarioId = localStorage.getItem("funcionarioId");
-    if (!funcionarioId) {
-      msgErro.textContent = "Funcionário não identificado. Faça login novamente.";
+    // ✅ Recupera usuário logado do localStorage
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const usuarioId = usuario?.id;
+
+    if (!usuario || !usuarioId) {
+      msgErro.textContent = "Usuário não identificado. Faça login novamente.";
       msgErro.classList.remove("hidden");
       return;
     }
@@ -18,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       categoria: document.getElementById("categoria").value.trim(),
       dataValidade: document.getElementById("dataValidade").value,
       quantidade: parseInt(document.getElementById("quantidade").value) || 1,
-      funcionarioId: parseInt(funcionarioId)
+      usuarioId: usuarioId // ✅ usa o id direto
     };
 
     try {

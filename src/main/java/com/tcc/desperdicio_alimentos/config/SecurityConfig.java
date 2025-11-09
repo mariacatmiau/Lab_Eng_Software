@@ -2,7 +2,6 @@ package com.tcc.desperdicio_alimentos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -10,34 +9,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Desativa CSRF
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // ✅ permite exibir H2 em iframe
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/index.html",
-                                "/login.html",
-                                "/register.html",
-                                "/register-ong.html",
-                                "/dashboard-funcionario.html",
-                                "/dashboard-ong.html",
-                                "/produtos.html",
-                                "/doacoes.html",
-                                "/retiradas-funcionario.html",
-                                "/retiradas-ong.html",
-                                "/ongs.html",
-                                "/cadastrar-produto.html",
-                                "/css/**",
-                                "/js/**",
-                                "/images/**",
-                                "/static/**",
-                                "/api/auth/**"
-                        ).permitAll()
+                        .requestMatchers("/h2-console/**").permitAll() // ✅ libera acesso ao H2
                         .anyRequest().permitAll()
                 )
                 .formLogin(login -> login.disable())
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(basic -> basic.disable());
 
         return http.build();
     }

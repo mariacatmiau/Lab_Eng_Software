@@ -16,6 +16,36 @@
 </head>
 <body class="bg-gray-100">
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuario = JSON.parse(localStorage.getItem("usuario"));
+      console.log("Usuário carregado:", usuario);
+
+      if (!usuario || !usuario.tipo) {
+        console.warn("Sessão expirada. Redirecionando...");
+        localStorage.removeItem("usuario");
+        setTimeout(() => window.location.replace("login.html"), 0);
+        return;
+      }
+
+      const spanNome = document.querySelector("#nomeUsuario");
+      if (spanNome && usuario.nome) spanNome.textContent = usuario.nome;
+
+      const logout = document.getElementById("logout");
+      if (logout) {
+        logout.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.removeItem("usuario");
+          window.location.replace("login.html");
+        });
+      }
+
+      window.history.replaceState({}, document.title, window.location.href);
+      AOS.init();
+      feather.replace();
+    });
+</script>
+
 <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
     <div class="flex items-center justify-center h-16 px-4 bg-green-600">
         <i data-feather="heart" class="text-white h-6 w-6"></i>
@@ -33,7 +63,7 @@
         </a>
     </nav>
     <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
-        <a href="index.html" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+        <a id="logout" href="#" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
             <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
         </a>
     </div>
@@ -41,14 +71,11 @@
 
 <div class="main-content">
     <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-6 py-4">
             <h1 class="text-2xl font-bold text-gray-900">Dashboard - ONG</h1>
-            <div class="flex items-center gap-3">
-                <img src="https://i.pravatar.cc/40" class="rounded-full" alt="user">
-                <span class="text-gray-700">ONG Parceira</span>
-            </div>
         </div>
     </header>
+
 
     <main class="max-w-7xl mx-auto px-6 py-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -104,9 +131,5 @@
     </main>
 </div>
 
-<script>
-    AOS.init();
-    feather.replace();
-</script>
 </body>
 </html>
