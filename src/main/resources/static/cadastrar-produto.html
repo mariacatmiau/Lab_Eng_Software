@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Produto | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="js/cadastrar-produto.js" defer></script>
+  <style>
+    .sidebar { width: 280px; }
+    .main-content { margin-left: 280px; }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Sidebar -->
+<div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+  <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+    <i data-feather="heart" class="text-white h-6 w-6"></i>
+    <span class="ml-2 text-white font-bold">DoaDoa</span>
+  </div>
+  <nav class="mt-8 px-4">
+    <div class="space-y-1">
+      <a href="dashboard-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="home" class="mr-3 h-5 w-5 text-gray-400"></i> Dashboard
+      </a>
+      <a href="cadastrar-produto.html" class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="package" class="mr-3 h-5 w-5 text-green-500"></i> Cadastrar Produto
+      </a>
+      <a href="produtos.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="list" class="mr-3 h-5 w-5 text-gray-400"></i> Produtos
+      </a>
+      <a href="doacoes-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="gift" class="mr-3 h-5 w-5 text-gray-400"></i> Doações
+      </a>
+      <a href="retiradas-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="truck" class="mr-3 h-5 w-5 text-gray-400"></i> Retiradas
+      </a>
+      <a href="ongs.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="users" class="mr-3 h-5 w-5 text-gray-400"></i> ONGs
+      </a>
+    </div>
+  </nav>
+  <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+    <a href="index.html" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+      <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+    </a>
+  </div>
+</div>
+
+<!-- Conteúdo principal -->
+<div class="main-content">
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-900">Cadastrar Novo Produto</h1>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-white shadow rounded-lg p-8">
+      <form id="form-cadastro-produto" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nome do Produto</label>
+          <input id="nome" type="text" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Categoria</label>
+          <input id="categoria" type="text" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Data de Validade</label>
+            <input id="dataValidade" type="date" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Quantidade (g)</label>
+            <input id="quantidade" type="number" min="1" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+          </div>
+        </div>
+        <div class="flex justify-end gap-3">
+          <a href="dashboard-funcionario.html" class="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200">Cancelar</a>
+          <button class="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700">Cadastrar</button>
+        </div>
+      </form>
+      <p id="mensagem-sucesso" class="text-green-600 text-center mt-4 hidden">Produto cadastrado com sucesso!</p>
+      <p id="mensagem-erro" class="text-red-600 text-center mt-4 hidden">Erro ao cadastrar produto. Verifique o backend.</p>
+    </div>
+  </main>
+</div>
+
+<script>feather.replace();</script>
+</body>
+</html>
