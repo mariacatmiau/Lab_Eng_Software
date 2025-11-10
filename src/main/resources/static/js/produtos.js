@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ✅ Usa o ID diretamente do objeto do usuário
-    const resp = await fetch(`http://localhost:8080/api/produtos/por-usuario/${usuarioId}`);
+    const resp = await fetch(`http://44.198.34.216:8081/api/produtos/por-usuario/${usuarioId}`);
 
     if (!resp.ok) throw new Error("Erro ao buscar produtos.");
 

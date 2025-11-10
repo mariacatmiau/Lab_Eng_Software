@@ -1,9 +1,9 @@
 const API = {
-  produtosDisponiveis: "http://localhost:8080/api/produtos/disponiveis",
-  ongs: "http://localhost:8080/api/ongs",
-  doacoes: "http://localhost:8080/api/doacoes",
-  confirmar: (id) => `http://localhost:8080/api/retiradas/${id}/confirmar`,
-  cancelar: (id) => `http://localhost:8080/api/retiradas/${id}/cancelar`,
+  produtosDisponiveis: "http://44.198.34.216:8081/api/produtos/disponiveis",
+  ongs: "http://44.198.34.216:8081/api/ongs",
+  doacoes: "http://44.198.34.216:8081/api/doacoes",
+  confirmar: (id) => `http://44.198.34.216:8081/api/retiradas/${id}/confirmar`,
+  cancelar: (id) => `http://44.198.34.216:8081/api/retiradas/${id}/cancelar`,
 };
 
 const el = (id) => document.getElementById(id);

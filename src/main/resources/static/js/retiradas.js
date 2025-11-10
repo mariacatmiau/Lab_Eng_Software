@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log(`📦 Página carregada: Retiradas - ${userType}`);
 
   try {
-    const response = await fetch("http://localhost:8080/api/doacoes");
+    const response = await fetch("http://44.198.34.216:8081/api/doacoes");
     if (!response.ok) throw new Error("Erro ao buscar doações");
     const doacoes = await response.json();
     console.log("✅ Doações recebidas:", doacoes);
@@ -108,7 +108,7 @@ function formatarData(dataString) {
 // ---------------- AÇÕES ----------------
 async function confirmarRetirada(id) {
   try {
-    const response = await fetch(`http://localhost:8080/api/doacoes/${id}/retirada`, {
+    const response = await fetch(`http://44.198.34.216:8081/api/doacoes/${id}/retirada`, {
       method: "PUT"
     });
     if (!response.ok) throw new Error("Erro ao confirmar retirada");
@@ -122,7 +122,7 @@ async function confirmarRetirada(id) {
 
 async function cancelarRetirada(id) {
   try {
-    const response = await fetch(`http://localhost:8080/api/doacoes/${id}/recusar`, {
+    const response = await fetch(`http://44.198.34.216:8081/api/doacoes/${id}/recusar`, {
       method: "PUT"
     });
     if (!response.ok) throw new Error("Erro ao cancelar retirada");

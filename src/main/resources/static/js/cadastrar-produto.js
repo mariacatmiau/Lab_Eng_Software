@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const resp = await fetch("http://localhost:8080/api/produtos", {
+      const resp = await fetch("http://44.198.34.216:8081/api/produtos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(produto)

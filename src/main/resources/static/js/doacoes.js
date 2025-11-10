@@ -1,4 +1,4 @@
-const API_DOACOES = "http://localhost:8080/api/doacoes";
+const API_DOACOES = "http://44.198.34.216:8081/api/doacoes";
 
 const userType = localStorage.getItem("userType");
 if (!userType) {
