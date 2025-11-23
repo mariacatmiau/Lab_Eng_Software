@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Doações | Funcionário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        .sidebar { width: 280px; }
+        .main-content { margin-left: 280px; }
+        @media (max-width: 768px) {
+          .sidebar { width: 100%; position: fixed; z-index: 40; transform: translateX(-100%); }
+          .sidebar.active { transform: translateX(0); }
+          .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Sidebar -->
+<div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+        <i data-feather="heart" class="text-white h-6 w-6"></i>
+        <span class="ml-2 text-white font-bold">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4">
+        <div class="space-y-1">
+            <a href="dashboard-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="home" class="mr-3 h-5 w-5 text-gray-400"></i> Dashboard
+            </a>
+            <a href="cadastrar-produto.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="package" class="mr-3 h-5 w-5 text-gray-400"></i> Cadastrar Produto
+            </a>
+            <a href="produtos.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="list" class="mr-3 h-5 w-5 text-gray-400"></i> Produtos
+            </a>
+            <a href="doacoes-funcionario.html" class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="gift" class="mr-3 h-5 w-5 text-green-500"></i> Doações
+            </a>
+            <a href="retiradas-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="truck" class="mr-3 h-5 w-5 text-gray-400"></i> Retiradas
+            </a>
+            <a href="ongs.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="users" class="mr-3 h-5 w-5 text-gray-400"></i> ONGs Parceiras
+            </a>
+        </div>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+        <a href="index.html" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+            <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+        </a>
+    </div>
+</div>
+
+<!-- Main -->
+<div class="main-content">
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-900">Doações - Funcionário</h1>
+            <button id="btnAbrirModal" class="inline-flex items-center px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                <i data-feather="plus" class="h-4 w-4 mr-2"></i> Nova Doação
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-6">
+        <section class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">Doações</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ONG</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Criada em</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody-doacoes" class="bg-white divide-y divide-gray-200">
+                    <tr><td colspan="5" class="text-center py-4 text-gray-500">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Modal Nova Doação -->
+<div id="modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xl rounded-lg shadow-lg">
+        <div class="px-6 py-4 border-b flex justify-between items-center">
+            <h3 class="text-lg font-semibold">Criar Doação</h3>
+            <button id="btnFecharModal"><i data-feather="x"></i></button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div>
+                <label class="block text-sm text-gray-700">Produto</label>
+                <select id="selProduto" class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+                    <option value="">Carregando...</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-700">ONG</label>
+                <select id="selOng" class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500">
+                    <option value="">Carregando...</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm text-gray-700">Quantidade (opcional)</label>
+                <input id="inpQtd" type="number" min="1" class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-green-500 focus:border-green-500" placeholder="Ex.: 10"/>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t flex justify-end gap-3">
+            <button class="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200" id="btnCancelar">Cancelar</button>
+            <button class="px-4 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700" id="btnSalvar">Criar</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/doacoes-funcionario.js"></script>
+<script>feather.replace();</script>
+</body>
+</html>

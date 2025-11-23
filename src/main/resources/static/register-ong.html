@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar ONG | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+<div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+  <h2 class="text-2xl font-bold mb-6 text-center text-green-700">Cadastro de ONG</h2>
+  <form id="registerOngForm" class="space-y-4">
+    <input type="text" id="nome" placeholder="Nome da ONG" class="border rounded-md w-full px-3 py-2" required>
+    <input type="email" id="email" placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required>
+    <input type="password" id="senha" placeholder="Senha" class="border rounded-md w-full px-3 py-2" required>
+    <input type="text" id="endereco" placeholder="Endereço" class="border rounded-md w-full px-3 py-2" required>
+    <input type="tel" id="telefone" placeholder="Telefone" class="border rounded-md w-full px-3 py-2" required>
+    <button class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Cadastrar</button>
+  </form>
+</div>
+<script src="js/auth.js"></script>
+</body>
+</html>

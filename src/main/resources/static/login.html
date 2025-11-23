@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | DoaDoa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+  <h1 class="text-2xl font-bold mb-6 text-green-700 text-center">Entrar no DoaDoa</h1>
+
+  <form id="loginForm" class="space-y-4">
+    <input type="email" id="email" name="email" autocomplete="email"
+           placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required />
+    <input type="password" id="senha" name="password" autocomplete="current-password"
+           placeholder="Senha" class="border rounded-md w-full px-3 py-2" required />
+
+    <div class="flex justify-between items-center">
+      <button type="submit"
+              class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
+        Entrar
+      </button>
+      <a href="register.html" class="text-green-700 hover:underline text-sm">Cadastrar-se</a>
+    </div>
+  </form>
+</div>
+
+<!-- ✅ Importa o script de autenticação -->
+<script src="js/auth.js" defer></script>
+</body>
+</html>

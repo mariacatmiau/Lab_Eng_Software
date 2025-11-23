@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retiradas | ONG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/retiradas.js" defer></script>
+</head>
+<body class="bg-gray-100">
+<!-- Sidebar -->
+<div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg w-72">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+        <i data-feather="heart" class="text-white h-6 w-6"></i>
+        <span class="ml-2 text-white font-bold">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4">
+        <div class="space-y-1">
+            <a href="dashboard-ong.html"
+               class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="home" class="mr-3 h-5 w-5 text-gray-400"></i> Dashboard
+            </a>
+            <a href="doacoes-ong.html"
+               class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="gift" class="mr-3 h-5 w-5 text-gray-400"></i> Doações
+            </a>
+            <a href="retiradas-ong.html"
+               class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="truck" class="mr-3 h-5 w-5 text-green-500"></i> Retiradas
+            </a>
+        </div>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+        <a href="index.html"
+           class="text-gray-600 hover:text-gray-900 flex items-center text-sm font-medium">
+            <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+        </a>
+    </div>
+</div>
+
+<!-- Main -->
+<div class="main-content ml-72">
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <h1 class="text-2xl font-bold text-gray-900">Retiradas</h1>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-6 space-y-8">
+        <!-- Pendentes -->
+        <section class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">Retiradas Pendentes</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supermercado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="retiradas-pendentes" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Concluídas -->
+        <section class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">Retiradas Concluídas</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supermercado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="retiradas-concluidas" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    AOS.init();
+    feather.replace();
+</script>
+</body>
+</html>
