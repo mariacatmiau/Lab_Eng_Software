@@ -1,7 +1,7 @@
 const API = {
-  doacoes: "http://localhost:8080/api/doacoes",
-  aceitar: (id) => `http://localhost:8080/api/doacoes/${id}/aceitar`,
-  recusar: (id) => `http://localhost:8080/api/doacoes/${id}/recusar`,
+  doacoes: "http://44.198.34.216:8081/api/doacoes",
+  aceitar: (id) => `http://44.198.34.216:8081/api/doacoes/${id}/aceitar`,
+  recusar: (id) => `http://44.198.34.216:8081/api/doacoes/${id}/recusar`,
 };
 
 const tbPend = document.getElementById("tbody-pendentes");

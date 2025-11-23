@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "http://44.198.34.216:8081/api";
 
 // --- LOGIN ---
 document.addEventListener("DOMContentLoaded", () => {

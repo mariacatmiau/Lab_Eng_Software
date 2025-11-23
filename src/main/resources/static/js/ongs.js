@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tabela = document.getElementById("lista-ongs");
 
   try {
-    const resp = await fetch("http://localhost:8080/api/ongs");
+    const resp = await fetch("http://44.198.34.216:8081/api/ongs");
     if (!resp.ok) throw new Error("Erro ao buscar ONGs");
 
     const ongs = await resp.json();

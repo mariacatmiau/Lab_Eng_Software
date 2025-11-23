@@ -59,7 +59,7 @@
     const novoUsuario = { tipo, nome, email, senha, endereco, telefone };
 
     try {
-      const res = await fetch("http://localhost:8080/api/usuarios/register", {
+      const res = await fetch("http://44.198.34.216:8081/api/usuarios/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(novoUsuario)

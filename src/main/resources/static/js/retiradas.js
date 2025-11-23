@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   AOS.init();
   feather.replace();
 
-  const BASE_URL = "http://localhost:8080";
+  const BASE_URL = "http://44.198.34.216:8081";
 
   const tbodyPendentes = document.getElementById("retiradas-pendentes");
   const tbodyConcluidas = document.getElementById("retiradas-concluidas");
@@ -126,7 +126,7 @@ function formatarData(val) {
 
 // ---------------- AÇÕES ----------------
 async function confirmarRetirada(id) {
-  const BASE_URL = "http://localhost:8080";
+  const BASE_URL = "http://44.198.34.216:8081";
   try {
     const r = await fetch(`${BASE_URL}/api/doacoes/${id}/retirada`, { method: "PUT" });
     if (!r.ok) throw new Error("Falha ao confirmar retirada");
@@ -139,7 +139,7 @@ async function confirmarRetirada(id) {
 }
 
 async function cancelarRetirada(id) {
-  const BASE_URL = "http://localhost:8080";
+  const BASE_URL = "http://44.198.34.216:8081";
   try {
     const r = await fetch(`${BASE_URL}/api/doacoes/${id}/recusar`, { method: "PUT" });
     if (!r.ok) throw new Error("Falha ao cancelar retirada");
