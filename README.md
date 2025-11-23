@@ -52,7 +52,7 @@ Conecta:
 Frontend (HTML, CSS, JS)
    → REST API (JSON)
 Backend Spring Boot
-   → PostgreSQL / H2
+   → H2
 ```
 
 ---
@@ -155,7 +155,7 @@ npx live-server
 # 🧰 Tecnologias Utilizadas
 - Java 17  
 - Spring Boot 3.5.5  
-- PostgreSQL / H2  
+- H2  
 - HTML, CSS, JS  
 
 ---
@@ -165,7 +165,7 @@ npx live-server
 src/
  ├── main/java/com/tcc/desperdicio_alimentos/
  ├── test/java/com/tcc/desperdicio_alimentos/
-frontend/
+ ├── main/resources/static
 ```
 
 ---
