@@ -330,7 +330,7 @@ PRs são bem-vindos.
 
 # 📜 Licença
 Uso educacional.
-)  
+
 - **CI/CD:** GitHub Actions  
 
 ---
