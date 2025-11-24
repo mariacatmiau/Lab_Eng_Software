@@ -153,8 +153,6 @@ npx live-server
 
 Esta documentação descreve formalmente os **casos de teste unitários** implementados no backend do sistema **DoaDoa**, organizados por módulo, incluindo objetivo, entradas, saídas esperadas e critérios de aceitação.
 
-> **Nota:** Casos referentes ao `FuncionarioController` foram removidos conforme solicitado.
-
 ---
 
 ## 🧪 1. Introdução
