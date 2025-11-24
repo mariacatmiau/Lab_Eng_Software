@@ -1,5 +1,3 @@
-# Sistema de Gestão e Doação de Alimentos
-
 ## Equipe
 - Felipe Carvalho – RA 10409804  
 - Giulia Araki – RA 10408954  
