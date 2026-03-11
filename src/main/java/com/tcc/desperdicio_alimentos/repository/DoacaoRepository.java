@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface DoacaoRepository extends JpaRepository<Doacao, Long> {
     List<Doacao> findByOng(Usuario ong);
+    List<Doacao> findByOngId(Long ongId);
+    List<Doacao> findByCriadoPorId(Long criadoPorId);
     List<Doacao> findByStatus(StatusDoacao status);
 }

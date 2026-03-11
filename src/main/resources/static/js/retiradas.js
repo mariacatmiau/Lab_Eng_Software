@@ -15,11 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log(`📦 Página carregada: Retiradas - ${userType}`);
 
   try {
-    const resp = await fetch(`${BASE_URL}/api/doacoes`);
-    if (!resp.ok) throw new Error("Erro ao buscar doações");
-    const doacoes = await resp.json();
-    console.log("✅ Doações recebidas:", doacoes);
-
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     if (!usuario) {
       alert("Sessão expirada. Faça login novamente.");
@@ -27,10 +22,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Filtra por usuário logado (se ONG)
-    const visiveis = isOng
-      ? doacoes.filter(d => d?.ong?.id === usuario.id)
-      : doacoes;
+    const endpoint = isOng
+      ? `${BASE_URL}/api/doacoes/por-ong/${usuario.id}`
+      : `${BASE_URL}/api/doacoes/por-criador/${usuario.id}`;
+
+    const resp = await fetch(endpoint);
+    if (!resp.ok) throw new Error("Erro ao buscar doações");
+    const doacoes = await resp.json();
+    console.log("✅ Doações recebidas:", doacoes);
+
+    const visiveis = doacoes;
 
     // Normaliza status para maiúsculas
     visiveis.forEach(d => (d.status = (d.status || "").toUpperCase()));
@@ -127,8 +128,16 @@ function formatarData(val) {
 // ---------------- AÇÕES ----------------
 async function confirmarRetirada(id) {
   const BASE_URL = "http://44.198.34.216:8081";
+  const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+
+  if (!usuario?.id) {
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.replace("login.html");
+    return;
+  }
+
   try {
-    const r = await fetch(`${BASE_URL}/api/doacoes/${id}/retirada`, { method: "PUT" });
+    const r = await fetch(`${BASE_URL}/api/doacoes/${id}/retirada?usuarioId=${usuario.id}`, { method: "PUT" });
     if (!r.ok) throw new Error("Falha ao confirmar retirada");
     alert("✅ Retirada confirmada!");
     location.reload();
@@ -140,8 +149,16 @@ async function confirmarRetirada(id) {
 
 async function cancelarRetirada(id) {
   const BASE_URL = "http://44.198.34.216:8081";
+  const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+
+  if (!usuario?.id) {
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.replace("login.html");
+    return;
+  }
+
   try {
-    const r = await fetch(`${BASE_URL}/api/doacoes/${id}/recusar`, { method: "PUT" });
+    const r = await fetch(`${BASE_URL}/api/doacoes/${id}/recusar?usuarioId=${usuario.id}`, { method: "PUT" });
     if (!r.ok) throw new Error("Falha ao cancelar retirada");
     alert("❌ Retirada cancelada.");
     location.reload();

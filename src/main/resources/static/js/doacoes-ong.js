@@ -1,14 +1,14 @@
 const API = {
-  doacoes: "http://44.198.34.216:8081/api/doacoes",
-  aceitar: (id) => `http://44.198.34.216:8081/api/doacoes/${id}/aceitar`,
-  recusar: (id) => `http://44.198.34.216:8081/api/doacoes/${id}/recusar`,
+  doacoes: (ongId) => `http://44.198.34.216:8081/api/doacoes/por-ong/${ongId}`,
+  aceitar: (id, ongId) => `http://44.198.34.216:8081/api/doacoes/${id}/aceitar?usuarioId=${ongId}`,
+  recusar: (id, ongId) => `http://44.198.34.216:8081/api/doacoes/${id}/recusar?usuarioId=${ongId}`,
 };
 
 const tbPend = document.getElementById("tbody-pendentes");
 const tbAceitas = document.getElementById("tbody-aceitas");
 
-// se você tiver guardado o ID da ONG no login, filtramos por ela
-const ONG_ID = Number(localStorage.getItem("ongId") || 0);
+const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+const ONG_ID = Number(usuario?.id || 0);
 
 function badge(status) {
   const map = {
@@ -31,13 +31,11 @@ async function carregar() {
   tbAceitas.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-500">Carregando...</td></tr>`;
 
   try {
-    const r = await fetch(API.doacoes);
+    const r = await fetch(API.doacoes(ONG_ID));
     const list = await r.json();
 
-    const filtraPorOng = (d) => (!ONG_ID || d.ong?.id === ONG_ID);
-
-    const pendentes = list.filter(d => d.status === "PENDENTE" && filtraPorOng(d));
-    const aceitas   = list.filter(d => d.status === "ACEITA" && filtraPorOng(d));
+    const pendentes = list.filter(d => d.status === "PENDENTE");
+    const aceitas   = list.filter(d => d.status === "ACEITA");
 
     // Pendentes
     tbPend.innerHTML = pendentes.length
@@ -75,7 +73,7 @@ async function carregar() {
 async function aceitar(id) {
   if (!confirm("Aceitar esta doação?")) return;
   try {
-    const r = await fetch(API.aceitar(id), { method: "PUT" });
+    const r = await fetch(API.aceitar(id, ONG_ID), { method: "PUT" });
     if (!r.ok) throw 0;
     await carregar();
     alert("Doação aceita!");
@@ -85,7 +83,7 @@ async function aceitar(id) {
 async function recusar(id) {
   if (!confirm("Recusar esta doação?")) return;
   try {
-    const r = await fetch(API.recusar(id), { method: "PUT" });
+    const r = await fetch(API.recusar(id, ONG_ID), { method: "PUT" });
     if (!r.ok) throw 0;
     await carregar();
     alert("Doação recusada.");

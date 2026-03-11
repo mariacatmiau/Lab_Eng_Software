@@ -35,6 +35,10 @@ public class DoacaoService {
         Usuario criador = usuarioRepo.findById(req.criadoPorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário criador não encontrado"));
 
+        if (produto.getCriadoPor() == null || !produto.getCriadoPor().getId().equals(criador.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Produto não pertence ao usuário informado");
+        }
+
         Doacao d = new Doacao();
         d.setProduto(produto);
         d.setOng(ong);
@@ -52,30 +56,52 @@ public class DoacaoService {
         return doacaoRepo.findAll();
     }
 
-    public List<Doacao> listarPorOng(Long id) {
-        Usuario ong = usuarioRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ONG não encontrada"));
-        return doacaoRepo.findByOng(ong);
+    public List<Doacao> listarPorCriador(Long criadorId) {
+        return doacaoRepo.findByCriadoPorId(criadorId);
     }
 
-    public Doacao aceitar(Long id) {
+    public List<Doacao> listarPorOng(Long id) {
+        return doacaoRepo.findByOngId(id);
+    }
+
+    public Doacao aceitar(Long id, Long usuarioId) {
         Doacao d = doacaoRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doação não encontrada"));
+
+        if (d.getOng() == null || !d.getOng().getId().equals(usuarioId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas a ONG destinatária pode aceitar a doação");
+        }
+
         d.setStatus(StatusDoacao.ACEITA);
         return doacaoRepo.save(d);
     }
 
-    public Doacao recusar(Long id) {
+    public Doacao recusar(Long id, Long usuarioId) {
         Doacao d = doacaoRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doação não encontrada"));
+
+        if (!usuarioParticipaDaDoacao(d, usuarioId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas participantes da doação podem recusá-la");
+        }
+
         d.setStatus(StatusDoacao.RECUSADA);
         return doacaoRepo.save(d);
     }
 
-    public Doacao confirmarRetirada(Long id) {
+    public Doacao confirmarRetirada(Long id, Long usuarioId) {
         Doacao d = doacaoRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doação não encontrada"));
+
+        if (!usuarioParticipaDaDoacao(d, usuarioId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas participantes da doação podem confirmar retirada");
+        }
+
         d.setStatus(StatusDoacao.RETIRADA);
         return doacaoRepo.save(d);
+    }
+
+    private boolean usuarioParticipaDaDoacao(Doacao doacao, Long usuarioId) {
+        return (doacao.getCriadoPor() != null && doacao.getCriadoPor().getId().equals(usuarioId))
+                || (doacao.getOng() != null && doacao.getOng().getId().equals(usuarioId));
     }
 }

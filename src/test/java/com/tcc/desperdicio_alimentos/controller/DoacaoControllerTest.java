@@ -55,9 +55,9 @@ public class DoacaoControllerTest {
         Doacao d = new Doacao();
         d.setId(1L);
 
-        when(service.aceitar(1L)).thenReturn(d);
+        when(service.aceitar(1L, 2L)).thenReturn(d);
 
-        mockMvc.perform(put("/api/doacoes/1/aceitar"))
+        mockMvc.perform(put("/api/doacoes/1/aceitar").param("usuarioId", "2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1));
     }
@@ -67,6 +67,14 @@ public class DoacaoControllerTest {
         when(service.listarTodas()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/doacoes"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deveListarPorCriador() throws Exception {
+        when(service.listarPorCriador(3L)).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/doacoes/por-criador/3"))
                 .andExpect(status().isOk());
     }
 }

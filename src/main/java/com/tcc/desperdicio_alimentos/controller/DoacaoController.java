@@ -24,23 +24,28 @@ public class DoacaoController {
     }
 
     @PutMapping("/{id}/aceitar")
-    public ResponseEntity<Doacao> aceitar(@PathVariable Long id) {
-        return ResponseEntity.ok(service.aceitar(id));
+    public ResponseEntity<Doacao> aceitar(@PathVariable Long id, @RequestParam Long usuarioId) {
+        return ResponseEntity.ok(service.aceitar(id, usuarioId));
     }
 
     @PutMapping("/{id}/recusar")
-    public ResponseEntity<Doacao> recusar(@PathVariable Long id) {
-        return ResponseEntity.ok(service.recusar(id));
+    public ResponseEntity<Doacao> recusar(@PathVariable Long id, @RequestParam Long usuarioId) {
+        return ResponseEntity.ok(service.recusar(id, usuarioId));
     }
 
     @PutMapping("/{id}/retirada")
-    public ResponseEntity<Doacao> retirada(@PathVariable Long id) {
-        return ResponseEntity.ok(service.confirmarRetirada(id));
+    public ResponseEntity<Doacao> retirada(@PathVariable Long id, @RequestParam Long usuarioId) {
+        return ResponseEntity.ok(service.confirmarRetirada(id, usuarioId));
     }
 
     @GetMapping
     public ResponseEntity<List<Doacao>> listarTodas() {
         return ResponseEntity.ok(service.listarTodas());
+    }
+
+    @GetMapping("/por-criador/{id}")
+    public ResponseEntity<List<Doacao>> listarPorCriador(@PathVariable Long id) {
+        return ResponseEntity.ok(service.listarPorCriador(id));
     }
 
     @GetMapping("/por-ong/{id}")

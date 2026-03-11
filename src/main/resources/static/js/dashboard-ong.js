@@ -26,9 +26,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 // === FUNÇÕES PRINCIPAIS ===
 async function carregarResumo() {
   try {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const usuarioId = usuario?.id;
+
+    if (!usuarioId) {
+      throw new Error("Usuário não autenticado");
+    }
+
     const [doacoesRes, produtosRes] = await Promise.all([
-      fetch(`${API_BASE}/api/doacoes`),
-      fetch(`${API_BASE}/api/produtos`)
+      fetch(`${API_BASE}/api/doacoes/por-ong/${usuarioId}`),
+      fetch(`${API_BASE}/api/produtos/disponiveis`)
     ]);
 
     const doacoes = await doacoesRes.json();
@@ -51,7 +58,14 @@ async function carregarResumo() {
 
 async function carregarDoacoesRecentes() {
   try {
-    const response = await fetch(`${API_BASE}/api/doacoes`);
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const usuarioId = usuario?.id;
+
+    if (!usuarioId) {
+      throw new Error("Usuário não autenticado");
+    }
+
+    const response = await fetch(`${API_BASE}/api/doacoes/por-ong/${usuarioId}`);
     const doacoes = await response.json();
 
     const tabela = document.getElementById("tabela-doacoes");

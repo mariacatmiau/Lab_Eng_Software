@@ -1,7 +1,7 @@
 const API = {
   produtosDisponiveis: "http://44.198.34.216:8081/api/produtos/disponiveis",
   ongs: "http://44.198.34.216:8081/api/ongs",
-  doacoes: "http://44.198.34.216:8081/api/doacoes",
+  doacoes: (usuarioId) => `http://44.198.34.216:8081/api/doacoes/por-criador/${usuarioId}`,
   confirmar: (id) => `http://44.198.34.216:8081/api/retiradas/${id}/confirmar`,
   cancelar: (id) => `http://44.198.34.216:8081/api/retiradas/${id}/cancelar`,
 };
@@ -88,7 +88,14 @@ function fmtData(iso) {
 async function carregarDoacoes() {
   tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-500">Carregando...</td></tr>`;
   try {
-    const r = await fetch(API.doacoes);
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const usuarioId = usuario?.id;
+
+    if (!usuarioId) {
+      throw new Error("Usuário não autenticado");
+    }
+
+    const r = await fetch(API.doacoes(usuarioId));
     if (!r.ok) throw new Error("Erro ao buscar doações");
     const list = await r.json();
 

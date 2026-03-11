@@ -7,9 +7,9 @@ import com.tcc.desperdicio_alimentos.repository.ProdutoRepository;
 import com.tcc.desperdicio_alimentos.repository.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,6 +48,7 @@ public class DoacaoServiceTest {
 
         Usuario funcionario = new Usuario();
         funcionario.setId(3L);
+        p.setCriadoPor(funcionario);
 
         when(produtoRepo.findById(1L)).thenReturn(Optional.of(p));
         when(usuarioRepo.findById(2L)).thenReturn(Optional.of(ong));
@@ -83,7 +84,11 @@ public class DoacaoServiceTest {
         when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
         when(doacaoRepo.save(d)).thenReturn(d);
 
-        Doacao result = service.aceitar(1L);
+        Usuario ong = new Usuario();
+        ong.setId(2L);
+        d.setOng(ong);
+
+        Doacao result = service.aceitar(1L, 2L);
 
         assertEquals(StatusDoacao.ACEITA, result.getStatus());
         verify(doacaoRepo).save(d);
@@ -98,7 +103,11 @@ public class DoacaoServiceTest {
         when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
         when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        Doacao result = service.recusar(1L);
+        Usuario criador = new Usuario();
+        criador.setId(3L);
+        d.setCriadoPor(criador);
+
+        Doacao result = service.recusar(1L, 3L);
 
         assertNotNull(result);
         assertEquals(StatusDoacao.RECUSADA, result.getStatus());
@@ -114,9 +123,21 @@ public class DoacaoServiceTest {
         when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
         when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        Doacao result = service.confirmarRetirada(1L);
+        Usuario criador = new Usuario();
+        criador.setId(3L);
+        d.setCriadoPor(criador);
+
+        Doacao result = service.confirmarRetirada(1L, 3L);
 
         assertNotNull(result);
         assertEquals(StatusDoacao.RETIRADA, result.getStatus());
+    }
+
+    @Test
+    void deveListarPorCriador() {
+        when(doacaoRepo.findByCriadoPorId(3L)).thenReturn(Collections.emptyList());
+
+        assertNotNull(service.listarPorCriador(3L));
+        verify(doacaoRepo).findByCriadoPorId(3L);
     }
 }
