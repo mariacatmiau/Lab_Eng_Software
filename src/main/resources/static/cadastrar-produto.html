@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Produto | DoaDoa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app-ui.css">
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="js/app-shell.js" defer></script>
+  <script src="js/utils.js" defer></script>
   <script src="js/cadastrar-produto.js" defer></script>
-  <style>
-    .sidebar { width: 280px; }
-    .main-content { margin-left: 280px; }
-  </style>
 </head>
 <body class="bg-gray-100">
 
@@ -18,14 +20,17 @@
 <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
   <div class="flex items-center justify-center h-16 px-4 bg-green-600">
     <i data-feather="heart" class="text-white h-6 w-6"></i>
-    <span class="ml-2 text-white font-bold">DoaDoa</span>
+    <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
   </div>
   <nav class="mt-8 px-4">
     <div class="space-y-1">
       <a href="dashboard-funcionario.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
         <i data-feather="home" class="mr-3 h-5 w-5 text-gray-400"></i> Dashboard
       </a>
-      <a href="cadastrar-produto.html" class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+      <a href="perfil.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="user" class="mr-3 h-5 w-5 text-gray-400"></i> Perfil
+      </a>
+      <a href="cadastrar-produto.html" class="active-item flex items-center px-3 py-2 text-sm font-medium rounded-md">
         <i data-feather="package" class="mr-3 h-5 w-5 text-green-500"></i> Cadastrar Produto
       </a>
       <a href="produtos.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
@@ -43,52 +48,90 @@
     </div>
   </nav>
   <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
-    <a href="index.html" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+    <a href="#" data-logout class="flex items-center text-sm text-gray-600 hover:text-gray-900">
       <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
     </a>
   </div>
 </div>
 
+<div id="menuOverlay" class="mobile-overlay"></div>
+
 <!-- Conteúdo principal -->
 <div class="main-content">
-  <header class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-gray-900">Cadastrar Novo Produto</h1>
+  <header class="top-header shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
+      <div>
+        <h1 class="page-title">Cadastrar Novo Produto</h1>
+        <p class="page-subtitle">Preencha os dados com calma. Campos obrigatórios estão marcados.</p>
+      </div>
+      <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">
+        <i data-feather="menu" class="h-5 w-5"></i>
+      </button>
     </div>
   </header>
 
   <main class="max-w-3xl mx-auto px-6 py-8">
-    <div class="bg-white shadow rounded-lg p-8">
+    <div class="info-callout mb-4">
+      Dica: use nomes simples, por exemplo "Arroz 5kg". Isso ajuda a equipe a localizar o item rapidamente.
+    </div>
+
+    <div class="card-elevated p-8">
       <form id="form-cadastro-produto" class="space-y-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700">Nome do Produto</label>
-          <input id="nome" type="text" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+          <label class="block text-sm font-bold text-gray-800">Nome do Produto *</label>
+          <input id="nome" type="text" required class="mt-1 w-full px-3 py-2 rounded-md" placeholder="Ex.: Arroz tipo 1 (5kg)">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700">Categoria</label>
-          <input id="categoria" type="text" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+          <label class="block text-sm font-bold text-gray-800">Categoria *</label>
+          <input id="categoria" type="text" required class="mt-1 w-full px-3 py-2 rounded-md" placeholder="Ex.: Grãos, Laticínios, Hortifruti">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label class="block text-sm font-medium text-gray-700">Data de Validade</label>
-            <input id="dataValidade" type="date" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+            <label class="block text-sm font-bold text-gray-800">Data de Validade *</label>
+            <input id="dataValidade" type="date" required class="mt-1 w-full px-3 py-2 rounded-md">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Quantidade (g)</label>
-            <input id="quantidade" type="number" min="1" required class="mt-1 border w-full px-3 py-2 rounded-md focus:ring-green-500 focus:border-green-500">
+            <label class="block text-sm font-bold text-gray-800">Quantidade (g) *</label>
+            <input id="quantidade" type="number" min="1" required class="mt-1 w-full px-3 py-2 rounded-md" placeholder="Ex.: 1000">
           </div>
         </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-800 mb-2">Tipo de Oferta *</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="flex items-center gap-2 border border-slate-300 rounded-md px-3 py-2 bg-white">
+              <input type="radio" name="tipoOferta" value="VENDA" id="tipoVenda">
+              <span class="font-semibold text-slate-800">Venda</span>
+            </label>
+            <label class="flex items-center gap-2 border border-slate-300 rounded-md px-3 py-2 bg-white">
+              <input type="radio" name="tipoOferta" value="DOACAO" id="tipoDoacao" checked>
+              <span class="font-semibold text-slate-800">Doação</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="grupoPreco" class="hidden">
+          <label class="block text-sm font-bold text-gray-800">Preço (R$) *</label>
+          <input id="preco" type="number" min="0.01" step="0.01" class="mt-1 w-full px-3 py-2 rounded-md" placeholder="Ex.: 9.90">
+        </div>
+
+        <div id="grupoOng">
+          <label class="block text-sm font-bold text-gray-800">ONG Destinatária *</label>
+          <select id="ongId" class="mt-1 w-full px-3 py-2 rounded-md">
+            <option value="">Carregando ONGs...</option>
+          </select>
+        </div>
+
         <div class="flex justify-end gap-3">
-          <a href="dashboard-funcionario.html" class="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200">Cancelar</a>
-          <button class="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700">Cadastrar</button>
+          <a href="dashboard-funcionario.html" class="neutral-btn">Cancelar</a>
+          <button class="primary-btn">Cadastrar Produto</button>
         </div>
       </form>
-      <p id="mensagem-sucesso" class="text-green-600 text-center mt-4 hidden">Produto cadastrado com sucesso!</p>
-      <p id="mensagem-erro" class="text-red-600 text-center mt-4 hidden">Erro ao cadastrar produto. Verifique o backend.</p>
+      <p id="mensagem-sucesso" class="text-green-700 text-center mt-4 font-semibold hidden">Produto cadastrado com sucesso!</p>
+      <p id="mensagem-erro" class="text-red-700 text-center mt-4 font-semibold hidden">Erro ao cadastrar produto. Verifique o backend.</p>
     </div>
   </main>
 </div>
 
-<script>feather.replace();</script>
 </body>
 </html>

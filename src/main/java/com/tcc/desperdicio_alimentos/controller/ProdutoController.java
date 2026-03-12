@@ -1,9 +1,12 @@
 package com.tcc.desperdicio_alimentos.controller;
 
 import com.tcc.desperdicio_alimentos.dto.CriarProdutoRequest;
+import com.tcc.desperdicio_alimentos.dto.OfertaProdutoDTO;
 import com.tcc.desperdicio_alimentos.model.Produto;
 import com.tcc.desperdicio_alimentos.service.ProdutoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +30,8 @@ public class ProdutoController {
 
     // Criar produto
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody CriarProdutoRequest req) {
+    public ResponseEntity<Produto> criar(@RequestBody CriarProdutoRequest req, Authentication authentication) {
+        req.usuarioId = Long.parseLong(authentication.getName());
         return ResponseEntity.ok(service.criar(req));
     }
 
@@ -37,9 +41,24 @@ public class ProdutoController {
         return ResponseEntity.ok(service.listarDisponiveis());
     }
 
+    // Listar ofertas para clientes, com busca por produto/mercado e referência de proximidade
+    @GetMapping("/ofertas")
+    public ResponseEntity<List<OfertaProdutoDTO>> listarOfertas(
+            @RequestParam(required = false) String busca,
+            @RequestParam(defaultValue = "PRODUTO") String tipoBusca,
+            @RequestParam(required = false) String referencia,
+            @RequestParam(required = false) Double latitude,
+            @RequestParam(required = false) Double longitude
+    ) {
+        return ResponseEntity.ok(service.listarOfertas(busca, tipoBusca, referencia, latitude, longitude));
+    }
+
     // Listar produtos por usuário (para funcionário ver o que ele cadastrou)
     @GetMapping("/por-usuario/{id}")
-    public ResponseEntity<List<Produto>> listarPorUsuario(@PathVariable Long id) {
+    public ResponseEntity<List<Produto>> listarPorUsuario(@PathVariable Long id, Authentication authentication) {
+        if (Long.parseLong(authentication.getName()) != id) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(service.listarPorUsuario(id));
     }
 

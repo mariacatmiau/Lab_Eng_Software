@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const API_ORIGIN =
+    window.location.origin && window.location.origin.startsWith("http")
+      ? window.location.origin
+      : "http://localhost:8081";
+  const API_BASE = `${API_ORIGIN}/api`;
+
   const tabela = document.getElementById("tabela-produtos");
   const erro = document.getElementById("erro-produtos");
 
@@ -15,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ✅ Usa o ID diretamente do objeto do usuário
-    const resp = await fetch(`http://44.198.34.216:8081/api/produtos/por-usuario/${usuarioId}`);
+    const resp = await fetch(`${API_BASE}/produtos/por-usuario/${usuarioId}`);
 
     if (!resp.ok) throw new Error("Erro ao buscar produtos.");
 

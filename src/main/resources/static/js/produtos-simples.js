@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_ORIGIN =
+    window.location.origin && window.location.origin.startsWith("http")
+      ? window.location.origin
+      : "http://localhost:8080";
+  const API_BASE = `${API_ORIGIN}/api`;
+
   const form = document.getElementById("form-cadastro-produto");
   const msg = document.getElementById("mensagem");
 
@@ -13,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const resp = await fetch("http://44.198.34.216:8081/api/produtos", {
+      const resp = await fetch(`${API_BASE}/produtos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(produto)

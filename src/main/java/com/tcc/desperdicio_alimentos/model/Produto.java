@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -22,7 +23,18 @@ public class Produto {
     private Integer quantidade;
     private Boolean disponivel = true;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoOfertaProduto tipoOferta = TipoOfertaProduto.DOACAO;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal preco;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario criadoPor;
+
+    @ManyToOne
+    @JoinColumn(name = "ong_destino_id")
+    private Usuario ongDestino;
 }

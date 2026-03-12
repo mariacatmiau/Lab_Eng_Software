@@ -1,4 +1,8 @@
-const API_DOACOES = "http://44.198.34.216:8081/api/doacoes";
+const API_ORIGIN =
+  window.location.origin && window.location.origin.startsWith("http")
+    ? window.location.origin
+    : "http://localhost:8080";
+const API_DOACOES = `${API_ORIGIN}/api/doacoes`;
 
 const userType = localStorage.getItem("userType");
 if (!userType) {

@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Funcionário | DoaDoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/app-ui.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="js/app-shell.js" defer></script>
+    <script src="js/utils.js" defer></script>
     <script src="js/dashboard-funcionario.js" defer></script>
-    <style>
-        .sidebar { width: 280px; }
-        .main-content { margin-left: 280px; }
-        @media (max-width: 768px) {
-          .sidebar { width: 100%; position: fixed; z-index: 40; transform: translateX(-100%); transition: transform 0.3s ease; }
-          .sidebar.active { transform: translateX(0); }
-          .main-content { margin-left: 0; }
-        }
-    </style>
 </head>
 <body class="bg-gray-100">
 
@@ -27,30 +24,26 @@
       if (!usuario || !usuario.tipo) {
         console.warn("Sessão expirada. Redirecionando...");
         localStorage.removeItem("usuario");
+        localStorage.removeItem("token");
         setTimeout(() => window.location.replace("login.html"), 0);
         return;
       }
-      console.log("Usuário carregado:", usuario);
 
-      // ✅ Mostra nome do usuário
-      const spanNome = document.querySelector("#nomeUsuario");
-      if (spanNome && usuario.nome) spanNome.textContent = usuario.nome;
+            const tipo = String(usuario.tipo || "").trim().toUpperCase();
+            if (tipo !== "FUNCIONARIO") {
+                const destino = tipo === "ONG"
+                    ? "dashboard-ong.html"
+                    : (tipo === "CLIENTE" ? "dashboard-cliente.html" : "login.html");
+                setTimeout(() => window.location.replace(destino), 0);
+                return;
+            }
+
+      console.log("Usuário carregado:", usuario);
 
       // ✅ Impede cache antigo
       window.history.replaceState({}, document.title, window.location.href);
 
-      // ✅ Corrige botão de sair
-      const logout = document.getElementById("logout");
-      if (logout) {
-        logout.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem("usuario");
-          window.location.replace("login.html");
-        });
-      }
-
       AOS.init();
-      feather.replace();
     });
 </script>
 
@@ -58,12 +51,15 @@
 <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
     <div class="flex items-center justify-center h-16 px-4 bg-green-600">
         <i data-feather="heart" class="text-white h-6 w-6"></i>
-        <span class="ml-2 text-white font-bold">DoaDoa</span>
+                <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
     </div>
     <nav class="mt-8 px-4">
         <div class="space-y-1">
-            <a href="dashboard-funcionario.html" class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <a href="dashboard-funcionario.html" class="active-item flex items-center px-3 py-2 text-sm font-medium rounded-md">
                 <i data-feather="home" class="text-green-500 mr-3 h-5 w-5"></i> Dashboard
+            </a>
+            <a href="perfil.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <i data-feather="user" class="mr-3 h-5 w-5 text-gray-400"></i> Perfil
             </a>
             <a href="cadastrar-produto.html" class="text-gray-600 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md">
                 <i data-feather="package" class="mr-3 h-5 w-5 text-gray-400"></i> Cadastrar Produto
@@ -83,38 +79,55 @@
         </div>
     </nav>
     <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
-        <a id="logout" href="#" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+        <a href="#" data-logout class="flex items-center text-sm text-gray-600 hover:text-gray-900">
             <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
         </a>
     </div>
 </div>
 
+<div id="menuOverlay" class="mobile-overlay"></div>
+
 <!-- Main -->
 <div class="main-content">
-    <header class="bg-white shadow">
+    <header class="top-header shadow-sm">
         <div class="max-w-7xl mx-auto px-6 py-4">
-            <h1 class="text-2xl font-bold text-gray-900">Dashboard - Funcionário</h1>
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h1 class="page-title">Painel do Mercado</h1>
+                    <p class="page-subtitle">Acompanhe produtos e doações em um só lugar.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">
+                        <i data-feather="menu" class="h-5 w-5"></i>
+                    </button>
+                    <span class="hidden sm:inline text-sm text-gray-600">Olá, <strong data-user-name>usuário</strong></span>
+                </div>
+            </div>
         </div>
     </header>
 
 
     <main class="max-w-7xl mx-auto px-6 py-6">
+        <div class="info-callout mb-6">
+            Dica rápida: use os atalhos <strong>Cadastrar Produto</strong> e <strong>Doações</strong> para registrar tudo no mesmo dia e evitar perda por vencimento.
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="package" class="h-10 w-10 text-green-600"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">Produtos Cadastrados</p>
                     <p id="total-produtos" class="text-2xl font-bold text-gray-900">--</p>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="users" class="h-10 w-10 text-blue-600"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">ONGs Parceiras</p>
                     <p id="total-ongs" class="text-2xl font-bold text-gray-900">--</p>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="gift" class="h-10 w-10 text-purple-600"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">Doações Realizadas</p>
@@ -123,7 +136,7 @@
             </div>
         </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="card-elevated overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-medium text-gray-900">Últimos Produtos Cadastrados</h3>
             </div>

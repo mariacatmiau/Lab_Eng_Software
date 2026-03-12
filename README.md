@@ -136,9 +136,23 @@ Requisitos:
 
 Comandos:
 ```
-mvn clean install
-mvn spring-boot:run
+./mvnw clean install
+./mvnw spring-boot:run
 ```
+
+Perfis de ambiente:
+- `local` (padrão): H2 em arquivo local
+- `prod`: PostgreSQL
+
+Executar em `prod`:
+```
+./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
+```
+
+Variáveis usadas no perfil `prod`:
+- `DB_URL`
+- `DB_USER`
+- `DB_PASS`
 
 ---
 

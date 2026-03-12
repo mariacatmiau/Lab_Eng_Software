@@ -1,224 +1,177 @@
-const API = {
-  produtosDisponiveis: "http://44.198.34.216:8081/api/produtos/disponiveis",
-  ongs: "http://44.198.34.216:8081/api/ongs",
-  doacoes: "http://44.198.34.216:8081/api/doacoes",
-  confirmar: (id) => `http://44.198.34.216:8081/api/retiradas/${id}/confirmar`,
-  cancelar: (id) => `http://44.198.34.216:8081/api/retiradas/${id}/cancelar`,
-};
+(() => {
+  const pageApiOrigin =
+    window.location.origin && window.location.origin.startsWith("http")
+      ? window.location.origin
+      : "http://localhost:8080";
+  const pageApiBase = `${pageApiOrigin}/api`;
 
-const el = (id) => document.getElementById(id);
-const tbody = el("tbody-doacoes");
-const modal = el("modal");
-const selProduto = el("selProduto");
-const selOng = el("selOng");
-const inpQtd = el("inpQtd");
-
-// ---------------- UI helpers ----------------
-function showModal() {
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
-}
-function hideModal() {
-  modal.classList.add("hidden");
-  modal.classList.remove("flex");
-}
-
-// ---------------- Carregamentos iniciais ----------------
-async function carregarProdutosEOngs() {
-  try {
-    const [rp, ro] = await Promise.all([
-      fetch(API.produtosDisponiveis),
-      fetch(API.ongs),
-    ]);
-
-    if (!rp.ok || !ro.ok) throw new Error("Erro ao buscar dados");
-
-    const [produtos, ongs] = await Promise.all([rp.json(), ro.json()]);
-
-    // Produtos
-    if (!produtos.length) {
-      selProduto.innerHTML = `<option>Nenhum produto disponível</option>`;
-    } else {
-      selProduto.innerHTML =
-        `<option value="">Selecione...</option>` +
-        produtos
-          .map(
-            (p) => `<option value="${p.id}">${p.nome} (${p.quantidade} un.)</option>`
-          )
-          .join("");
+  function lerUsuario() {
+    try {
+      return JSON.parse(localStorage.getItem("usuario") || "null");
+    } catch {
+      return null;
     }
+  }
 
-    // ONGs
-    if (!ongs.length) {
-      selOng.innerHTML = `<option>Nenhuma ONG cadastrada</option>`;
-    } else {
-      selOng.innerHTML =
-        `<option value="">Selecione...</option>` +
-        ongs.map((o) => `<option value="${o.id}">${o.nome}</option>`).join("");
+  function getToken() {
+    return localStorage.getItem("token") || "";
+  }
+
+  function requestJson(method, url) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(method, url, true);
+      xhr.responseType = "text";
+      xhr.timeout = 12000;
+      xhr.setRequestHeader("Accept", "application/json");
+
+      const token = getToken();
+      if (token) {
+        xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+      }
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          const text = xhr.responseText || "null";
+          try {
+            resolve(JSON.parse(text));
+          } catch {
+            reject(new Error("Resposta inválida do servidor."));
+          }
+          return;
+        }
+
+        if (xhr.status === 401) {
+          localStorage.removeItem("usuario");
+          localStorage.removeItem("token");
+          window.location.replace("login.html");
+          return;
+        }
+
+        reject(new Error(xhr.responseText || `Erro HTTP ${xhr.status}`));
+      };
+
+      xhr.onerror = () => reject(new Error("Falha de rede ao carregar doações."));
+      xhr.ontimeout = () => reject(new Error("Tempo de resposta excedido ao carregar doações."));
+      xhr.send();
+    });
+  }
+
+  function badge(status) {
+    const map = {
+      PENDENTE: "bg-yellow-100 text-yellow-800",
+      ACEITA: "bg-blue-100 text-blue-800",
+      RECUSADA: "bg-red-100 text-red-800",
+      RETIRADA_CONCLUIDA: "bg-green-100 text-green-800",
+      CANCELADA: "bg-gray-100 text-gray-700",
+    };
+    const css = map[status] || "bg-gray-100 text-gray-700";
+    return `<span class="px-2 py-1 text-xs rounded-full ${css}">${status || "-"}</span>`;
+  }
+
+  function fmtData(iso) {
+    if (!iso) return "-";
+    try {
+      return new Date(iso).toLocaleString();
+    } catch {
+      return iso;
     }
-  } catch (e) {
-    console.error("Erro ao carregar produtos/ongs:", e);
-    selProduto.innerHTML = `<option>Erro ao carregar</option>`;
-    selOng.innerHTML = `<option>Erro ao carregar</option>`;
   }
-}
 
-function badge(status) {
-  const map = {
-    PENDENTE: "bg-yellow-100 text-yellow-800",
-    ACEITA: "bg-blue-100 text-blue-800",
-    RECUSADA: "bg-red-100 text-red-800",
-    RETIRADA_CONCLUIDA: "bg-green-100 text-green-800",
-    CANCELADA: "bg-gray-100 text-gray-700",
-  };
-  return `<span class="px-2 py-1 text-xs rounded-full ${
-    map[status] || "bg-gray-100 text-gray-700"
-  }">${status}</span>`;
-}
-
-function fmtData(iso) {
-  if (!iso) return "-";
-  try {
-    return new Date(iso).toLocaleString();
-  } catch {
-    return iso;
+  function setMensagem(tbody, texto, css) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 ${css}">${texto}</td></tr>`;
   }
-}
 
-async function carregarDoacoes() {
-  tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-500">Carregando...</td></tr>`;
-  try {
-    const r = await fetch(API.doacoes);
-    if (!r.ok) throw new Error("Erro ao buscar doações");
-    const list = await r.json();
-
-    if (!list.length) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-gray-500">Nenhuma doação encontrada.</td></tr>`;
+  function renderLista(tbody, lista) {
+    if (!lista.length) {
+      setMensagem(tbody, "Nenhuma doação encontrada.", "text-gray-500");
       return;
     }
 
-    tbody.innerHTML = list
-      .map((d) => {
-        const canConfirm = d.status === "ACEITA";
-        const canCancel = d.status === "PENDENTE" || d.status === "ACEITA";
-        return `
+    tbody.innerHTML = lista.map((doacao) => {
+      const canConfirm = doacao.status === "ACEITA";
+      const canCancel = doacao.status === "PENDENTE" || doacao.status === "ACEITA";
+
+      return `
         <tr>
-          <td class="px-6 py-4">${d.produto?.nome ?? "-"}</td>
-          <td class="px-6 py-4">${d.ong?.nome ?? "-"}</td>
-          <td class="px-6 py-4">${fmtData(d.dataCriacao)}</td>
-          <td class="px-6 py-4">${badge(d.status)}</td>
+          <td class="px-6 py-4">${doacao.produto?.nome ?? "-"}</td>
+          <td class="px-6 py-4">${doacao.ong?.nome ?? "-"}</td>
+          <td class="px-6 py-4">${fmtData(doacao.dataCriacao)}</td>
+          <td class="px-6 py-4">${badge(doacao.status)}</td>
           <td class="px-6 py-4 text-right space-x-3">
-            <button class="${
-              canConfirm
-                ? "text-green-600 hover:text-green-800"
-                : "text-gray-300 cursor-not-allowed"
-            }"
-              ${canConfirm ? `onclick="confirmar(${d.id})"` : ""} title="Confirmar retirada">
+            <button class="${canConfirm ? "text-green-600 hover:text-green-800" : "text-gray-300 cursor-not-allowed"}" ${canConfirm ? `onclick="confirmar(${doacao.id})"` : ""} title="Confirmar retirada">
               <i data-feather="check-circle"></i>
             </button>
-            <button class="${
-              canCancel
-                ? "text-red-600 hover:text-red-800"
-                : "text-gray-300 cursor-not-allowed"
-            }"
-              ${canCancel ? `onclick="cancelar(${d.id})"` : ""} title="Cancelar">
+            <button class="${canCancel ? "text-red-600 hover:text-red-800" : "text-gray-300 cursor-not-allowed"}" ${canCancel ? `onclick="cancelar(${doacao.id})"` : ""} title="Cancelar">
               <i data-feather="x-circle"></i>
             </button>
           </td>
-        </tr>`;
-      })
-      .join("");
-    feather.replace();
-  } catch (e) {
-    console.error(e);
-    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-500">Erro ao carregar doações.</td></tr>`;
-  }
-}
-
-// ---------------- Ações ----------------
-async function criarDoacao() {
-  const produtoId = selProduto.value;
-  const ongId = selOng.value;
-  const quantidade = inpQtd.value ? parseInt(inpQtd.value, 10) : null;
-
-  // Recupera o ID do usuário logado
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const usuarioId = usuario?.id;
-
-  if (!usuarioId) {
-    alert("Usuário não encontrado. Faça login novamente.");
-    window.location.href = "login.html";
-    return;
+        </tr>
+      `;
+    }).join("");
   }
 
-  if (!produtoId || !ongId) {
-    alert("Selecione produto e ONG.");
-    return;
-  }
+  async function carregarDoacoesFuncionario() {
+    const tbody = document.getElementById("tbody-doacoes");
+    const usuario = lerUsuario();
+    const usuarioId = Number(usuario?.id || 0);
 
-  const payload = {
-    produtoId: Number(produtoId),
-    ongId: Number(ongId),
-    quantidade,
-    criadoPorId: usuarioId,
-  };
-
-  console.log("Enviando:", payload);
-
-  try {
-    const r = await fetch(API.doacoes, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (!r.ok) {
-      const text = await r.text();
-      console.error("Erro ao criar doação:", text);
-      throw new Error(text);
+    if (!tbody) {
+      alert("Tabela de doações não encontrada na página.");
+      return;
     }
 
-    hideModal();
-    await carregarDoacoes();
-    alert("Doação criada e enviada para a ONG!");
-  } catch (err) {
-    console.error("Erro ao criar doação:", err);
-    alert("Erro ao criar doação. Verifique o console.");
+    if (!usuario || String(usuario.tipo || "").toUpperCase() !== "FUNCIONARIO" || !getToken()) {
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("token");
+      window.location.replace("login.html");
+      return;
+    }
+
+    if (!usuarioId) {
+      setMensagem(tbody, "Usuário não autenticado.", "text-red-500");
+      return;
+    }
+
+    setMensagem(tbody, "Carregando...", "text-gray-500");
+
+    try {
+      const lista = await requestJson("GET", `${pageApiBase}/doacoes/por-criador/${usuarioId}`);
+      if (!Array.isArray(lista)) {
+        throw new Error("Resposta inválida ao carregar doações.");
+      }
+
+      renderLista(tbody, lista);
+
+      if (window.feather) {
+        window.feather.replace();
+      }
+    } catch (error) {
+      setMensagem(tbody, String(error?.message || "Erro ao carregar doações."), "text-red-500");
+    }
   }
-}
 
-async function confirmar(id) {
-  if (!confirm("Confirmar retirada desta doação?")) return;
-  try {
-    const r = await fetch(API.confirmar(id), { method: "PUT" });
-    if (!r.ok) throw 0;
-    await carregarDoacoes();
-    alert("Retirada confirmada!");
-  } catch {
-    alert("Erro ao confirmar retirada.");
-  }
-}
+  window.confirmar = async function confirmar(id) {
+    if (!confirm("Confirmar retirada desta doação?")) return;
+    try {
+      await requestJson("PUT", `${pageApiBase}/retiradas/${id}/confirmar`);
+      await carregarDoacoesFuncionario();
+      alert("Retirada confirmada!");
+    } catch (error) {
+      alert(String(error?.message || "Erro ao confirmar retirada."));
+    }
+  };
 
-async function cancelar(id) {
-  if (!confirm("Cancelar esta doação?")) return;
-  try {
-    const r = await fetch(API.cancelar(id), { method: "PUT" });
-    if (!r.ok) throw 0;
-    await carregarDoacoes();
-    alert("Doação cancelada.");
-  } catch {
-    alert("Erro ao cancelar doação.");
-  }
-}
+  window.cancelar = async function cancelar(id) {
+    if (!confirm("Cancelar esta doação?")) return;
+    try {
+      await requestJson("PUT", `${pageApiBase}/retiradas/${id}/cancelar`);
+      await carregarDoacoesFuncionario();
+      alert("Doação cancelada.");
+    } catch (error) {
+      alert(String(error?.message || "Erro ao cancelar doação."));
+    }
+  };
 
-// ---------------- Listeners ----------------
-document.getElementById("btnAbrirModal").addEventListener("click", async () => {
-  showModal();
-  await carregarProdutosEOngs();
-});
-document.getElementById("btnFecharModal").addEventListener("click", hideModal);
-document.getElementById("btnCancelar").addEventListener("click", hideModal);
-document.getElementById("btnSalvar").addEventListener("click", criarDoacao);
-
-// boot
-carregarDoacoes();
+  document.addEventListener("DOMContentLoaded", carregarDoacoesFuncionario);
+})();

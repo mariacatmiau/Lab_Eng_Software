@@ -4,13 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ONGs Parceiras | DoaDoa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app-ui.css">
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="js/app-shell.js" defer></script>
+  <script src="js/utils.js" defer></script>
   <script src="js/ongs.js" defer></script>
-  <style>
-    .sidebar { width: 280px; }
-    .main-content { margin-left: 280px; }
-  </style>
 </head>
 <body class="bg-gray-100">
 
@@ -18,28 +20,44 @@
 <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
   <div class="flex items-center justify-center h-16 px-4 bg-green-600">
     <i data-feather="heart" class="text-white h-6 w-6"></i>
-    <span class="ml-2 text-white font-bold">DoaDoa</span>
+    <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
   </div>
   <nav class="mt-8 px-4 space-y-1">
     <a href="dashboard-funcionario.html" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900"><i data-feather="home" class="mr-3 h-5 w-5 text-gray-400"></i> Dashboard</a>
+    <a href="perfil.html" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900"><i data-feather="user" class="mr-3 h-5 w-5 text-gray-400"></i> Perfil</a>
     <a href="cadastrar-produto.html" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900"><i data-feather="package" class="mr-3 h-5 w-5 text-gray-400"></i> Cadastrar Produto</a>
     <a href="produtos.html" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900"><i data-feather="list" class="mr-3 h-5 w-5 text-gray-400"></i> Produtos</a>
     <a href="doacoes-funcionario.html" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900"><i data-feather="gift" class="mr-3 h-5 w-5 text-gray-400"></i> Doações</a>
     <a href="retiradas-funcionario.html" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900"><i data-feather="truck" class="mr-3 h-5 w-5 text-gray-400"></i> Retiradas</a>
-    <a href="ongs.html" class="flex items-center px-3 py-2 text-sm bg-green-100 text-green-700 rounded-md"><i data-feather="users" class="mr-3 h-5 w-5 text-green-500"></i> ONGs Parceiras</a>
+    <a href="ongs.html" class="active-item flex items-center px-3 py-2 text-sm rounded-md"><i data-feather="users" class="mr-3 h-5 w-5 text-green-500"></i> ONGs Parceiras</a>
   </nav>
+  <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+    <a href="#" data-logout class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+      <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+    </a>
+  </div>
 </div>
+
+<div id="menuOverlay" class="mobile-overlay"></div>
 
 <!-- Main -->
 <div class="main-content">
-  <header class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-gray-900">ONGs Parceiras</h1>
+  <header class="top-header shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
+      <div>
+        <h1 class="page-title">ONGs Parceiras</h1>
+        <p class="page-subtitle">Consulte contatos para agilizar combinações de retirada.</p>
+      </div>
+      <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">
+        <i data-feather="menu" class="h-5 w-5"></i>
+      </button>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-6">
-    <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="info-callout mb-4">Use telefone e e-mail para confirmar disponibilidade antes de enviar novas doações.</div>
+
+    <div class="card-elevated overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -59,6 +77,5 @@
   </main>
 </div>
 
-<script>feather.replace();</script>
 </body>
 </html>

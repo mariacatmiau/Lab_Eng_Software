@@ -4,20 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastrar ONG | DoaDoa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app-ui.css">
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-<div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-  <h2 class="text-2xl font-bold mb-6 text-center text-green-700">Cadastro de ONG</h2>
+<body class="flex items-center justify-center min-h-screen px-4 py-10">
+<div class="card-elevated p-8 w-full max-w-md">
+  <h2 class="text-3xl font-extrabold mb-2 text-center text-green-800">Cadastro de ONG</h2>
+  <p class="text-center text-gray-600 mb-6">Cadastre sua organização para começar a receber doações.</p>
+
+  <div id="authMessage" class="hidden rounded-md px-4 py-3 text-sm font-semibold mb-4"></div>
+
   <form id="registerOngForm" class="space-y-4">
-    <input type="text" id="nome" placeholder="Nome da ONG" class="border rounded-md w-full px-3 py-2" required>
-    <input type="email" id="email" placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required>
-    <input type="password" id="senha" placeholder="Senha" class="border rounded-md w-full px-3 py-2" required>
-    <input type="text" id="endereco" placeholder="Endereço" class="border rounded-md w-full px-3 py-2" required>
-    <input type="tel" id="telefone" placeholder="Telefone" class="border rounded-md w-full px-3 py-2" required>
-    <button class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">Cadastrar</button>
+    <input type="text" id="nome" placeholder="Nome da ONG" class="rounded-md w-full px-3 py-2" required>
+    <input type="email" id="email" placeholder="E-mail" class="rounded-md w-full px-3 py-2" required>
+    <input type="password" id="senha" placeholder="Senha" class="rounded-md w-full px-3 py-2" required>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <input type="text" id="rua" placeholder="Rua" class="rounded-md w-full px-3 py-2" required>
+      <input type="text" id="numero" placeholder="Número" class="rounded-md w-full px-3 py-2" required>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <input type="text" id="bairro" placeholder="Bairro" class="rounded-md w-full px-3 py-2" required>
+      <input type="text" id="cidade" placeholder="Cidade" class="rounded-md w-full px-3 py-2" required>
+    </div>
+    <input type="text" id="estado" placeholder="Estado (UF)" maxlength="2" class="rounded-md w-full px-3 py-2 uppercase" required>
+    <input type="tel" id="telefone" placeholder="Telefone com DDD" class="rounded-md w-full px-3 py-2" required>
+    <button class="w-full primary-btn">Cadastrar ONG</button>
   </form>
+
+  <p class="text-center text-sm mt-5 text-gray-600">Já possui conta? <a href="login.html" class="text-green-800 font-semibold hover:underline">Entrar</a></p>
+
+  <div class="info-callout mt-6">Informe telefone válido para facilitar contato da equipe do mercado.</div>
 </div>
-<script src="js/auth.js"></script>
+<script src="js/app-core.js?v=20260312-1" defer></script>
+<script src="js/address-form.js?v=20260312-1" defer></script>
+<script src="js/auth.js?v=20260312-3" defer></script>
 </body>
 </html>
