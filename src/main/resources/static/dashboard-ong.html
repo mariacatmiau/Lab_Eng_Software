@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard ONG | DoaDoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/app-ui.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="js/app-shell.js" defer></script>
+    <script src="js/utils.js" defer></script>
     <script src="js/dashboard-ong.js" defer></script>
-    <style>
-        .sidebar { width: 280px; }
-        .main-content { margin-left: 280px; }
-    </style>
 </head>
 <body class="bg-gray-100">
 
@@ -24,36 +26,36 @@
       if (!usuario || !usuario.tipo) {
         console.warn("Sessão expirada. Redirecionando...");
         localStorage.removeItem("usuario");
+        localStorage.removeItem("token");
         setTimeout(() => window.location.replace("login.html"), 0);
         return;
       }
 
-      const spanNome = document.querySelector("#nomeUsuario");
-      if (spanNome && usuario.nome) spanNome.textContent = usuario.nome;
-
-      const logout = document.getElementById("logout");
-      if (logout) {
-        logout.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem("usuario");
-          window.location.replace("login.html");
-        });
-      }
+            const tipo = String(usuario.tipo || "").trim().toUpperCase();
+            if (tipo !== "ONG") {
+                const destino = tipo === "FUNCIONARIO"
+                    ? "dashboard-funcionario.html"
+                    : (tipo === "CLIENTE" ? "dashboard-cliente.html" : "login.html");
+                setTimeout(() => window.location.replace(destino), 0);
+                return;
+            }
 
       window.history.replaceState({}, document.title, window.location.href);
       AOS.init();
-      feather.replace();
     });
 </script>
 
 <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
     <div class="flex items-center justify-center h-16 px-4 bg-green-600">
         <i data-feather="heart" class="text-white h-6 w-6"></i>
-        <span class="ml-2 text-white font-bold">DoaDoa</span>
+                <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
     </div>
     <nav class="mt-8 px-4 space-y-1">
-        <a href="dashboard-ong.html" class="bg-green-100 text-green-700 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                <a href="dashboard-ong.html" class="active-item flex items-center px-3 py-2 text-sm font-medium rounded-md">
             <i data-feather="home" class="text-green-500 mr-3 h-5 w-5"></i> Dashboard
+        </a>
+        <a href="perfil.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900">
+            <i data-feather="user" class="mr-3 h-5 w-5 text-gray-400"></i> Perfil
         </a>
         <a href="doacoes-ong.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900">
             <i data-feather="gift" class="mr-3 h-5 w-5 text-gray-400"></i> Doações
@@ -63,44 +65,57 @@
         </a>
     </nav>
     <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
-        <a id="logout" href="#" class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+        <a href="#" data-logout class="flex items-center text-sm text-gray-600 hover:text-gray-900">
             <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
         </a>
     </div>
 </div>
 
+<div id="menuOverlay" class="mobile-overlay"></div>
+
 <div class="main-content">
-    <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <h1 class="text-2xl font-bold text-gray-900">Dashboard - ONG</h1>
+    <header class="top-header shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+            <div>
+                <h1 class="page-title">Painel da ONG</h1>
+                <p class="page-subtitle">Acompanhe pedidos aceitos e próximas retiradas sem complicação.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">
+                    <i data-feather="menu" class="h-5 w-5"></i>
+                </button>
+                <span class="hidden sm:inline text-sm text-gray-600">Olá, <strong data-user-name>usuário</strong></span>
+            </div>
         </div>
     </header>
 
 
     <main class="max-w-7xl mx-auto px-6 py-6">
+        <div class="info-callout mb-6">Dica: priorize doações já aceitas para organizar a retirada no mesmo dia.</div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="clock" class="h-10 w-10 text-yellow-500"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">Doações Pendentes</p>
                     <p id="doacoes-pendentes" class="text-2xl font-bold text-gray-900">--</p>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="check" class="h-10 w-10 text-green-600"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">Doações Aceitas</p>
                     <p id="doacoes-aceitas" class="text-2xl font-bold text-gray-900">--</p>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="truck" class="h-10 w-10 text-blue-600"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">Retiradas Concluídas</p>
                     <p id="retiradas-concluidas" class="text-2xl font-bold text-gray-900">--</p>
                 </div>
             </div>
-            <div class="bg-white shadow rounded-lg p-6 flex items-center">
+            <div class="card-elevated p-6 flex items-center">
                 <i data-feather="package" class="h-10 w-10 text-purple-600"></i>
                 <div class="ml-4">
                     <p class="text-sm text-gray-500">Produtos Disponíveis</p>
@@ -109,7 +124,7 @@
             </div>
         </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="card-elevated overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-medium text-gray-900">Doações Recentes</h3>
             </div>

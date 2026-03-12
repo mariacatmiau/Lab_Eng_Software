@@ -1,5 +1,6 @@
 package com.tcc.desperdicio_alimentos.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class CriarProdutoRequest {
@@ -8,4 +9,7 @@ public class CriarProdutoRequest {
     public LocalDate dataValidade;
     public Integer quantidade;
     public Long usuarioId;
+    public String tipoOferta;
+    public BigDecimal preco;
+    public Long ongId;
 }

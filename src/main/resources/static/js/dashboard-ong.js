@@ -1,4 +1,7 @@
-const API_BASE = "http://44.198.34.216:8081";
+const API_BASE =
+  window.location.origin && window.location.origin.startsWith("http")
+    ? window.location.origin
+    : "http://localhost:8080";
 
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("📊 Iniciando dashboard ONG...");
@@ -96,6 +99,7 @@ document.addEventListener("click", (e) => {
   if (e.target.id === "logout") {
     e.preventDefault();
     localStorage.removeItem("usuario");
+    localStorage.removeItem("token");
     window.location.replace("login.html");
   }
 });

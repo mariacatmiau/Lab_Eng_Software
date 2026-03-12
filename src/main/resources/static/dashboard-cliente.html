@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ofertas Próximas | DoaDoa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="css/app-ui.css">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="js/app-shell.js" defer></script>
+  <script src="js/app-core.js?v=20260312-1" defer></script>
+  <script src="js/utils.js?v=20260312-5" defer></script>
+  <script src="js/dashboard-cliente.js?v=20260312-5" defer></script>
+</head>
+<body class="min-h-screen">
+  <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+      <i data-feather="heart" class="text-white h-6 w-6"></i>
+      <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4 space-y-1">
+      <a href="dashboard-cliente.html" class="active-item flex items-center px-3 py-2 text-sm font-medium rounded-md">
+        <i data-feather="home" class="text-green-500 mr-3 h-5 w-5"></i> Dashboard
+      </a>
+      <a href="perfil.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900">
+        <i data-feather="user" class="mr-3 h-5 w-5 text-gray-400"></i> Perfil
+      </a>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+      <a href="#" data-logout class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+        <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+      </a>
+    </div>
+  </div>
+
+  <div id="menuOverlay" class="mobile-overlay"></div>
+
+  <div class="main-content">
+    <header class="top-header shadow-sm">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+        <div>
+          <h1 class="page-title">Ofertas Perto de Você</h1>
+          <p class="page-subtitle">Busque produtos com validade próxima e compare mercados.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">
+            <i data-feather="menu" class="h-5 w-5"></i>
+          </button>
+          <span class="hidden sm:inline text-sm text-gray-600">Olá, <strong data-user-name>cliente</strong></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-6">
+      <div class="mb-4 flex flex-col lg:flex-row lg:items-center gap-3">
+        <div class="info-callout flex-1">Dica: para resultados mais úteis, informe um bairro ou cidade no campo de referência.</div>
+        <div class="card-elevated px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div>
+            <p class="text-sm font-bold text-gray-900">Localização</p>
+            <p id="statusLocalizacao" class="text-sm text-gray-600">Permita sua localização para priorizar os mercados mais próximos.</p>
+          </div>
+          <button id="btnUsarLocalizacao" type="button" class="primary-btn whitespace-nowrap">Usar minha localização</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+        <div class="xl:col-span-2 space-y-5">
+          <section class="card-elevated p-5">
+            <form id="filtroOfertas" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div class="md:col-span-2">
+                <label for="busca" class="block text-sm font-bold text-gray-800 mb-1">Buscar</label>
+                <input id="busca" type="text" class="w-full rounded-md px-3 py-2" placeholder="Ex.: arroz, leite, mercado central">
+              </div>
+
+              <div>
+                <label for="tipoBusca" class="block text-sm font-bold text-gray-800 mb-1">Tipo</label>
+                <select id="tipoBusca" class="w-full rounded-md px-3 py-2">
+                  <option value="PRODUTO">Produto</option>
+                  <option value="MERCADO">Mercado</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="referencia" class="block text-sm font-bold text-gray-800 mb-1">Referência (bairro/cidade)</label>
+                <input id="referencia" type="text" class="w-full rounded-md px-3 py-2" placeholder="Ex.: Centro">
+              </div>
+
+              <div class="flex items-end">
+                <button class="primary-btn w-full" type="submit">Buscar Ofertas</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="card-elevated overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between gap-3">
+              <h2 class="text-lg font-bold text-gray-900">Resultados</h2>
+              <span id="totalResultados" class="text-sm text-gray-600">0 ofertas</span>
+            </div>
+
+            <div id="estadoVazio" class="p-6 text-gray-600">Carregando ofertas...</div>
+
+            <div id="listaOfertas" class="divide-y divide-gray-100 hidden"></div>
+          </section>
+        </div>
+
+        <aside class="xl:sticky xl:top-24">
+          <section class="card-elevated p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h2 class="text-lg font-bold text-gray-900">Carrinho</h2>
+                <p class="text-sm text-gray-600 mt-1">Monte o pedido e fale com o mercado no WhatsApp para receber a chave Pix.</p>
+              </div>
+              <button id="btnLimparCarrinho" type="button" class="neutral-btn">Limpar</button>
+            </div>
+
+            <div id="estadoCarrinhoVazio" class="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-5 text-sm text-slate-600">
+              Nenhum item selecionado ainda.
+            </div>
+
+            <div id="resumoCarrinho" class="hidden mt-4 space-y-4">
+              <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Total de itens</p>
+                <p id="carrinhoTotalItens" class="mt-2 text-2xl font-extrabold text-slate-900">0</p>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Valor total estimado</p>
+                <p id="carrinhoTotalValor" class="mt-2 text-2xl font-extrabold text-green-700">R$ 0,00</p>
+              </div>
+
+              <div id="carrinhoMercados" class="space-y-3"></div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

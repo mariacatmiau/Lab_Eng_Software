@@ -1,4 +1,7 @@
-const API_BASE = "http://44.198.34.216:8081";
+const API_BASE =
+  window.location.origin && window.location.origin.startsWith("http")
+    ? window.location.origin
+    : "http://localhost:8080";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -78,5 +81,6 @@ async function carregarProdutosRecentes() {
 
 function logout() {
   localStorage.removeItem("usuario");
+  localStorage.removeItem("token");
   window.location.replace("login.html");
 }

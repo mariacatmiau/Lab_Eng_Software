@@ -53,14 +53,17 @@ public class DoacaoService {
     }
 
     public List<Doacao> listarTodas() {
+        reconciliarDoacoesDeProdutosLegados();
         return doacaoRepo.findAll();
     }
 
     public List<Doacao> listarPorCriador(Long criadorId) {
+        reconciliarDoacoesDeProdutosLegados();
         return doacaoRepo.findByCriadoPorId(criadorId);
     }
 
     public List<Doacao> listarPorOng(Long id) {
+        reconciliarDoacoesDeProdutosLegados();
         return doacaoRepo.findByOngId(id);
     }
 
@@ -103,5 +106,31 @@ public class DoacaoService {
     private boolean usuarioParticipaDaDoacao(Doacao doacao, Long usuarioId) {
         return (doacao.getCriadoPor() != null && doacao.getCriadoPor().getId().equals(usuarioId))
                 || (doacao.getOng() != null && doacao.getOng().getId().equals(usuarioId));
+    }
+
+    private void reconciliarDoacoesDeProdutosLegados() {
+        List<Produto> produtosDoacao = produtoRepo.findAll().stream()
+                .filter(p -> p.getTipoOferta() == TipoOfertaProduto.DOACAO)
+                .filter(p -> p.getOngDestino() != null)
+                .toList();
+
+        for (Produto p : produtosDoacao) {
+            if (doacaoRepo.existsByProdutoId(p.getId())) {
+                continue;
+            }
+
+            Doacao d = new Doacao();
+            d.setProduto(p);
+            d.setOng(p.getOngDestino());
+            d.setCriadoPor(p.getCriadoPor());
+            d.setQuantidade(p.getQuantidade());
+            d.setStatus(StatusDoacao.PENDENTE);
+            doacaoRepo.save(d);
+
+            if (Boolean.TRUE.equals(p.getDisponivel())) {
+                p.setDisponivel(false);
+                produtoRepo.save(p);
+            }
+        }
     }
 }

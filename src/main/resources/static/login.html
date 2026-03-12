@@ -2,30 +2,50 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login | DoaDoa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app-ui.css">
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-  <h1 class="text-2xl font-bold mb-6 text-green-700 text-center">Entrar no DoaDoa</h1>
+<body class="min-h-screen flex items-center justify-center px-4 py-10">
+<div class="w-full max-w-md card-elevated p-8">
+  <h1 class="text-3xl font-extrabold text-center text-green-800">Entrar no DoaDoa</h1>
+  <p class="text-center text-gray-600 mt-2 mb-6">Acesse sua conta para registrar produtos e acompanhar retiradas.</p>
 
-  <form id="loginForm" class="space-y-4">
-    <input type="email" id="email" name="email" autocomplete="email"
-           placeholder="E-mail" class="border rounded-md w-full px-3 py-2" required />
-    <input type="password" id="senha" name="password" autocomplete="current-password"
-           placeholder="Senha" class="border rounded-md w-full px-3 py-2" required />
+  <div id="authMessage" class="hidden rounded-md px-4 py-3 text-sm font-semibold mb-4"></div>
 
-    <div class="flex justify-between items-center">
-      <button type="submit"
-              class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700">
-        Entrar
-      </button>
-      <a href="register.html" class="text-green-700 hover:underline text-sm">Cadastrar-se</a>
+  <form id="loginForm" class="space-y-5">
+    <div>
+      <label for="email" class="block text-sm font-bold text-gray-800">E-mail</label>
+      <input type="email" id="email" name="email" autocomplete="email"
+             placeholder="seuemail@exemplo.com" class="mt-1 rounded-md w-full px-3 py-2" required />
     </div>
+    <div>
+      <label for="senha" class="block text-sm font-bold text-gray-800">Senha</label>
+      <input type="password" id="senha" name="password" autocomplete="current-password"
+             placeholder="Digite sua senha" class="mt-1 rounded-md w-full px-3 py-2" required />
+    </div>
+
+    <button type="submit" class="primary-btn w-full">
+      Entrar
+    </button>
   </form>
+
+  <div class="mt-5 text-center text-sm">
+    <a href="register.html" class="text-green-800 font-semibold hover:underline">Não tem conta? Cadastre-se</a>
+  </div>
+
+  <div class="info-callout mt-6">
+    Se aparecer erro de acesso, confirme se o e-mail e a senha foram digitados corretamente.
+  </div>
 </div>
 
 <!-- ✅ Importa o script de autenticação -->
-<script src="js/auth.js" defer></script>
+<script src="js/app-core.js?v=20260312-1" defer></script>
+<script src="js/address-form.js?v=20260312-1" defer></script>
+<script src="js/auth.js?v=20260312-3" defer></script>
 </body>
 </html>

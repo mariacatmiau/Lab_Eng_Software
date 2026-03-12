@@ -4,16 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DoaDoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/app-ui.css">
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
-<header class="bg-green-600 text-white py-4 text-center font-bold text-xl">DoaDoa</header>
+<body class="flex flex-col min-h-screen">
+<header class="bg-green-700 text-white py-4 text-center font-bold text-xl brand-title">DoaDoa</header>
 
 <main class="flex-1 flex flex-col items-center justify-center text-center px-4">
-    <h1 class="text-3xl font-extrabold mb-6 text-gray-800">Conectando supermercados e ONGs</h1>
-    <div class="space-x-4">
-        <a href="login.html" class="bg-green-600 text-white px-5 py-2 rounded-md hover:bg-green-700">Entrar</a>
-        <a href="register.html" class="bg-gray-100 text-green-700 px-5 py-2 rounded-md hover:bg-gray-200">Cadastrar Conta</a>
+    <div class="card-elevated p-10 max-w-2xl">
+        <h1 class="text-4xl font-extrabold mb-4 text-gray-900">Reduza perdas com uma rotina simples</h1>
+        <p class="text-gray-600 text-lg mb-7">
+            Cadastre produtos próximos do vencimento, acompanhe reservas e organize retiradas com rapidez.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="login.html" class="primary-btn text-center">Entrar</a>
+            <a href="register.html" class="neutral-btn text-center">Cadastrar Conta</a>
+        </div>
+        <p class="text-sm text-gray-500 mt-6">Pensado para uso fácil no dia a dia de mercados e equipes operacionais.</p>
     </div>
 </main>
 
