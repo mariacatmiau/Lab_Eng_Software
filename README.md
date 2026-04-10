@@ -22,7 +22,7 @@ Sistema web para combate ao desperdício alimentar, conectando supermercados, ON
 | Giulia Araki | 10408954 |
 | Maria Gabriela de Barros | 10409037 |
 | Raphaela Polonis | 10408843 |
-| Samuel Zheng | 10395781 |
+
 
 ---
 
