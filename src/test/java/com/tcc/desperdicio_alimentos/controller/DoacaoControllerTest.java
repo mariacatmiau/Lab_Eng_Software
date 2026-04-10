@@ -36,16 +36,16 @@ public class DoacaoControllerTest {
         CriarDoacaoRequest req = new CriarDoacaoRequest();
         req.produtoId = 1L;
         req.ongId = 2L;
-        req.criadoPorId = 3L;
 
         Doacao d = new Doacao();
         d.setId(10L);
 
-        when(service.criar(any())).thenReturn(d);
+        when(service.criar(any(), eq(3L))).thenReturn(d);
 
         mockMvc.perform(post("/api/doacoes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(req)))
+                        .content(mapper.writeValueAsString(req))
+                        .principal(new org.springframework.security.authentication.UsernamePasswordAuthenticationToken("3", null)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(10));
     }

@@ -35,7 +35,6 @@ public class DoacaoServiceTest {
         CriarDoacaoRequest req = new CriarDoacaoRequest();
         req.produtoId = 1L;
         req.ongId = 2L;
-        req.criadoPorId = 3L;
         req.quantidade = 5;
 
         Produto p = new Produto();
@@ -55,7 +54,7 @@ public class DoacaoServiceTest {
         when(usuarioRepo.findById(3L)).thenReturn(Optional.of(funcionario));
         when(doacaoRepo.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
-        Doacao result = service.criar(req);
+        Doacao result = service.criar(req, 3L);
 
         assertNotNull(result);
         assertEquals(StatusDoacao.PENDENTE, result.getStatus());
@@ -68,11 +67,10 @@ public class DoacaoServiceTest {
         CriarDoacaoRequest req = new CriarDoacaoRequest();
         req.produtoId = 1L;
         req.ongId = 2L;
-        req.criadoPorId = 3L;
 
         when(produtoRepo.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ResponseStatusException.class, () -> service.criar(req));
+        assertThrows(ResponseStatusException.class, () -> service.criar(req, 3L));
     }
 
     @Test
@@ -118,7 +116,7 @@ public class DoacaoServiceTest {
     void deveConfirmarRetirada() {
         Doacao d = new Doacao();
         d.setId(1L);
-        d.setStatus(StatusDoacao.PENDENTE);
+        d.setStatus(StatusDoacao.ACEITA);
 
         when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
         when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));

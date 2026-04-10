@@ -21,8 +21,9 @@ public class DoacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Doacao> criar(@RequestBody CriarDoacaoRequest req) {
-        return ResponseEntity.ok(service.criar(req));
+    public ResponseEntity<Doacao> criar(@RequestBody CriarDoacaoRequest req, Authentication authentication) {
+        Long usuarioId = Long.parseLong(authentication.getName());
+        return ResponseEntity.ok(service.criar(req, usuarioId));
     }
 
     @PutMapping("/{id}/aceitar")

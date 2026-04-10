@@ -8,49 +8,95 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   <link rel="stylesheet" href="css/app-ui.css">
 </head>
-<body class="flex items-center justify-center min-h-screen px-4 py-10">
-<div class="card-elevated p-8 w-full max-w-lg">
-  <h1 class="text-3xl font-extrabold mb-2 text-green-800 text-center">Cadastro no DoaDoa</h1>
-  <p class="text-center text-gray-600 mb-6">Crie sua conta para publicar, receber ou buscar produtos perto do vencimento.</p>
+<body class="auth-wrapper">
+<div class="auth-card auth-card--wide">
+  <div class="auth-logo">
+    <div class="auth-logo-icon">
+      <i data-feather="heart" style="width:22px;height:22px;color:#fff"></i>
+    </div>
+    <span class="auth-logo-text">DoaDoa</span>
+  </div>
 
-  <div id="authMessage" class="hidden rounded-md px-4 py-3 text-sm font-semibold mb-4"></div>
+  <h1 class="auth-title">Crie sua conta</h1>
+  <p class="auth-subtitle">Publique, receba ou busque produtos perto do vencimento.</p>
+
+  <div id="authMessage" class="hidden rounded-lg px-4 py-3 text-sm font-semibold mb-4"></div>
 
   <form id="registerForm" class="space-y-4">
-    <label for="tipo" class="block text-sm font-bold text-gray-800">Tipo de usuário *</label>
-    <select id="tipo" class="rounded-md w-full px-3 py-2" required>
-      <option value="">Selecione o tipo de usuário</option>
-      <option value="CLIENTE">Pessoa / Cliente</option>
-      <option value="FUNCIONARIO">Supermercado / Funcionário</option>
-      <option value="ONG">ONG</option>
-    </select>
-
-    <input type="text" id="nome" placeholder="Nome" class="rounded-md w-full px-3 py-2" required />
-    <input type="email" id="email" placeholder="E-mail" class="rounded-md w-full px-3 py-2" required />
-    <input type="password" id="senha" placeholder="Senha" class="rounded-md w-full px-3 py-2" required />
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input type="text" id="rua" placeholder="Rua" class="rounded-md w-full px-3 py-2" required />
-      <input type="text" id="numero" placeholder="Número" class="rounded-md w-full px-3 py-2" required />
+    <div>
+      <label for="tipo" class="block mb-1.5">Tipo de usuário *</label>
+      <select id="tipo" class="w-full px-3 py-2.5" required>
+        <option value="">Selecione o tipo de usuário</option>
+        <option value="CLIENTE">Pessoa / Cliente</option>
+        <option value="FUNCIONARIO">Supermercado / Funcionário</option>
+        <option value="ONG">ONG</option>
+      </select>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input type="text" id="bairro" placeholder="Bairro" class="rounded-md w-full px-3 py-2" required />
-      <input type="text" id="cidade" placeholder="Cidade" class="rounded-md w-full px-3 py-2" required />
+
+    <div>
+      <label for="nome" class="block mb-1.5">Nome *</label>
+      <input type="text" id="nome" placeholder="Seu nome completo" class="w-full px-3 py-2.5" required />
     </div>
-    <input type="text" id="estado" placeholder="Estado (UF)" maxlength="2" class="rounded-md w-full px-3 py-2 uppercase" required />
-    <input type="text" id="telefone" placeholder="Telefone para contato" class="rounded-md w-full px-3 py-2" required />
 
-    <button class="w-full primary-btn">Cadastrar</button>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label for="email" class="block mb-1.5">E-mail *</label>
+        <input type="email" id="email" placeholder="seuemail@exemplo.com" class="w-full px-3 py-2.5" required />
+      </div>
+      <div>
+        <label for="senha" class="block mb-1.5">Senha *</label>
+        <input type="password" id="senha" placeholder="Crie uma senha" class="w-full px-3 py-2.5" required />
+      </div>
+    </div>
 
-    <p class="text-center text-sm mt-4">
-      Já tem conta? <a href="login.html" class="text-green-700 hover:underline">Entrar</a>
-    </p>
+    <div class="auth-divider">Endereço</div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label for="rua" class="block mb-1.5">Rua *</label>
+        <input type="text" id="rua" placeholder="Nome da rua" class="w-full px-3 py-2.5" required />
+      </div>
+      <div>
+        <label for="numero" class="block mb-1.5">Número *</label>
+        <input type="text" id="numero" placeholder="123" class="w-full px-3 py-2.5" required />
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label for="bairro" class="block mb-1.5">Bairro *</label>
+        <input type="text" id="bairro" placeholder="Bairro" class="w-full px-3 py-2.5" required />
+      </div>
+      <div>
+        <label for="cidade" class="block mb-1.5">Cidade *</label>
+        <input type="text" id="cidade" placeholder="Cidade" class="w-full px-3 py-2.5" required />
+      </div>
+      <div>
+        <label for="estado" class="block mb-1.5">UF *</label>
+        <input type="text" id="estado" placeholder="SP" maxlength="2" class="w-full px-3 py-2.5 uppercase" required />
+      </div>
+    </div>
+
+    <div>
+      <label for="telefone" class="block mb-1.5">Telefone com DDD *</label>
+      <input type="text" id="telefone" placeholder="(11) 99999-0000" class="w-full px-3 py-2.5" required />
+    </div>
+
+    <button class="w-full primary-btn" style="padding:0.7rem;margin-top:0.5rem" type="submit">Cadastrar</button>
   </form>
 
-  <div class="info-callout mt-6">Preencha telefone com DDD para facilitar contato rápido.</div>
+  <div class="auth-divider">ou</div>
+
+  <div class="text-center">
+    <a href="login.html" class="neutral-btn w-full justify-center">Já tenho conta — Entrar</a>
+  </div>
 </div>
-<script src="js/app-core.js?v=20260312-1" defer></script>
-<script src="js/address-form.js?v=20260312-1" defer></script>
-<script src="js/auth.js?v=20260312-3" defer></script>
+
+<script>feather.replace();</script>
+<script src="js/app-core.js?v=20260409-1" defer></script>
+<script src="js/address-form.js?v=20260409-1" defer></script>
+<script src="js/auth.js?v=20260409-1" defer></script>
 </body>
 </html>

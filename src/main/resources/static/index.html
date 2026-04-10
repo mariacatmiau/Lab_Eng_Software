@@ -3,30 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DoaDoa</title>
+    <title>DoaDoa — Reduza o desperdício</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <link rel="stylesheet" href="css/app-ui.css">
 </head>
-<body class="flex flex-col min-h-screen">
-<header class="bg-green-700 text-white py-4 text-center font-bold text-xl brand-title">DoaDoa</header>
-
-<main class="flex-1 flex flex-col items-center justify-center text-center px-4">
-    <div class="card-elevated p-10 max-w-2xl">
-        <h1 class="text-4xl font-extrabold mb-4 text-gray-900">Reduza perdas com uma rotina simples</h1>
-        <p class="text-gray-600 text-lg mb-7">
-            Cadastre produtos próximos do vencimento, acompanhe reservas e organize retiradas com rapidez.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="login.html" class="primary-btn text-center">Entrar</a>
-            <a href="register.html" class="neutral-btn text-center">Cadastrar Conta</a>
-        </div>
-        <p class="text-sm text-gray-500 mt-6">Pensado para uso fácil no dia a dia de mercados e equipes operacionais.</p>
+<body>
+<div class="landing-hero">
+  <nav class="landing-nav">
+    <div class="flex items-center gap-2">
+      <div class="auth-logo-icon" style="width:36px;height:36px">
+        <i data-feather="heart" style="width:18px;height:18px;color:#fff"></i>
+      </div>
+      <span class="font-extrabold text-lg text-gray-900 brand-title">DoaDoa</span>
     </div>
-</main>
+    <div class="flex items-center gap-3">
+      <a href="login.html" class="neutral-btn text-sm">Entrar</a>
+      <a href="register.html" class="primary-btn text-sm">Criar Conta</a>
+    </div>
+  </nav>
 
-<footer class="bg-gray-100 text-gray-500 py-4 text-center text-sm">&copy; 2025 DoaDoa</footer>
+  <div class="landing-content">
+    <div class="landing-card">
+      <div class="landing-badge">
+        <i data-feather="zap" style="width:14px;height:14px"></i>
+        Plataforma contra o desperdício
+      </div>
+
+      <h1 class="landing-heading">
+        Conecte quem tem com<br><span class="text-brand">quem precisa</span>
+      </h1>
+
+      <p class="landing-description">
+        Mercados cadastram produtos próximos do vencimento. ONGs recebem doações.
+        Clientes encontram ofertas perto de casa. Tudo simples e rápido.
+      </p>
+
+      <div class="landing-actions">
+        <a href="register.html" class="primary-btn" style="padding:0.7rem 2rem;font-size:1rem">
+          Comece Agora
+        </a>
+        <a href="login.html" class="neutral-btn" style="padding:0.7rem 2rem;font-size:1rem">
+          Já tenho conta
+        </a>
+      </div>
+
+      <div class="landing-features">
+        <div class="landing-feature">
+          <div class="landing-feature-icon">
+            <i data-feather="package" style="width:22px;height:22px"></i>
+          </div>
+          <h3>Mercados</h3>
+          <p>Cadastre produtos perto do vencimento para venda ou doação.</p>
+        </div>
+        <div class="landing-feature">
+          <div class="landing-feature-icon">
+            <i data-feather="heart" style="width:22px;height:22px"></i>
+          </div>
+          <h3>ONGs</h3>
+          <p>Receba doações de alimentos e organize retiradas com facilidade.</p>
+        </div>
+        <div class="landing-feature">
+          <div class="landing-feature-icon">
+            <i data-feather="map-pin" style="width:22px;height:22px"></i>
+          </div>
+          <h3>Clientes</h3>
+          <p>Encontre ofertas nos mercados mais próximos e economize.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="landing-footer">&copy; 2026 DoaDoa. Menos desperdício, mais solidariedade.</footer>
+</div>
+<script>feather.replace();</script>
 </body>
 </html>

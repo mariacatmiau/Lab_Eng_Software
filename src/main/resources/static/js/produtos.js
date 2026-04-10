@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const API_ORIGIN =
     window.location.origin && window.location.origin.startsWith("http")
       ? window.location.origin
-      : "http://localhost:8081";
+      : "http://localhost:8080";
   const API_BASE = `${API_ORIGIN}/api`;
 
   const tabela = document.getElementById("tabela-produtos");

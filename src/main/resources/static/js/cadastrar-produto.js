@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const API_ORIGIN =
     window.location.origin && window.location.origin.startsWith("http")
       ? window.location.origin
-      : "http://localhost:8081";
+      : "http://localhost:8080";
   const API_BASE = `${API_ORIGIN}/api`;
 
   const form = document.getElementById("form-cadastro-produto");

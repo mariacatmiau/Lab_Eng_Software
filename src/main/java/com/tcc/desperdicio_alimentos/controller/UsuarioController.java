@@ -53,8 +53,14 @@ public class UsuarioController {
             if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("E-mail é obrigatório");
             }
+            if (!usuario.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                return ResponseEntity.badRequest().body("Formato de e-mail inválido");
+            }
             if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("Senha é obrigatória");
+            }
+            if (usuario.getSenha().length() < 6) {
+                return ResponseEntity.badRequest().body("Senha deve ter no mínimo 6 caracteres");
             }
             if (usuario.getTelefone() == null || usuario.getTelefone().trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("Telefone é obrigatório");
@@ -86,20 +92,14 @@ public class UsuarioController {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
 
         if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail não encontrado");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
         }
 
         Usuario usuario = usuarioOpt.get();
         boolean senhaValida = passwordEncoder.matches(senha, usuario.getSenha());
-        // Compatibilidade temporária com registros antigos em texto puro.
-        if (!senhaValida && usuario.getSenha().equals(senha)) {
-            senhaValida = true;
-            usuario.setSenha(passwordEncoder.encode(senha));
-            usuarioRepository.save(usuario);
-        }
 
         if (!senhaValida) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
         }
 
         String token = jwtService.generateToken(usuario.getId(), usuario.getTipo().name());

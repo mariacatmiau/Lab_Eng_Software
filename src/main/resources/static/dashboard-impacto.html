@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Impacto | DoaDoa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/app-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="js/app-shell.js" defer></script>
+    <script src="js/dashboard-impacto.js" defer></script>
+</head>
+<body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuario = JSON.parse(localStorage.getItem("usuario"));
+      if (!usuario || !usuario.tipo) {
+        localStorage.removeItem("usuario");
+        localStorage.removeItem("token");
+        setTimeout(() => window.location.replace("login.html"), 0);
+        return;
+      }
+      window.history.replaceState({}, document.title, window.location.href);
+    });
+</script>
+
+<!-- Sidebar -->
+<div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
+    <div class="flex items-center justify-center h-16 px-4 bg-green-600">
+        <i data-feather="heart" class="text-white h-6 w-6"></i>
+        <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
+    </div>
+    <nav class="mt-8 px-4 space-y-1">
+        <a href="#" id="linkVoltar" class="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md">
+            <i data-feather="arrow-left" class="mr-3 h-5 w-5 text-gray-400"></i> Voltar ao Painel
+        </a>
+        <a href="dashboard-impacto.html" class="active-item flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <i data-feather="bar-chart-2" class="text-green-500 mr-3 h-5 w-5"></i> Impacto
+        </a>
+        <a href="perfil.html" class="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md">
+            <i data-feather="user" class="mr-3 h-5 w-5 text-gray-400"></i> Perfil
+        </a>
+    </nav>
+    <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
+        <a href="#" data-logout class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+            <i data-feather="log-out" class="mr-3 h-5 w-5 text-gray-400"></i> Sair
+        </a>
+    </div>
+</div>
+
+<div id="menuOverlay" class="mobile-overlay"></div>
+
+<!-- Main -->
+<div class="main-content">
+    <header class="top-header shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h1 class="page-title">Dashboard de Impacto</h1>
+                    <p class="page-subtitle">Métricas gerais da plataforma DoaDoa.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">
+                        <i data-feather="menu" class="h-5 w-5"></i>
+                    </button>
+                    <span class="hidden sm:inline text-sm text-gray-600">Olá, <strong data-user-name>usuário</strong></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-6 space-y-8">
+
+        <!-- KPI Cards -->
+        <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-4">Visão Geral</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="card-elevated p-4 text-center">
+                    <i data-feather="gift" class="mx-auto h-8 w-8 text-green-600 mb-2"></i>
+                    <p id="kpi-total-doacoes" class="text-2xl font-bold text-gray-900">--</p>
+                    <p class="text-xs text-gray-500 mt-1">Doações Totais</p>
+                </div>
+                <div class="card-elevated p-4 text-center">
+                    <i data-feather="truck" class="mx-auto h-8 w-8 text-blue-600 mb-2"></i>
+                    <p id="kpi-retiradas" class="text-2xl font-bold text-gray-900">--</p>
+                    <p class="text-xs text-gray-500 mt-1">Retiradas</p>
+                </div>
+                <div class="card-elevated p-4 text-center">
+                    <i data-feather="box" class="mx-auto h-8 w-8 text-purple-600 mb-2"></i>
+                    <p id="kpi-itens-doados" class="text-2xl font-bold text-gray-900">--</p>
+                    <p class="text-xs text-gray-500 mt-1">Itens Doados</p>
+                </div>
+                <div class="card-elevated p-4 text-center">
+                    <i data-feather="package" class="mx-auto h-8 w-8 text-amber-600 mb-2"></i>
+                    <p id="kpi-produtos" class="text-2xl font-bold text-gray-900">--</p>
+                    <p class="text-xs text-gray-500 mt-1">Produtos Cadastrados</p>
+                </div>
+                <div class="card-elevated p-4 text-center">
+                    <i data-feather="users" class="mx-auto h-8 w-8 text-teal-600 mb-2"></i>
+                    <p id="kpi-ongs" class="text-2xl font-bold text-gray-900">--</p>
+                    <p class="text-xs text-gray-500 mt-1">ONGs</p>
+                </div>
+                <div class="card-elevated p-4 text-center">
+                    <i data-feather="shopping-bag" class="mx-auto h-8 w-8 text-rose-600 mb-2"></i>
+                    <p id="kpi-mercados" class="text-2xl font-bold text-gray-900">--</p>
+                    <p class="text-xs text-gray-500 mt-1">Mercados</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Status Breakdown -->
+        <section>
+            <h2 class="text-lg font-bold text-gray-900 mb-4">Status das Doações</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="card-elevated p-4 border-l-4 border-yellow-400">
+                    <p class="text-sm text-gray-500">Pendentes</p>
+                    <p id="status-pendentes" class="text-xl font-bold text-gray-900">--</p>
+                </div>
+                <div class="card-elevated p-4 border-l-4 border-green-500">
+                    <p class="text-sm text-gray-500">Aceitas</p>
+                    <p id="status-aceitas" class="text-xl font-bold text-gray-900">--</p>
+                </div>
+                <div class="card-elevated p-4 border-l-4 border-blue-500">
+                    <p class="text-sm text-gray-500">Retiradas</p>
+                    <p id="status-retiradas" class="text-xl font-bold text-gray-900">--</p>
+                </div>
+                <div class="card-elevated p-4 border-l-4 border-red-400">
+                    <p class="text-sm text-gray-500">Recusadas</p>
+                    <p id="status-recusadas" class="text-xl font-bold text-gray-900">--</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress bar -->
+        <section class="card-elevated p-5">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-sm font-bold text-gray-800">Taxa de Conclusão</h3>
+                <span id="taxa-conclusao" class="text-sm font-bold text-green-700">--%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div id="barra-conclusao" class="h-3 rounded-full bg-green-500 transition-all duration-700" style="width: 0%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Porcentagem de doações que foram efetivamente retiradas.</p>
+        </section>
+
+        <!-- Rankings -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Ranking ONGs -->
+            <section class="card-elevated overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center gap-2">
+                    <i data-feather="award" class="h-5 w-5 text-yellow-500"></i>
+                    <h3 class="text-lg font-bold text-gray-900">Ranking de ONGs</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ONG</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Retiradas</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Recebidas</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tabela-ranking-ongs" class="bg-white divide-y divide-gray-200">
+                        <tr><td colspan="4" class="text-center py-4 text-gray-500">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Ranking Mercados -->
+            <section class="card-elevated overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center gap-2">
+                    <i data-feather="trending-up" class="h-5 w-5 text-green-500"></i>
+                    <h3 class="text-lg font-bold text-gray-900">Ranking de Mercados</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mercado</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Doações</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Itens</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tabela-ranking-mercados" class="bg-white divide-y divide-gray-200">
+                        <tr><td colspan="4" class="text-center py-4 text-gray-500">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Recent Donations -->
+        <section class="card-elevated overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-bold text-gray-900">Doações Recentes</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mercado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ONG</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tabela-doacoes-recentes" class="bg-white divide-y divide-gray-200">
+                    <tr><td colspan="5" class="text-center py-4 text-gray-500">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

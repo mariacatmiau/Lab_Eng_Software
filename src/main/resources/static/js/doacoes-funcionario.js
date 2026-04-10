@@ -62,7 +62,7 @@
       PENDENTE: "bg-yellow-100 text-yellow-800",
       ACEITA: "bg-blue-100 text-blue-800",
       RECUSADA: "bg-red-100 text-red-800",
-      RETIRADA_CONCLUIDA: "bg-green-100 text-green-800",
+      RETIRADA: "bg-green-100 text-green-800",
       CANCELADA: "bg-gray-100 text-gray-700",
     };
     const css = map[status] || "bg-gray-100 text-gray-700";
@@ -154,7 +154,7 @@
   window.confirmar = async function confirmar(id) {
     if (!confirm("Confirmar retirada desta doação?")) return;
     try {
-      await requestJson("PUT", `${pageApiBase}/retiradas/${id}/confirmar`);
+      await requestJson("PUT", `${pageApiBase}/doacoes/${id}/retirada`);
       await carregarDoacoesFuncionario();
       alert("Retirada confirmada!");
     } catch (error) {
@@ -165,7 +165,7 @@
   window.cancelar = async function cancelar(id) {
     if (!confirm("Cancelar esta doação?")) return;
     try {
-      await requestJson("PUT", `${pageApiBase}/retiradas/${id}/cancelar`);
+      await requestJson("PUT", `${pageApiBase}/doacoes/${id}/recusar`);
       await carregarDoacoesFuncionario();
       alert("Doação cancelada.");
     } catch (error) {

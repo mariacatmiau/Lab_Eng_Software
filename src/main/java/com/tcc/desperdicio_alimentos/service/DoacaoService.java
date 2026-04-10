@@ -21,8 +21,8 @@ public class DoacaoService {
         this.usuarioRepo = usuarioRepo;
     }
 
-    public Doacao criar(CriarDoacaoRequest req) {
-        if (req.produtoId == null || req.ongId == null || req.criadoPorId == null) {
+    public Doacao criar(CriarDoacaoRequest req, Long criadoPorId) {
+        if (req.produtoId == null || req.ongId == null || criadoPorId == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campos obrigatórios ausentes");
         }
 
@@ -32,7 +32,7 @@ public class DoacaoService {
         Usuario ong = usuarioRepo.findById(req.ongId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ONG não encontrada"));
 
-        Usuario criador = usuarioRepo.findById(req.criadoPorId)
+        Usuario criador = usuarioRepo.findById(criadoPorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário criador não encontrado"));
 
         if (produto.getCriadoPor() == null || !produto.getCriadoPor().getId().equals(criador.getId())) {
@@ -75,6 +75,10 @@ public class DoacaoService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas a ONG destinatária pode aceitar a doação");
         }
 
+        if (d.getStatus() != StatusDoacao.PENDENTE) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Apenas doações pendentes podem ser aceitas");
+        }
+
         d.setStatus(StatusDoacao.ACEITA);
         return doacaoRepo.save(d);
     }
@@ -87,6 +91,10 @@ public class DoacaoService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas participantes da doação podem recusá-la");
         }
 
+        if (d.getStatus() != StatusDoacao.PENDENTE && d.getStatus() != StatusDoacao.ACEITA) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Doação já finalizada, não pode ser recusada");
+        }
+
         d.setStatus(StatusDoacao.RECUSADA);
         return doacaoRepo.save(d);
     }
@@ -97,6 +105,10 @@ public class DoacaoService {
 
         if (!usuarioParticipaDaDoacao(d, usuarioId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas participantes da doação podem confirmar retirada");
+        }
+
+        if (d.getStatus() != StatusDoacao.ACEITA) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Apenas doações aceitas podem ter retirada confirmada");
         }
 
         d.setStatus(StatusDoacao.RETIRADA);

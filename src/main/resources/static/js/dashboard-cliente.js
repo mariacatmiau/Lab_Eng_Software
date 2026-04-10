@@ -4,6 +4,7 @@
   let ofertasAtuais = [];
   let carrinho = carregarCarrinho();
   let localizacaoAtual = null;
+  let ultimoPedidoFinalizado = null;
 
   function carregarCarrinho() {
     try {
@@ -16,6 +17,48 @@
 
   function persistirCarrinho() {
     localStorage.setItem(cartStorageKey, JSON.stringify(carrinho));
+  }
+
+  function atualizarPainelPedidoFinalizado() {
+    const box = document.getElementById("pedidoFinalizadoBox");
+    const resumo = document.getElementById("pedidoFinalizadoResumo");
+    const mercadosEl = document.getElementById("pedidoFinalizadoMercados");
+    if (!box || !resumo || !mercadosEl) {
+      return;
+    }
+
+    if (!ultimoPedidoFinalizado) {
+      box.classList.add("hidden");
+      resumo.textContent = "";
+      mercadosEl.innerHTML = "";
+      return;
+    }
+
+    box.classList.remove("hidden");
+    resumo.textContent = `Pedido #${ultimoPedidoFinalizado.pedidoId} aguardando pagamento. Total: ${window.AppCore.formatCurrency(ultimoPedidoFinalizado.valorTotal)}.`;
+    mercadosEl.innerHTML = (ultimoPedidoFinalizado.mercados || [])
+      .map((mercado) => {
+        const whatsappNumero = formatarTelefoneWhatsapp(mercado.mercadoTelefone);
+        const whatsappHref = whatsappNumero
+          ? `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(mercado.mensagemWhatsapp || "")}`
+          : "";
+
+        return `
+          <section class="rounded-xl border border-green-200 bg-white px-4 py-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-sm font-bold text-slate-900">${window.AppCore.escapeHtml(mercado.mercadoNome || "Mercado")}</p>
+                <p class="mt-1 text-sm text-slate-600">${window.AppCore.escapeHtml(mercado.mercadoEndereco || "Endereço não informado")}</p>
+              </div>
+              <p class="text-sm font-extrabold text-green-700">${window.AppCore.formatCurrency(mercado.total)}</p>
+            </div>
+            ${whatsappHref
+              ? `<a href="${whatsappHref}" target="_blank" rel="noopener noreferrer" class="primary-btn mt-3 w-full inline-flex items-center justify-center">Enviar mensagem para o mercado</a>`
+              : `<p class="mt-3 text-sm text-amber-800">Esse mercado não tem telefone cadastrado para WhatsApp.</p>`}
+          </section>
+        `;
+      })
+      .join("");
   }
 
   function obterQuantidadeSelecionada(produtoId) {
@@ -96,15 +139,23 @@
       localizacaoAtual = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
+        fonte: "gps",
       };
-      atualizarStatusLocalizacao("Localização ativada. As ofertas agora priorizam os mercados mais próximos.", "sucesso");
+      atualizarStatusLocalizacao("Localização ativada via GPS. As ofertas priorizam os mercados mais próximos.", "sucesso");
       await carregarOfertas();
     } catch (error) {
-      localizacaoAtual = null;
-      const mensagem = error?.code === 1
-        ? "Permissão de localização negada. Você ainda pode usar o campo de referência manualmente."
-        : "Não foi possível obter sua localização agora. Tente novamente em instantes.";
-      atualizarStatusLocalizacao(mensagem, "erro");
+      // Mantém coordenadas do perfil se já existiam
+      if (!localizacaoAtual) {
+        const mensagem = error?.code === 1
+          ? "Permissão de localização negada. Você ainda pode usar o campo de referência manualmente."
+          : "Não foi possível obter sua localização agora. Tente novamente em instantes.";
+        atualizarStatusLocalizacao(mensagem, "erro");
+      } else {
+        const mensagem = error?.code === 1
+          ? "Permissão de GPS negada. Usando localização do seu endereço cadastrado."
+          : "GPS indisponível. Usando localização do seu endereço cadastrado.";
+        atualizarStatusLocalizacao(mensagem, "sucesso");
+      }
     } finally {
       if (botao) {
         botao.disabled = false;
@@ -113,12 +164,35 @@
     }
   }
 
+  function inicializarLocalizacaoComPerfil() {
+    const usuario = window.AppCore.readStoredUser();
+    if (usuario?.latitude != null && usuario?.longitude != null) {
+      localizacaoAtual = {
+        latitude: usuario.latitude,
+        longitude: usuario.longitude,
+        fonte: "perfil",
+      };
+      atualizarStatusLocalizacao(
+        "Usando localização do seu endereço cadastrado. Para maior precisão, clique em \"Usar minha localização\".",
+        "sucesso"
+      );
+      return true;
+    }
+    return false;
+  }
+
   async function inicializarLocalizacao() {
+    // 1. Usa coordenadas do perfil como fallback imediato
+    const temPerfil = inicializarLocalizacaoComPerfil();
+
     if (!navigator.geolocation) {
-      atualizarStatusLocalizacao("Seu navegador não suporta geolocalização. Use o campo de referência para priorizar ofertas.", "erro");
+      if (!temPerfil) {
+        atualizarStatusLocalizacao("Seu navegador não suporta geolocalização. Use o campo de referência para priorizar ofertas.", "erro");
+      }
       return;
     }
 
+    // 2. Se permissão de GPS já está concedida, atualiza com coordenadas mais precisas
     if (!navigator.permissions?.query) {
       return;
     }
@@ -129,7 +203,7 @@
         await solicitarLocalizacao();
       }
     } catch {
-      // Ignora falhas do Permissions API e deixa a ativação manual via botão.
+      // Ignora falhas do Permissions API e mantém coordenadas do perfil.
     }
   }
 
@@ -193,6 +267,102 @@
     return Array.from(grupos.values());
   }
 
+  function construirPayloadPedido() {
+    return {
+      itens: Object.values(carrinho)
+        .map((item) => ({
+          produtoId: item.produtoId,
+          quantidade: Number(item.quantidade || 0),
+        }))
+        .filter((item) => item.produtoId && item.quantidade > 0),
+    };
+  }
+
+  function sincronizarCarrinhoComOfertas() {
+    const ofertasPorProduto = new Map(ofertasAtuais.map((oferta) => [String(oferta.produtoId), oferta]));
+    let alterou = false;
+
+    Object.keys(carrinho).forEach((produtoId) => {
+      const oferta = ofertasPorProduto.get(String(produtoId));
+      if (!oferta) {
+        delete carrinho[produtoId];
+        alterou = true;
+        return;
+      }
+
+      const maximo = Math.max(0, Number(oferta.quantidade) || 0);
+      if (maximo <= 0) {
+        delete carrinho[produtoId];
+        alterou = true;
+        return;
+      }
+
+      const quantidadeAtual = Number(carrinho[produtoId]?.quantidade || 0);
+      const quantidadeAjustada = Math.min(quantidadeAtual, maximo);
+      if (quantidadeAjustada <= 0) {
+        delete carrinho[produtoId];
+        alterou = true;
+        return;
+      }
+
+      if (quantidadeAjustada !== quantidadeAtual) {
+        carrinho[produtoId].quantidade = quantidadeAjustada;
+        alterou = true;
+      }
+    });
+
+    if (alterou) {
+      persistirCarrinho();
+    }
+  }
+
+  async function finalizarPedido() {
+    const botao = document.getElementById("btnFinalizarPedido");
+    const payload = construirPayloadPedido();
+    if (!payload.itens.length) {
+      alert("Adicione pelo menos um item ao carrinho antes de finalizar o pedido.");
+      return;
+    }
+
+    try {
+      if (botao) {
+        botao.disabled = true;
+        botao.textContent = "Finalizando...";
+      }
+
+      const resp = await fetch(`${pageApiBase}/pedidos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      let dados = null;
+      try {
+        dados = await resp.json();
+      } catch {
+        dados = null;
+      }
+
+      if (!resp.ok) {
+        throw new Error(dados?.message || "Não foi possível finalizar o pedido.");
+      }
+
+      ultimoPedidoFinalizado = dados;
+      carrinho = {};
+      persistirCarrinho();
+      atualizarResumoCarrinho();
+      atualizarPainelPedidoFinalizado();
+      await carregarOfertas();
+    } catch (error) {
+      alert(error?.message || "Erro ao finalizar o pedido.");
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Finalizar pedido no sistema";
+      }
+    }
+  }
+
   function atualizarResumoCarrinho() {
     const resumo = document.getElementById("resumoCarrinho");
     const estadoVazio = document.getElementById("estadoCarrinhoVazio");
@@ -213,6 +383,7 @@
       mercadosEl.innerHTML = "";
       totalItens.textContent = "0";
       totalValor.textContent = "R$ 0,00";
+      document.getElementById("btnFinalizarPedido")?.setAttribute("disabled", "disabled");
       return;
     }
 
@@ -220,6 +391,7 @@
     estadoVazio.classList.add("hidden");
     totalItens.textContent = String(quantidadeTotal);
     totalValor.textContent = window.AppCore.formatCurrency(valorTotal);
+    document.getElementById("btnFinalizarPedido")?.removeAttribute("disabled");
     mercadosEl.innerHTML = grupos
       .map((grupo) => {
         const whatsappNumero = formatarTelefoneWhatsapp(grupo.telefone);
@@ -394,6 +566,7 @@
       }
 
       ofertasAtuais = await resp.json();
+      sincronizarCarrinhoComOfertas();
       renderizarOfertas();
       atualizarResumoCarrinho();
     } catch (err) {
@@ -456,11 +629,16 @@
       renderizarOfertas();
     });
 
+    document.getElementById("btnFinalizarPedido")?.addEventListener("click", async () => {
+      await finalizarPedido();
+    });
+
     document.getElementById("btnUsarLocalizacao")?.addEventListener("click", async () => {
       await solicitarLocalizacao();
     });
 
     atualizarResumoCarrinho();
+  atualizarPainelPedidoFinalizado();
     await inicializarLocalizacao();
 
     await carregarOfertas();

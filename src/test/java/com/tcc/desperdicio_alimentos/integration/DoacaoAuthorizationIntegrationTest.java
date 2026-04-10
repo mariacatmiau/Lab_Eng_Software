@@ -81,7 +81,7 @@ class DoacaoAuthorizationIntegrationTest {
         );
 
         Long produtoId = criarProduto(funcionario.token, ongDestino.id);
-        Long doacaoId = criarDoacao(funcionario.token, produtoId, ongDestino.id, funcionario.id);
+        Long doacaoId = criarDoacao(funcionario.token, produtoId, ongDestino.id);
 
         mockMvc.perform(put("/api/doacoes/" + doacaoId + "/aceitar")
                         .header("Authorization", "Bearer " + ongIntrusa.token))
@@ -115,7 +115,8 @@ class DoacaoAuthorizationIntegrationTest {
                 "\"email\":\"" + email + "\"," +
                 "\"senha\":\"123456\"," +
                 "\"tipo\":\"" + tipo + "\"," +
-                "\"telefone\":\"" + telefone + "\"" +
+                "\"telefone\":\"" + telefone + "\"," +
+                "\"endereco\":\"Avenida Paulista, 1000, Bela Vista, Sao Paulo, SP\"" +
                 "}";
 
         mockMvc.perform(post("/api/usuarios/register")
@@ -162,11 +163,10 @@ class DoacaoAuthorizationIntegrationTest {
         return json.get("id").asLong();
     }
 
-    private Long criarDoacao(String token, Long produtoId, Long ongId, Long criadoPorId) throws Exception {
+    private Long criarDoacao(String token, Long produtoId, Long ongId) throws Exception {
         String body = "{" +
                 "\"produtoId\":" + produtoId + "," +
                 "\"ongId\":" + ongId + "," +
-                "\"criadoPorId\":" + criadoPorId + "," +
                 "\"quantidade\":2" +
                 "}";
 

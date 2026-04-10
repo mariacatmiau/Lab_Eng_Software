@@ -8,44 +8,54 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
   <link rel="stylesheet" href="css/app-ui.css">
 </head>
-<body class="min-h-screen flex items-center justify-center px-4 py-10">
-<div class="w-full max-w-md card-elevated p-8">
-  <h1 class="text-3xl font-extrabold text-center text-green-800">Entrar no DoaDoa</h1>
-  <p class="text-center text-gray-600 mt-2 mb-6">Acesse sua conta para registrar produtos e acompanhar retiradas.</p>
+<body class="auth-wrapper">
+<div class="auth-card">
+  <div class="auth-logo">
+    <div class="auth-logo-icon">
+      <i data-feather="heart" style="width:22px;height:22px;color:#fff"></i>
+    </div>
+    <span class="auth-logo-text">DoaDoa</span>
+  </div>
 
-  <div id="authMessage" class="hidden rounded-md px-4 py-3 text-sm font-semibold mb-4"></div>
+  <h1 class="auth-title">Bem-vindo de volta</h1>
+  <p class="auth-subtitle">Entre na sua conta para continuar.</p>
+
+  <div id="authMessage" class="hidden rounded-lg px-4 py-3 text-sm font-semibold mb-4"></div>
 
   <form id="loginForm" class="space-y-5">
     <div>
-      <label for="email" class="block text-sm font-bold text-gray-800">E-mail</label>
+      <label for="email" class="block mb-1.5">E-mail</label>
       <input type="email" id="email" name="email" autocomplete="email"
-             placeholder="seuemail@exemplo.com" class="mt-1 rounded-md w-full px-3 py-2" required />
+             placeholder="seuemail@exemplo.com" class="w-full px-3 py-2.5" required />
     </div>
     <div>
-      <label for="senha" class="block text-sm font-bold text-gray-800">Senha</label>
+      <label for="senha" class="block mb-1.5">Senha</label>
       <input type="password" id="senha" name="password" autocomplete="current-password"
-             placeholder="Digite sua senha" class="mt-1 rounded-md w-full px-3 py-2" required />
+             placeholder="Digite sua senha" class="w-full px-3 py-2.5" required />
     </div>
 
-    <button type="submit" class="primary-btn w-full">
+    <button type="submit" class="primary-btn w-full" style="padding:0.7rem">
       Entrar
     </button>
   </form>
 
-  <div class="mt-5 text-center text-sm">
-    <a href="register.html" class="text-green-800 font-semibold hover:underline">Não tem conta? Cadastre-se</a>
+  <div class="auth-divider">ou</div>
+
+  <div class="text-center">
+    <a href="register.html" class="neutral-btn w-full justify-center">Criar minha conta</a>
   </div>
 
-  <div class="info-callout mt-6">
-    Se aparecer erro de acesso, confirme se o e-mail e a senha foram digitados corretamente.
+  <div class="info-callout mt-6" style="font-size:0.85rem">
+    Dica: se não conseguir acessar, verifique se o e-mail e senha estão digitados corretamente.
   </div>
 </div>
 
-<!-- ✅ Importa o script de autenticação -->
-<script src="js/app-core.js?v=20260312-1" defer></script>
-<script src="js/address-form.js?v=20260312-1" defer></script>
-<script src="js/auth.js?v=20260312-3" defer></script>
+<script>feather.replace();</script>
+<script src="js/app-core.js?v=20260409-1" defer></script>
+<script src="js/address-form.js?v=20260409-1" defer></script>
+<script src="js/auth.js?v=20260409-1" defer></script>
 </body>
 </html>

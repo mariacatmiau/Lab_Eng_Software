@@ -64,7 +64,8 @@ public class ProdutoController {
 
     // Marcar produto como indisponível
     @PutMapping("/{id}/indisponivel")
-    public ResponseEntity<Produto> marcarIndisponivel(@PathVariable Long id) {
-        return ResponseEntity.ok(service.marcarIndisponivel(id));
+    public ResponseEntity<Produto> marcarIndisponivel(@PathVariable Long id, Authentication authentication) {
+        Long usuarioId = Long.parseLong(authentication.getName());
+        return ResponseEntity.ok(service.marcarIndisponivel(id, usuarioId));
     }
 }

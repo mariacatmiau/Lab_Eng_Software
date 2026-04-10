@@ -1,6 +1,6 @@
 package com.tcc.desperdicio_alimentos.controller;
 
-import com.tcc.desperdicio_alimentos.model.Usuario;
+import com.tcc.desperdicio_alimentos.dto.UsuarioResumoDTO;
 import com.tcc.desperdicio_alimentos.model.UsuarioTipo;
 import com.tcc.desperdicio_alimentos.repository.UsuarioRepository;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +22,11 @@ public class OngController {
 
     // Lista todas as ONGs cadastradas (usuários com tipo = ONG)
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarOngs() {
-        List<Usuario> ongs = usuarioRepo.findAll()
+    public ResponseEntity<List<UsuarioResumoDTO>> listarOngs() {
+        List<UsuarioResumoDTO> ongs = usuarioRepo.findAll()
                 .stream()
                 .filter(u -> u.getTipo() == UsuarioTipo.ONG)
+                .map(UsuarioResumoDTO::from)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ongs);
     }

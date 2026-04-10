@@ -116,9 +116,12 @@ public class ProdutoService {
     }
 
     // Marcar produto como indisponível
-    public Produto marcarIndisponivel(Long id) {
+    public Produto marcarIndisponivel(Long id, Long usuarioId) {
         Produto p = produtoRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+        if (p.getCriadoPor() == null || !p.getCriadoPor().getId().equals(usuarioId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas o criador do produto pode marcá-lo como indisponível");
+        }
         p.setDisponivel(false);
         return produtoRepo.save(p);
     }

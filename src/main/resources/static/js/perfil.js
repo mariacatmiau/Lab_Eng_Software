@@ -1,52 +1,6 @@
 (() => {
   const pageApiBase = window.AppCore.apiBase;
 
-  function decomporEndereco(endereco) {
-    const texto = String(endereco || "").trim();
-    if (!texto) {
-      return { rua: "", numero: "", bairro: "", cidade: "", estado: "" };
-    }
-
-    const partes = texto.split(",").map((parte) => parte.trim()).filter(Boolean);
-    if (partes.length < 4) {
-      return { rua: texto, numero: "", bairro: "", cidade: "", estado: "" };
-    }
-
-    const rua = partes[0] || texto;
-    const numero = partes[1] || "";
-    let bairro = partes[2] || "";
-    const cidadeEstado = partes.slice(3).join(", ");
-    let cidade = "";
-    let estado = "";
-
-    if (cidadeEstado.includes(" - ")) {
-      const pedacos = cidadeEstado.split(" - ");
-      cidade = pedacos[0]?.trim() || "";
-      estado = pedacos.slice(1).join(" - ").trim().toUpperCase();
-    } else if (partes.length >= 4) {
-      cidade = cidadeEstado;
-    }
-
-    return { rua, numero, bairro, cidade, estado };
-  }
-
-  function montarEndereco() {
-    const rua = document.getElementById("rua")?.value.trim() || "";
-    const numero = document.getElementById("numero")?.value.trim() || "";
-    const bairro = document.getElementById("bairro")?.value.trim() || "";
-    const cidade = document.getElementById("cidade")?.value.trim() || "";
-    const estado = (document.getElementById("estado")?.value || "").trim().toUpperCase();
-
-    if (!rua || !numero || !bairro || !cidade || !estado) {
-      return { valido: false, endereco: "" };
-    }
-
-    return {
-      valido: true,
-      endereco: `${rua}, ${numero}, ${bairro}, ${cidade} - ${estado}`,
-    };
-  }
-
   function montarLinksPerfil(tipo) {
     const tipoNormalizado = String(tipo || "").trim().toUpperCase();
     if (tipoNormalizado === "ONG") {

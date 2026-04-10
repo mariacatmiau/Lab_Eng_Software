@@ -1,25 +1,4 @@
-const API_ORIGIN =
-  window.location.origin && window.location.origin.startsWith("http")
-    ? window.location.origin
-    : "http://localhost:8081";
 const API_BASE = window.AppCore.apiBase;
-
-function montarEnderecoEstruturado() {
-  const rua = document.getElementById("rua")?.value.trim() || "";
-  const numero = document.getElementById("numero")?.value.trim() || "";
-  const bairro = document.getElementById("bairro")?.value.trim() || "";
-  const cidade = document.getElementById("cidade")?.value.trim() || "";
-  const estado = (document.getElementById("estado")?.value || "").trim().toUpperCase();
-
-  if (!rua || !numero || !bairro || !cidade || !estado) {
-    return { valido: false, endereco: "" };
-  }
-
-  return {
-    valido: true,
-    endereco: `${rua}, ${numero}, ${bairro}, ${cidade} - ${estado}`,
-  };
-}
 
 function showAuthMessage(message, type = "error") {
   const box = document.getElementById("authMessage");
@@ -80,16 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("email").value.trim();
       const senha = document.getElementById("senha").value.trim();
 
-      console.log("Tentando login com:", { email, senha });
-
       try {
         const res = await fetch(`${API_BASE}/usuarios/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, senha }),
         });
-
-        console.log("Status da resposta:", res.status);
 
         if (!res.ok) {
           const msg = await res.text();
@@ -100,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const loginData = await res.json();
         const user = loginData?.usuario || loginData;
-        console.log("Usuário retornado pelo backend:", user);
 
         if (!user || !user.tipo) {
           showAuthMessage("Não foi possível identificar o perfil de acesso.");
@@ -112,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         window.AppCore.writeStoredUser(user);
         const tipo = (user.tipo || "").toString().toUpperCase();
-        console.log("Tipo de usuário detectado:", tipo);
 
         const nextPage = window.AppCore.resolveDashboardByRole(tipo);
         if (nextPage === "login.html") {

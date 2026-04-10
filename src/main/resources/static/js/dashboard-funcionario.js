@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  console.log("Usuário logado:", usuario);
-
   await carregarResumo();
   await carregarProdutosRecentes();
 });

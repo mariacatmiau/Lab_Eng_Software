@@ -4,8 +4,6 @@ const API_BASE =
     : "http://localhost:8080";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("📊 Iniciando dashboard ONG...");
-
   // Verifica sessão
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   if (!usuario || !usuario.tipo) {
@@ -52,8 +50,6 @@ async function carregarResumo() {
     document.getElementById("doacoes-aceitas").textContent = aceitas;
     document.getElementById("retiradas-concluidas").textContent = concluidas;
     document.getElementById("produtos-disponiveis").textContent = produtos.length;
-
-    console.log("Resumo atualizado:", { pendentes, aceitas, concluidas });
   } catch (error) {
     console.error("Erro ao carregar resumo:", error);
   }
