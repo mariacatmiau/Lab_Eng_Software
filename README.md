@@ -5,7 +5,7 @@
 - Giulia Araki – RA 10408954  
 - Maria Gabriela de Barros – RA 10409037  
 - Raphaela Polonis - RA 10408843  
-- Samuel Zheng - RA 10395781
+
 
 # 🍎 DoaDoa — Sistema de Doação de Alimentos
 **Projeto de TCC — Ciência da Computação**
