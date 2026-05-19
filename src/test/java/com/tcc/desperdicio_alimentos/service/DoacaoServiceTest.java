@@ -21,13 +21,15 @@ public class DoacaoServiceTest {
     private DoacaoRepository doacaoRepo;
     private ProdutoRepository produtoRepo;
     private UsuarioRepository usuarioRepo;
+    private NotificacaoService notificacaoService;
 
     @BeforeEach
     void setup() {
         doacaoRepo = mock(DoacaoRepository.class);
         produtoRepo = mock(ProdutoRepository.class);
         usuarioRepo = mock(UsuarioRepository.class);
-        service = new DoacaoService(doacaoRepo, produtoRepo, usuarioRepo);
+        notificacaoService = mock(NotificacaoService.class);
+        service = new DoacaoService(doacaoRepo, produtoRepo, usuarioRepo, notificacaoService);
     }
 
     @Test
@@ -79,12 +81,20 @@ public class DoacaoServiceTest {
         d.setId(1L);
         d.setStatus(StatusDoacao.PENDENTE);
 
-        when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
-        when(doacaoRepo.save(d)).thenReturn(d);
-
         Usuario ong = new Usuario();
         ong.setId(2L);
         d.setOng(ong);
+
+        Usuario criador = new Usuario();
+        criador.setId(3L);
+        d.setCriadoPor(criador);
+
+        Produto produto = new Produto();
+        produto.setNome("Teste");
+        d.setProduto(produto);
+
+        when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
+        when(doacaoRepo.save(d)).thenReturn(d);
 
         Doacao result = service.aceitar(1L, 2L);
 
@@ -98,12 +108,20 @@ public class DoacaoServiceTest {
         d.setId(1L);
         d.setStatus(StatusDoacao.PENDENTE);
 
-        when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
-        when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
-
         Usuario criador = new Usuario();
         criador.setId(3L);
         d.setCriadoPor(criador);
+
+        Usuario ong = new Usuario();
+        ong.setId(2L);
+        d.setOng(ong);
+
+        Produto produto = new Produto();
+        produto.setNome("Teste");
+        d.setProduto(produto);
+
+        when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
+        when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
 
         Doacao result = service.recusar(1L, 3L);
 
@@ -118,12 +136,20 @@ public class DoacaoServiceTest {
         d.setId(1L);
         d.setStatus(StatusDoacao.ACEITA);
 
-        when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
-        when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
-
         Usuario criador = new Usuario();
         criador.setId(3L);
         d.setCriadoPor(criador);
+
+        Usuario ong = new Usuario();
+        ong.setId(2L);
+        d.setOng(ong);
+
+        Produto produto = new Produto();
+        produto.setNome("Teste");
+        d.setProduto(produto);
+
+        when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
+        when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
 
         Doacao result = service.confirmarRetirada(1L, 3L);
 

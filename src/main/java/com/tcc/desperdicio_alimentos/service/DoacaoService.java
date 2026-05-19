@@ -14,11 +14,14 @@ public class DoacaoService {
     private final DoacaoRepository doacaoRepo;
     private final ProdutoRepository produtoRepo;
     private final UsuarioRepository usuarioRepo;
+    private final NotificacaoService notificacaoService;
 
-    public DoacaoService(DoacaoRepository doacaoRepo, ProdutoRepository produtoRepo, UsuarioRepository usuarioRepo) {
+    public DoacaoService(DoacaoRepository doacaoRepo, ProdutoRepository produtoRepo,
+                         UsuarioRepository usuarioRepo, NotificacaoService notificacaoService) {
         this.doacaoRepo = doacaoRepo;
         this.produtoRepo = produtoRepo;
         this.usuarioRepo = usuarioRepo;
+        this.notificacaoService = notificacaoService;
     }
 
     public Doacao criar(CriarDoacaoRequest req, Long criadoPorId) {
@@ -49,7 +52,10 @@ public class DoacaoService {
         produto.setDisponivel(false);
         produtoRepo.save(produto);
 
-        return doacaoRepo.save(d);
+        Doacao salva = doacaoRepo.save(d);
+        notificacaoService.criar(ong.getId(),
+                "Nova doação disponível: " + produto.getNome() + " enviada por " + criador.getNome());
+        return salva;
     }
 
     public List<Doacao> listarTodas() {
@@ -80,7 +86,10 @@ public class DoacaoService {
         }
 
         d.setStatus(StatusDoacao.ACEITA);
-        return doacaoRepo.save(d);
+        Doacao aceita = doacaoRepo.save(d);
+        notificacaoService.criar(d.getCriadoPor().getId(),
+                "Sua doação de " + d.getProduto().getNome() + " foi aceita pela ONG " + d.getOng().getNome());
+        return aceita;
     }
 
     public Doacao recusar(Long id, Long usuarioId) {
@@ -96,7 +105,17 @@ public class DoacaoService {
         }
 
         d.setStatus(StatusDoacao.RECUSADA);
-        return doacaoRepo.save(d);
+        Doacao recusada = doacaoRepo.save(d);
+        // Notifica a outra parte
+        if (d.getOng().getId().equals(usuarioId)) {
+            notificacaoService.criar(d.getCriadoPor().getId(),
+                    "Sua doação de " + d.getProduto().getNome() + " foi recusada pela ONG " + d.getOng().getNome());
+        } else {
+            notificacaoService.criar(d.getOng().getId(),
+                    "A doação de " + d.getProduto().getNome() + " foi cancelada pelo mercado "
+                            + d.getCriadoPor().getNome());
+        }
+        return recusada;
     }
 
     public Doacao confirmarRetirada(Long id, Long usuarioId) {
@@ -112,7 +131,16 @@ public class DoacaoService {
         }
 
         d.setStatus(StatusDoacao.RETIRADA);
-        return doacaoRepo.save(d);
+        Doacao retirada = doacaoRepo.save(d);
+        // Notifica a outra parte
+        if (d.getCriadoPor().getId().equals(usuarioId)) {
+            notificacaoService.criar(d.getOng().getId(),
+                    "Retirada de " + d.getProduto().getNome() + " confirmada pelo mercado " + d.getCriadoPor().getNome());
+        } else {
+            notificacaoService.criar(d.getCriadoPor().getId(),
+                    "A ONG " + d.getOng().getNome() + " confirmou a retirada de " + d.getProduto().getNome());
+        }
+        return retirada;
     }
 
     private boolean usuarioParticipaDaDoacao(Doacao doacao, Long usuarioId) {
