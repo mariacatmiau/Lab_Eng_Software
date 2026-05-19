@@ -77,8 +77,4 @@ async function carregarProdutosRecentes() {
   }
 }
 
-function logout() {
-  localStorage.removeItem("usuario");
-  localStorage.removeItem("token");
-  window.location.replace("login.html");
-}
+

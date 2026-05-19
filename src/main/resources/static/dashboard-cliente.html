@@ -16,6 +16,28 @@
   <script src="js/dashboard-cliente.js?v=20260312-6" defer></script>
 </head>
 <body class="min-h-screen">
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!usuario || !usuario.tipo) {
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("token");
+      setTimeout(() => window.location.replace("login.html"), 0);
+      return;
+    }
+    const tipo = String(usuario.tipo || "").trim().toUpperCase();
+    if (tipo !== "CLIENTE") {
+      const destino = tipo === "FUNCIONARIO"
+        ? "dashboard-funcionario.html"
+        : (tipo === "ONG" ? "dashboard-ong.html" : "login.html");
+      setTimeout(() => window.location.replace(destino), 0);
+      return;
+    }
+    window.history.replaceState({}, document.title, window.location.href);
+  });
+</script>
+
   <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
     <div class="flex items-center justify-center h-16 px-4 bg-green-600">
       <i data-feather="heart" class="text-white h-6 w-6"></i>

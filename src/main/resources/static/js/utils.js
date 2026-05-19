@@ -40,12 +40,4 @@ function redirectIfNotLogged() {
   }
 }
 
-document.addEventListener("click", (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-logout]") : null;
-  if (!target) return;
 
-  event.preventDefault();
-  localStorage.removeItem("usuario");
-  localStorage.removeItem("token");
-  window.location.replace("login.html");
-});

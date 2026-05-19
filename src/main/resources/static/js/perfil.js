@@ -8,11 +8,13 @@
         { href: "dashboard-ong.html", icon: "home", label: "Dashboard" },
         { href: "doacoes-ong.html", icon: "gift", label: "Doações" },
         { href: "retiradas-ong.html", icon: "truck", label: "Retiradas" },
+        { href: "dashboard-impacto.html", icon: "bar-chart-2", label: "Impacto" },
       ];
     }
     if (tipoNormalizado === "CLIENTE") {
       return [
         { href: "dashboard-cliente.html", icon: "home", label: "Dashboard" },
+        { href: "dashboard-impacto.html", icon: "bar-chart-2", label: "Impacto" },
       ];
     }
     return [
@@ -22,6 +24,7 @@
       { href: "doacoes-funcionario.html", icon: "gift", label: "Doações" },
       { href: "retiradas-funcionario.html", icon: "truck", label: "Retiradas" },
       { href: "ongs.html", icon: "users", label: "ONGs Parceiras" },
+      { href: "dashboard-impacto.html", icon: "bar-chart-2", label: "Impacto" },
     ];
   }
 

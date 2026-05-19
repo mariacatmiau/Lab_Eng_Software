@@ -90,12 +90,4 @@ async function carregarDoacoesRecentes() {
   }
 }
 
-// === LOGOUT ===
-document.addEventListener("click", (e) => {
-  if (e.target.id === "logout") {
-    e.preventDefault();
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("token");
-    window.location.replace("login.html");
-  }
-});
+
