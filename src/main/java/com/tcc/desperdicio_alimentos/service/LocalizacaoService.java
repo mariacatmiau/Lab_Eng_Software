@@ -21,7 +21,7 @@ public class LocalizacaoService {
     public LocalizacaoService(RestClient.Builder restClientBuilder) {
         this.restClient = restClientBuilder
                 .baseUrl("https://nominatim.openstreetmap.org")
-                .defaultHeader(HttpHeaders.USER_AGENT, "DoaDoa/1.0 (market-distance)")
+                .defaultHeader(HttpHeaders.USER_AGENT, "VenceLogo/1.0 (market-distance)")
                 .defaultHeader(HttpHeaders.ACCEPT_LANGUAGE, "pt-BR")
                 .build();
     }

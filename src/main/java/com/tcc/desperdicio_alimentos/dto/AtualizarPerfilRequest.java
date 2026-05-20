@@ -5,4 +5,6 @@ public class AtualizarPerfilRequest {
     public String email;
     public String telefone;
     public String endereco;
+    public String senhaAtual;
+    public String novaSenha;
 }

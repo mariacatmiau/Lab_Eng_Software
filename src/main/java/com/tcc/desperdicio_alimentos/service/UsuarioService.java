@@ -87,6 +87,19 @@ public class UsuarioService {
         usuario.setLatitude(coordenada.latitude());
         usuario.setLongitude(coordenada.longitude());
 
+        if (req.novaSenha != null && !req.novaSenha.trim().isEmpty()) {
+            if (req.senhaAtual == null || req.senhaAtual.trim().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Informe a senha atual para trocar a senha");
+            }
+            if (!passwordEncoder.matches(req.senhaAtual, usuario.getSenha())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual incorreta");
+            }
+            if (req.novaSenha.length() < 6) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nova senha deve ter no mínimo 6 caracteres");
+            }
+            usuario.setSenha(passwordEncoder.encode(req.novaSenha));
+        }
+
         return usuarioRepository.save(usuario);
     }
 

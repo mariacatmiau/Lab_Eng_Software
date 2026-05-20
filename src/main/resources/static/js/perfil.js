@@ -3,9 +3,11 @@
 
   function montarLinksPerfil(tipo) {
     const tipoNormalizado = String(tipo || "").trim().toUpperCase();
+    const perfil = { href: "perfil.html", icon: "user", label: "Perfil", active: true };
     if (tipoNormalizado === "ONG") {
       return [
         { href: "dashboard-ong.html", icon: "home", label: "Dashboard" },
+        perfil,
         { href: "doacoes-ong.html", icon: "gift", label: "Doações" },
         { href: "retiradas-ong.html", icon: "truck", label: "Retiradas" },
         { href: "dashboard-impacto.html", icon: "bar-chart-2", label: "Impacto" },
@@ -14,11 +16,13 @@
     if (tipoNormalizado === "CLIENTE") {
       return [
         { href: "dashboard-cliente.html", icon: "home", label: "Dashboard" },
+        perfil,
         { href: "dashboard-impacto.html", icon: "bar-chart-2", label: "Impacto" },
       ];
     }
     return [
       { href: "dashboard-funcionario.html", icon: "home", label: "Dashboard" },
+      perfil,
       { href: "cadastrar-produto.html", icon: "package", label: "Cadastrar Produto" },
       { href: "produtos.html", icon: "list", label: "Produtos" },
       { href: "doacoes-funcionario.html", icon: "gift", label: "Doações" },
@@ -47,19 +51,18 @@
     const navContainer = document.getElementById("perfilNavLinks");
     if (!navContainer) return;
 
-    const links = montarLinksPerfil(tipo)
-      .map((item) => `
-        <a href="${item.href}" class="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md">
-          <i data-feather="${item.icon}" class="mr-3 h-5 w-5 text-gray-400"></i> ${item.label}
-        </a>
-      `)
+    navContainer.innerHTML = montarLinksPerfil(tipo)
+      .map((item) => {
+        const cls = item.active
+          ? "active-item flex items-center px-3 py-2 text-sm font-medium rounded-md"
+          : "flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md";
+        const iconCls = item.active ? "text-green-500 mr-3 h-5 w-5" : "mr-3 h-5 w-5 text-gray-400";
+        return `
+        <a href="${item.href}" class="${cls}">
+          <i data-feather="${item.icon}" class="${iconCls}"></i> ${item.label}
+        </a>`;
+      })
       .join("");
-
-    navContainer.innerHTML = `${links}
-      <a href="perfil.html" class="active-item flex items-center px-3 py-2 text-sm font-medium rounded-md">
-        <i data-feather="user" class="text-green-500 mr-3 h-5 w-5"></i> Perfil
-      </a>
-    `;
 
     if (window.feather) {
       window.feather.replace();
@@ -114,12 +117,39 @@
       msgErro.classList.add("hidden");
 
       const enderecoMontado = window.AddressForm.buildFromFields();
+      const novaSenha = document.getElementById("novaSenha").value;
+      const confirmarSenha = document.getElementById("confirmarSenha").value;
+      const senhaAtual = document.getElementById("senhaAtual").value;
+
+      if (novaSenha || confirmarSenha || senhaAtual) {
+        if (novaSenha !== confirmarSenha) {
+          msgErro.textContent = "Nova senha e confirmação não conferem.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
+        if (novaSenha.length < 6) {
+          msgErro.textContent = "Nova senha deve ter no mínimo 6 caracteres.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
+        if (!senhaAtual) {
+          msgErro.textContent = "Informe a senha atual para trocar a senha.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
+      }
+
       const payload = {
         nome: document.getElementById("nome").value.trim(),
         email: document.getElementById("email").value.trim(),
         telefone: document.getElementById("telefone").value.trim(),
         endereco: enderecoMontado.address,
       };
+
+      if (novaSenha) {
+        payload.senhaAtual = senhaAtual;
+        payload.novaSenha = novaSenha;
+      }
 
       if (!payload.nome || !payload.email || !payload.telefone || !enderecoMontado.valid) {
         msgErro.textContent = "Preencha rua, número, bairro, cidade, estado, além de nome, e-mail e telefone.";
@@ -153,6 +183,9 @@
         preencherResumo(usuario);
         preencherFormulario(usuario);
         renderSidebar(usuario.tipo);
+        document.getElementById("senhaAtual").value = "";
+        document.getElementById("novaSenha").value = "";
+        document.getElementById("confirmarSenha").value = "";
         fecharEdicao();
         msgOk.textContent = "Perfil atualizado com sucesso.";
         msgOk.classList.remove("hidden");

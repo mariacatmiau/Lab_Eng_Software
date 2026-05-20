@@ -172,7 +172,7 @@ public class PedidoService {
     private String gerarMensagemWhatsapp(PedidoResumoDTO.PedidoMercadoResumoDTO mercado) {
         List<String> linhas = new ArrayList<>();
         linhas.add("Olá, " + valorOuPadrao(mercado.mercadoNome, "mercado") + ".");
-        linhas.add("Acabei de registrar meu pedido na DoaDoa e gostaria de combinar o pagamento via Pix:");
+        linhas.add("Acabei de registrar meu pedido na VenceLogo e gostaria de combinar o pagamento via Pix:");
         linhas.add("");
 
         for (PedidoResumoDTO.PedidoItemResumoDTO item : mercado.itens) {

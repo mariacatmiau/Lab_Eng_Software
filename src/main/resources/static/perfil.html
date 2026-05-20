@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Perfil | DoaDoa</title>
+  <title>Perfil | VenceLogo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
   <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg">
     <div class="flex items-center justify-center h-16 px-4 bg-green-600">
       <i data-feather="heart" class="text-white h-6 w-6"></i>
-      <span class="ml-2 text-white font-bold brand-title">DoaDoa</span>
+      <span class="ml-2 text-white font-bold brand-title">VenceLogo</span>
     </div>
     <nav id="perfilNavLinks" class="mt-8 px-4 space-y-1"></nav>
     <div class="absolute bottom-0 w-full px-4 py-4 border-t border-gray-200">
@@ -84,7 +84,7 @@
           <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2">
             <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Senha</p>
             <p class="mt-2 text-base font-semibold text-slate-900">********</p>
-            <p class="text-xs text-slate-500 mt-1">Por segurança, a senha não é exibida nem editada nesta tela.</p>
+            <p class="text-xs text-slate-500 mt-1">Para alterar a senha, clique em "Editar Dados".</p>
           </div>
         </div>
 
@@ -133,6 +133,25 @@
             </div>
 
             <p class="text-xs text-slate-500">Informe rua, número, bairro, cidade e estado para uma localização mais precisa.</p>
+          </div>
+
+          <div class="border-t border-slate-200 pt-4 space-y-4">
+            <p class="text-sm font-bold text-gray-800">Trocar Senha <span class="text-gray-400 font-normal">(opcional)</span></p>
+            <div>
+              <label class="block text-sm font-bold text-gray-800">Senha Atual</label>
+              <input id="senhaAtual" type="password" autocomplete="current-password" class="mt-1 w-full rounded-md px-3 py-2" placeholder="Digite sua senha atual" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-gray-800">Nova Senha</label>
+                <input id="novaSenha" type="password" autocomplete="new-password" class="mt-1 w-full rounded-md px-3 py-2" placeholder="Mín. 6 caracteres" />
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-800">Confirmar Nova Senha</label>
+                <input id="confirmarSenha" type="password" autocomplete="new-password" class="mt-1 w-full rounded-md px-3 py-2" placeholder="Repita a nova senha" />
+              </div>
+            </div>
+            <p class="text-xs text-slate-500">Deixe em branco para manter a senha atual.</p>
           </div>
 
           <div class="flex justify-end gap-3">

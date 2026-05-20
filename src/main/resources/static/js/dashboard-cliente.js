@@ -210,7 +210,7 @@
   function gerarMensagemWhatsapp(mercado) {
     const linhas = [
       `Olá, ${mercado.nome}.`,
-      "Tenho interesse nestes produtos da DoaDoa:",
+      "Tenho interesse nestes produtos da VenceLogo:",
       "",
     ];
 
