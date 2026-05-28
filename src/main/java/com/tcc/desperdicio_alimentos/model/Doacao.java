@@ -33,4 +33,6 @@ public class Doacao {
     private StatusDoacao status = StatusDoacao.PENDENTE;
 
     private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    private LocalDateTime dataAtualizacao;
 }

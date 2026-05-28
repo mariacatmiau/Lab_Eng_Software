@@ -69,13 +69,15 @@
         : (item?.ong?.nome || "ONG");
       const status = item?.status || "-";
       const data = item?.dataAtualizacao || item?.dataCriacao;
+      const statusLabel = { ACEITA: "Aceita", RETIRADA: "Retirada" }[status] || status;
+      const statusClass = status === "ACEITA" ? "bg-yellow-100 text-yellow-800" : status === "RETIRADA" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600";
 
       tr.innerHTML = `
         <td class="px-6 py-4 text-sm text-gray-700">${produto}</td>
         <td class="px-6 py-4 text-sm text-gray-700">${parceiro}</td>
         ${!isPendentes ? `<td class="px-6 py-4 text-sm text-gray-700">${formatarData(data)}</td>` : ""}
         <td class="px-6 py-4">
-          <span class="px-2 py-1 text-xs font-semibold rounded-full ${status === "ACEITA" ? "bg-yellow-100 text-yellow-800" : status === "RETIRADA" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600"}">${status}</span>
+          <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClass}">${statusLabel}</span>
         </td>
         ${isPendentes
           ? `<td class="px-6 py-4">

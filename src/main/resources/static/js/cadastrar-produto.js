@@ -58,6 +58,10 @@ document.addEventListener("DOMContentLoaded", () => {
   aplicarVisibilidadeTipoOferta();
   carregarOngs();
 
+  // Impede cadastro de produto já vencido
+  const campoData = document.getElementById("dataValidade");
+  campoData.min = new Date().toISOString().split("T")[0];
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 

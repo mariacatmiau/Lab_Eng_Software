@@ -58,7 +58,7 @@ public class DoacaoServiceTest {
 
         assertNotNull(result);
         assertEquals(StatusDoacao.PENDENTE, result.getStatus());
-        assertFalse(p.getDisponivel());
+        assertTrue(p.getDisponivel());
         verify(doacaoRepo, times(1)).save(any());
     }
 
@@ -114,12 +114,18 @@ public class DoacaoServiceTest {
 
     @Test
     void deveConfirmarRetirada() {
+        Produto p = new Produto();
+        p.setId(10L);
+        p.setDisponivel(true);
+
         Doacao d = new Doacao();
         d.setId(1L);
         d.setStatus(StatusDoacao.ACEITA);
+        d.setProduto(p);
 
         when(doacaoRepo.findById(1L)).thenReturn(Optional.of(d));
         when(doacaoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
+        when(produtoRepo.save(any())).thenAnswer(i -> i.getArgument(0));
 
         Usuario criador = new Usuario();
         criador.setId(3L);
@@ -129,6 +135,7 @@ public class DoacaoServiceTest {
 
         assertNotNull(result);
         assertEquals(StatusDoacao.RETIRADA, result.getStatus());
+        assertFalse(p.getDisponivel());
     }
 
     @Test

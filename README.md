@@ -187,6 +187,7 @@ erDiagram
         Long criado_por_id FK
         StatusDoacao status "PENDENTE | ACEITA | RECUSADA | RETIRADA"
         LocalDateTime dataCriacao
+        LocalDateTime dataAtualizacao
     }
 
     PEDIDOS {
@@ -330,7 +331,6 @@ sequenceDiagram
 
     F->>API: POST /api/doacoes (criar doação)
     API->>DB: Salvar doação (PENDENTE)
-    API->>DB: Marcar produto indisponível
     DB-->>API: OK
     API-->>F: 200 OK + Doação
 
@@ -345,6 +345,7 @@ sequenceDiagram
 
     O->>API: PUT /api/doacoes/{id}/retirada
     API->>DB: Status → RETIRADA
+    API->>DB: Marcar produto indisponível
     API-->>O: 200 OK
 ```
 
@@ -400,6 +401,10 @@ Authorization: Bearer <token_jwt>
 | Método | Rota | Auth | Descrição |
 |--------|------|------|-----------|
 | `POST` | `/api/pedidos` | ✅ | Finalizar pedido de compra |
+| `GET` | `/api/pedidos/meus` | ✅ | Listar pedidos do cliente autenticado |
+| `GET` | `/api/pedidos/por-mercado` | ✅ (FUNCIONARIO) | Listar pedidos aguardando pagamento no mercado |
+| `PUT` | `/api/pedidos/{id}/pagar` | ✅ (FUNCIONARIO) | Confirmar pagamento recebido |
+| `PUT` | `/api/pedidos/{id}/cancelar` | ✅ (CLIENTE) | Cancelar pedido aguardando pagamento |
 
 ### ONGs (`/api/ongs`)
 
@@ -520,11 +525,11 @@ Os testes validam as regras de negócio e os endpoints REST. Ferramentas utiliza
 
 | ID | Caso de Teste | Resultado Esperado |
 |----|--------------|-------------------|
-| CT-DS01 | Criar doação com sucesso | Status PENDENTE, produto indisponível |
+| CT-DS01 | Criar doação com sucesso | Status PENDENTE, produto disponível (aguardando retirada) |
 | CT-DS02 | Criar doação com produto inexistente | 404 NOT_FOUND |
 | CT-DS03 | Aceitar doação | Status → ACEITA |
 | CT-DS04 | Recusar doação | Status → RECUSADA |
-| CT-DS05 | Confirmar retirada | Status → RETIRADA |
+| CT-DS05 | Confirmar retirada | Status → RETIRADA, produto indisponível |
 
 ### ProdutoService (3 testes)
 

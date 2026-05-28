@@ -81,7 +81,7 @@ class DoacaoAuthorizationIntegrationTest {
         );
 
         Long produtoId = criarProduto(funcionario.token, ongDestino.id);
-        Long doacaoId = criarDoacao(funcionario.token, produtoId, ongDestino.id);
+        Long doacaoId = buscarPrimeiraDoacaoId(funcionario.token, funcionario.id);
 
         mockMvc.perform(put("/api/doacoes/" + doacaoId + "/aceitar")
                         .header("Authorization", "Bearer " + ongIntrusa.token))
@@ -163,22 +163,14 @@ class DoacaoAuthorizationIntegrationTest {
         return json.get("id").asLong();
     }
 
-    private Long criarDoacao(String token, Long produtoId, Long ongId) throws Exception {
-        String body = "{" +
-                "\"produtoId\":" + produtoId + "," +
-                "\"ongId\":" + ongId + "," +
-                "\"quantidade\":2" +
-                "}";
-
-        MvcResult result = mockMvc.perform(post("/api/doacoes")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+    private Long buscarPrimeiraDoacaoId(String token, Long criadorId) throws Exception {
+        MvcResult result = mockMvc.perform(get("/api/doacoes/por-criador/" + criadorId)
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andReturn();
 
         JsonNode json = objectMapper.readTree(result.getResponse().getContentAsString());
-        return json.get("id").asLong();
+        return json.get(0).get("id").asLong();
     }
 
     private static class LoginResult {

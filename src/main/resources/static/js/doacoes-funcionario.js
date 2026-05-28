@@ -57,16 +57,23 @@
     });
   }
 
+  const statusLabels = {
+    PENDENTE: "Pendente",
+    ACEITA: "Aceita",
+    RECUSADA: "Cancelada",
+    RETIRADA: "Retirada",
+  };
+
   function badge(status) {
     const map = {
       PENDENTE: "bg-yellow-100 text-yellow-800",
       ACEITA: "bg-blue-100 text-blue-800",
-      RECUSADA: "bg-red-100 text-red-800",
+      RECUSADA: "bg-gray-100 text-gray-700",
       RETIRADA: "bg-green-100 text-green-800",
-      CANCELADA: "bg-gray-100 text-gray-700",
     };
     const css = map[status] || "bg-gray-100 text-gray-700";
-    return `<span class="px-2 py-1 text-xs rounded-full ${css}">${status || "-"}</span>`;
+    const label = statusLabels[status] || status || "-";
+    return `<span class="px-2 py-1 text-xs rounded-full ${css}">${label}</span>`;
   }
 
   function fmtData(iso) {

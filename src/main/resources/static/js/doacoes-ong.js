@@ -59,6 +59,14 @@
     });
   }
 
+  const statusLabels = {
+    PENDENTE: "Pendente",
+    ACEITA: "Aceita",
+    RECUSADA: "Recusada",
+    RETIRADA: "Retirada",
+    CANCELADA: "Cancelada",
+  };
+
   function badge(status) {
     const map = {
       PENDENTE: "bg-yellow-100 text-yellow-800",
@@ -68,7 +76,8 @@
       CANCELADA: "bg-gray-100 text-gray-700",
     };
     const css = map[status] || "bg-gray-100 text-gray-700";
-    return `<span class="px-2 py-1 text-xs rounded-full ${css}">${status || "-"}</span>`;
+    const label = statusLabels[status] || status || "-";
+    return `<span class="px-2 py-1 text-xs rounded-full ${css}">${label}</span>`;
   }
 
   function fmtData(iso) {

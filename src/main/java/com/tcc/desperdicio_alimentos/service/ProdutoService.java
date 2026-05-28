@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -76,8 +77,7 @@ public class ProdutoService {
 
             p.setPreco(null);
             p.setOngDestino(ongDestino);
-            // A doacao eh aberta imediatamente no cadastro do produto.
-            p.setDisponivel(false);
+            // Produto fica disponível até que a ONG confirme a retirada.
         }
 
         Produto salvo = produtoRepo.save(p);
@@ -97,9 +97,11 @@ public class ProdutoService {
 
     // Listar apenas produtos disponíveis
     public List<Produto> listarDisponiveis() {
+        LocalDate hoje = LocalDate.now();
         return produtoRepo.findByDisponivelTrue()
             .stream()
             .filter(p -> p.getTipoOferta() == null || p.getTipoOferta() == TipoOfertaProduto.DOACAO)
+            .filter(p -> p.getDataValidade() == null || !p.getDataValidade().isBefore(hoje))
             .collect(Collectors.toList());
     }
 
@@ -139,10 +141,12 @@ public class ProdutoService {
         boolean temCoordenadasUsuario = latitude != null && longitude != null;
         Map<String, Optional<LocalizacaoService.Coordenada>> cacheMercados = new HashMap<>();
 
+        LocalDate hoje = LocalDate.now();
         return produtoRepo.findByDisponivelTrue()
                 .stream()
             .filter(p -> p.getTipoOferta() == TipoOfertaProduto.VENDA)
                 .filter(p -> p.getCriadoPor() != null && p.getCriadoPor().getTipo() == UsuarioTipo.FUNCIONARIO)
+                .filter(p -> p.getDataValidade() == null || !p.getDataValidade().isBefore(hoje))
                 .filter(p -> filtroBusca(p, termo, buscarMercado))
                 .map(OfertaProdutoDTO::from)
             .peek(dto -> preencherDistancia(dto, latitude, longitude, temCoordenadasUsuario, cacheMercados))

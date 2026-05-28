@@ -13,6 +13,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="js/app-shell.js" defer></script>
+    <script src="js/app-core.js" defer></script>
     <script src="js/utils.js" defer></script>
     <script src="js/dashboard-funcionario.js" defer></script>
 </head>
@@ -156,6 +157,16 @@
                     <tr><td colspan="3" class="text-center py-4 text-gray-500">Carregando...</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="card-elevated overflow-hidden mt-8" id="secao-pedidos-pendentes">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-medium text-gray-900">Pedidos Aguardando Confirmação de Pagamento</h3>
+                <span id="badge-pedidos-pendentes" class="hidden bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full"></span>
+            </div>
+            <div id="lista-pedidos-pendentes" class="divide-y divide-gray-100">
+                <p class="text-center py-6 text-gray-500">Carregando...</p>
             </div>
         </div>
     </main>

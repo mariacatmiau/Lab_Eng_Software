@@ -19,6 +19,41 @@
     localStorage.setItem(cartStorageKey, JSON.stringify(carrinho));
   }
 
+  async function carregarPedidoPendente() {
+    try {
+      const resp = await fetch(`${pageApiBase}/pedidos/meus`);
+      if (!resp.ok) return;
+      const pedidos = await resp.json();
+      const pendente = (pedidos || []).find((p) => p.status === "AGUARDANDO_PAGAMENTO");
+      if (pendente) {
+        ultimoPedidoFinalizado = pendente;
+        atualizarPainelPedidoFinalizado();
+        return;
+      }
+      // Buraco 5: mostrar pedido recente que foi confirmado como pago
+      const pago = (pedidos || []).find((p) => p.status === "PAGO");
+      if (pago) {
+        mostrarPedidoPago(pago);
+      }
+    } catch {
+      // falha silenciosa — não bloqueia o carregamento do dashboard
+    }
+  }
+
+  function mostrarPedidoPago(pedido) {
+    const box = document.getElementById("pedidoFinalizadoBox");
+    const resumo = document.getElementById("pedidoFinalizadoResumo");
+    const mercadosEl = document.getElementById("pedidoFinalizadoMercados");
+    if (!box || !resumo || !mercadosEl) return;
+    box.classList.remove("hidden");
+    box.classList.remove("border-green-200", "bg-green-50");
+    box.classList.add("border-blue-200", "bg-blue-50");
+    resumo.innerHTML = `<span class="inline-flex items-center gap-2 text-blue-800 font-semibold"><svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Pedido #${pedido.pedidoId} confirmado como pago! Total: ${window.AppCore.formatCurrency(pedido.valorTotal)}</span>`;
+    mercadosEl.innerHTML = "";
+    const cancelarBtn = document.getElementById("btnCancelarPedido");
+    if (cancelarBtn) cancelarBtn.remove();
+  }
+
   function atualizarPainelPedidoFinalizado() {
     const box = document.getElementById("pedidoFinalizadoBox");
     const resumo = document.getElementById("pedidoFinalizadoResumo");
@@ -59,6 +94,39 @@
         `;
       })
       .join("");
+
+    const cancelarBtnId = "btnCancelarPedido";
+    let cancelarBtn = document.getElementById(cancelarBtnId);
+    if (!cancelarBtn) {
+      cancelarBtn = document.createElement("button");
+      cancelarBtn.id = cancelarBtnId;
+      cancelarBtn.className = "mt-4 w-full rounded-xl border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors";
+      cancelarBtn.textContent = "Cancelar pedido";
+      cancelarBtn.addEventListener("click", cancelarPedidoPendente);
+      mercadosEl.after(cancelarBtn);
+    }
+  }
+
+  async function cancelarPedidoPendente() {
+    if (!ultimoPedidoFinalizado) return;
+    const pedidoId = ultimoPedidoFinalizado.pedidoId;
+    const btn = document.getElementById("btnCancelarPedido");
+    if (btn) { btn.disabled = true; btn.textContent = "Cancelando..."; }
+    try {
+      const resp = await fetch(`${pageApiBase}/pedidos/${pedidoId}/cancelar`, { method: "PUT" });
+      if (!resp.ok) {
+        const msg = await resp.text().catch(() => "");
+        alert("Não foi possível cancelar o pedido: " + (msg || resp.status));
+        if (btn) { btn.disabled = false; btn.textContent = "Cancelar pedido"; }
+        return;
+      }
+      ultimoPedidoFinalizado = null;
+      atualizarPainelPedidoFinalizado();
+      await atualizarResumoCarrinho();
+    } catch {
+      alert("Erro ao cancelar pedido. Tente novamente.");
+      if (btn) { btn.disabled = false; btn.textContent = "Cancelar pedido"; }
+    }
   }
 
   function obterQuantidadeSelecionada(produtoId) {
@@ -494,7 +562,7 @@
             <div class="lg:col-span-3">
                 <h3 class="text-lg font-extrabold text-gray-900">${window.AppCore.escapeHtml(o.produtoNome || "Produto sem nome")}</h3>
                 <p class="text-sm text-gray-600 mt-1">Categoria: ${window.AppCore.escapeHtml(o.categoria || "-")}</p>
-              <p class="text-sm text-gray-600">Quantidade disponível: ${o.quantidade ?? "-"}</p>
+              <p class="text-sm text-gray-600">Quantidade disponível: ${o.quantidade ?? "-"} unidade(s)</p>
                 <p class="text-sm text-green-700 font-bold">Preço unitário: ${window.AppCore.formatCurrency(o.preco)}</p>
               <p class="text-sm font-semibold ${o.diasParaVencer != null && o.diasParaVencer <= 2 ? "text-red-700" : "text-amber-700"}">${venc}</p>
             </div>
@@ -638,9 +706,9 @@
     });
 
     atualizarResumoCarrinho();
-  atualizarPainelPedidoFinalizado();
+    atualizarPainelPedidoFinalizado();
     await inicializarLocalizacao();
-
+    await carregarPedidoPendente();
     await carregarOfertas();
   });
 })();

@@ -14,12 +14,17 @@ public class PedidoResumoDTO {
     public LocalDateTime criadoEm;
     public List<PedidoMercadoResumoDTO> mercados = new ArrayList<>();
 
+    public String clienteNome;
+
     public static PedidoResumoDTO from(Pedido pedido) {
         PedidoResumoDTO dto = new PedidoResumoDTO();
         dto.pedidoId = pedido.getId();
         dto.status = pedido.getStatus() != null ? pedido.getStatus().name() : null;
         dto.valorTotal = pedido.getValorTotal();
         dto.criadoEm = pedido.getCriadoEm();
+        if (pedido.getCliente() != null) {
+            dto.clienteNome = pedido.getCliente().getNome();
+        }
         return dto;
     }
 

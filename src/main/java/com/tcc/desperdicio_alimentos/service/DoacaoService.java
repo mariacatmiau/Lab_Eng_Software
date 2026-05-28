@@ -39,15 +39,28 @@ public class DoacaoService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Produto não pertence ao usuário informado");
         }
 
+        if (doacaoRepo.existsByProdutoIdAndStatusIn(req.produtoId,
+                java.util.List.of(StatusDoacao.PENDENTE, StatusDoacao.ACEITA))) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Já existe uma doação ativa para este produto");
+        }
+
+        int qtdDoacao = req.quantidade != null ? req.quantidade : (produto.getQuantidade() != null ? produto.getQuantidade() : 0);
+        int qtdDisponivel = produto.getQuantidade() != null ? produto.getQuantidade() : 0;
+        if (qtdDoacao <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A quantidade da doação deve ser maior que zero");
+        }
+        if (qtdDoacao > qtdDisponivel) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Quantidade solicitada (" + qtdDoacao + ") supera o estoque disponível (" + qtdDisponivel + ")");
+        }
+
         Doacao d = new Doacao();
         d.setProduto(produto);
         d.setOng(ong);
-        d.setQuantidade(req.quantidade != null ? req.quantidade : produto.getQuantidade());
+        d.setQuantidade(qtdDoacao);
         d.setStatus(StatusDoacao.PENDENTE);
         d.setCriadoPor(criador);
-
-        produto.setDisponivel(false);
-        produtoRepo.save(produto);
 
         return doacaoRepo.save(d);
     }
@@ -80,6 +93,7 @@ public class DoacaoService {
         }
 
         d.setStatus(StatusDoacao.ACEITA);
+        d.setDataAtualizacao(java.time.LocalDateTime.now());
         return doacaoRepo.save(d);
     }
 
@@ -96,6 +110,7 @@ public class DoacaoService {
         }
 
         d.setStatus(StatusDoacao.RECUSADA);
+        d.setDataAtualizacao(java.time.LocalDateTime.now());
         return doacaoRepo.save(d);
     }
 
@@ -112,6 +127,14 @@ public class DoacaoService {
         }
 
         d.setStatus(StatusDoacao.RETIRADA);
+        d.setDataAtualizacao(java.time.LocalDateTime.now());
+
+        Produto produto = d.getProduto();
+        if (produto != null) {
+            produto.setDisponivel(false);
+            produtoRepo.save(produto);
+        }
+
         return doacaoRepo.save(d);
     }
 
@@ -138,11 +161,6 @@ public class DoacaoService {
             d.setQuantidade(p.getQuantidade());
             d.setStatus(StatusDoacao.PENDENTE);
             doacaoRepo.save(d);
-
-            if (Boolean.TRUE.equals(p.getDisponivel())) {
-                p.setDisponivel(false);
-                produtoRepo.save(p);
-            }
         }
     }
 }

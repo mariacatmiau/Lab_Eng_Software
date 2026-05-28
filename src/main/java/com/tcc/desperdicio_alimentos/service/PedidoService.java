@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -36,6 +37,74 @@ public class PedidoService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    public List<PedidoResumoDTO> listarPedidosPorMercado(Long mercadoId) {
+        Usuario mercado = usuarioRepository.findById(mercadoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        if (mercado.getTipo() != UsuarioTipo.FUNCIONARIO) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas funcionários de mercado podem acessar este recurso");
+        }
+        List<PedidoItem> itens = pedidoItemRepository.findByMercadoIdAndPedidoStatus(mercadoId, StatusPedido.AGUARDANDO_PAGAMENTO);
+        Map<Long, PedidoResumoDTO> pedidosMap = new LinkedHashMap<>();
+        for (PedidoItem item : itens) {
+            pedidosMap.computeIfAbsent(item.getPedido().getId(), id -> PedidoResumoDTO.from(item.getPedido()));
+        }
+        return new ArrayList<>(pedidosMap.values());
+    }
+
+    @Transactional
+    public void confirmarPagamento(Long pedidoId, Long mercadoId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+        if (pedido.getStatus() != StatusPedido.AGUARDANDO_PAGAMENTO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Pedido não está aguardando pagamento");
+        }
+        if (!pedidoItemRepository.existsByPedidoIdAndMercadoId(pedidoId, mercadoId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Este pedido não contém itens do seu estabelecimento");
+        }
+        pedido.setStatus(StatusPedido.PAGO);
+        pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    public void cancelarPedido(Long pedidoId, Long clienteId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+        if (!pedido.getCliente().getId().equals(clienteId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não pode cancelar este pedido");
+        }
+        if (pedido.getStatus() != StatusPedido.AGUARDANDO_PAGAMENTO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Apenas pedidos aguardando pagamento podem ser cancelados");
+        }
+        List<PedidoItem> itens = pedidoItemRepository.findByPedidoId(pedidoId);
+        for (PedidoItem item : itens) {
+            Produto produto = item.getProduto();
+            int novaQuantidade = (produto.getQuantidade() != null ? produto.getQuantidade() : 0) + item.getQuantidade();
+            produto.setQuantidade(novaQuantidade);
+            produto.setDisponivel(true);
+            produtoRepository.save(produto);
+        }
+        pedido.setStatus(StatusPedido.CANCELADO);
+        pedidoRepository.save(pedido);
+    }
+
+    public List<PedidoResumoDTO> listarMeusPedidos(Long clienteId) {
+        List<Pedido> pedidos = pedidoRepository.findByClienteIdOrderByCriadoEmDesc(clienteId);
+        List<PedidoResumoDTO> resultado = new ArrayList<>();
+
+        for (Pedido pedido : pedidos) {
+            PedidoResumoDTO resumo = PedidoResumoDTO.from(pedido);
+            List<PedidoItem> itens = pedidoItemRepository.findByPedidoId(pedido.getId());
+            Map<Long, PedidoResumoDTO.PedidoMercadoResumoDTO> mercados = new LinkedHashMap<>();
+            for (PedidoItem item : itens) {
+                adicionarResumoMercado(mercados, item);
+            }
+            resumo.mercados.addAll(mercados.values());
+            resultado.add(resumo);
+        }
+
+        return resultado;
+    }
+
     @Transactional
     public PedidoResumoDTO finalizarPedido(Long clienteId, FinalizarPedidoRequest request) {
         if (request == null || request.itens == null || request.itens.isEmpty()) {
@@ -47,6 +116,10 @@ public class PedidoService {
 
         if (cliente.getTipo() != UsuarioTipo.CLIENTE) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas clientes podem finalizar pedidos");
+        }
+
+        if (pedidoRepository.existsByClienteIdAndStatus(clienteId, StatusPedido.AGUARDANDO_PAGAMENTO)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Você já possui um pedido aguardando pagamento. Conclua ou cancele o pedido atual antes de fazer um novo.");
         }
 
         Map<Long, Integer> quantidadesPorProduto = consolidarItens(request.itens);
@@ -130,6 +203,10 @@ public class PedidoService {
     private void validarProdutoParaVenda(Produto produto) {
         if (!Boolean.TRUE.equals(produto.getDisponivel())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "O produto " + produto.getNome() + " não está mais disponível");
+        }
+
+        if (produto.getDataValidade() != null && produto.getDataValidade().isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O produto " + produto.getNome() + " está vencido e não pode ser comprado");
         }
 
         if (produto.getTipoOferta() != TipoOfertaProduto.VENDA) {
