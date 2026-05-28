@@ -92,7 +92,7 @@
 
   function formatarData(val) {
     if (!val) return "-";
-    const d = new Date(val);
+    const d = new Date(val.length === 10 ? val + "T00:00:00" : val);
     return Number.isNaN(d.getTime()) ? "-" : d.toLocaleDateString("pt-BR");
   }
 

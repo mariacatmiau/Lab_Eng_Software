@@ -28,13 +28,16 @@ public class PedidoService {
     private final PedidoItemRepository pedidoItemRepository;
     private final ProdutoRepository produtoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final NotificacaoService notificacaoService;
 
     public PedidoService(PedidoRepository pedidoRepository, PedidoItemRepository pedidoItemRepository,
-                         ProdutoRepository produtoRepository, UsuarioRepository usuarioRepository) {
+                         ProdutoRepository produtoRepository, UsuarioRepository usuarioRepository,
+                         NotificacaoService notificacaoService) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoItemRepository = pedidoItemRepository;
         this.produtoRepository = produtoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.notificacaoService = notificacaoService;
     }
 
     public List<PedidoResumoDTO> listarPedidosPorMercado(Long mercadoId) {
@@ -63,6 +66,11 @@ public class PedidoService {
         }
         pedido.setStatus(StatusPedido.PAGO);
         pedidoRepository.save(pedido);
+
+        Usuario mercado = usuarioRepository.findById(mercadoId).orElse(null);
+        String nomeMercado = mercado != null ? mercado.getNome() : "o mercado";
+        notificacaoService.criar(pedido.getCliente().getId(),
+                "Pagamento do seu pedido #" + pedidoId + " foi confirmado por " + nomeMercado);
     }
 
     @Transactional
@@ -85,6 +93,13 @@ public class PedidoService {
         }
         pedido.setStatus(StatusPedido.CANCELADO);
         pedidoRepository.save(pedido);
+
+        for (PedidoItem item : itens) {
+            if (item.getMercado() != null) {
+                notificacaoService.criar(item.getMercado().getId(),
+                        "Pedido #" + pedidoId + " foi cancelado pelo cliente " + pedido.getCliente().getNome());
+            }
+        }
     }
 
     public List<PedidoResumoDTO> listarMeusPedidos(Long clienteId) {
@@ -175,6 +190,12 @@ public class PedidoService {
         pedidoItemRepository.saveAll(itensPedido);
         pedido.setValorTotal(valorTotal);
         pedidoRepository.save(pedido);
+
+        for (PedidoResumoDTO.PedidoMercadoResumoDTO mercadoResumo : mercados.values()) {
+            notificacaoService.criar(mercadoResumo.mercadoId,
+                    "Novo pedido recebido de " + cliente.getNome() + " — R$ " +
+                    String.format(Locale.US, "%.2f", mercadoResumo.total));
+        }
 
         PedidoResumoDTO resumo = PedidoResumoDTO.from(pedido);
         resumo.mercados.addAll(mercados.values());

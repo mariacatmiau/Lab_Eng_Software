@@ -105,12 +105,8 @@ graph TB
     subgraph "Frontend — SPA Estática"
         HTML["HTML5 Pages<br/>(18 páginas)"]
         CSS["Tailwind CSS"]
-        JS["JavaScript Vanilla<br/>(17 módulos)"]
-    end
-
-    subgraph "Backend — Spring Boot 3.5.5"
-        SEC["Spring Security<br/>+ JWT Filter"]
-        CTRL["Controllers<br/>(6 REST Controllers)"]
+        JS["JavaScript Vanilla<br/>(18 módulos)"]
+        CTRL["Controllers<br/>(7 REST Controllers)"]
         SVC["Services<br/>(5 Service Classes)"]
         REPO["Repositories<br/>(7 JPA Repositories)"]
     end
@@ -190,6 +186,14 @@ erDiagram
         LocalDateTime dataAtualizacao
     }
 
+    NOTIFICACOES {
+        Long id PK
+        Long usuario_id FK
+        String mensagem
+        Boolean lida
+        LocalDateTime dataCriacao
+    }
+
     PEDIDOS {
         Long id PK
         Long cliente_id FK
@@ -222,6 +226,7 @@ erDiagram
         String telefone
     }
 
+    USUARIOS ||--o{ NOTIFICACOES : "recebe"
     USUARIOS ||--o{ PRODUTOS : "cadastra"
     USUARIOS ||--o{ DOACOES : "cria (funcionário)"
     USUARIOS ||--o{ DOACOES : "recebe (ONG)"
@@ -406,6 +411,15 @@ Authorization: Bearer <token_jwt>
 | `PUT` | `/api/pedidos/{id}/pagar` | ✅ (FUNCIONARIO) | Confirmar pagamento recebido |
 | `PUT` | `/api/pedidos/{id}/cancelar` | ✅ (CLIENTE) | Cancelar pedido aguardando pagamento |
 
+### Notificações (`/api/notificacoes`)
+
+| Método | Rota | Auth | Descrição |
+|--------|------|------|-----------|
+| `GET` | `/api/notificacoes` | ✅ | Listar notificações do usuário autenticado |
+| `GET` | `/api/notificacoes/count` | ✅ | Contar notificações não lidas |
+| `PUT` | `/api/notificacoes/{id}/lida` | ✅ | Marcar notificação como lida |
+| `PUT` | `/api/notificacoes/todas-lidas` | ✅ | Marcar todas as notificações como lidas |
+
 ### ONGs (`/api/ongs`)
 
 | Método | Rota | Auth | Descrição |
@@ -585,6 +599,7 @@ Lab_Eng_Software/
 │   │   │   │   ├── ProdutoController.java   # CRUD de produtos
 │   │   │   │   ├── DoacaoController.java    # Fluxo de doações
 │   │   │   │   ├── PedidoController.java    # Pedidos de compra
+│   │   │   │   ├── NotificacaoController.java # Alertas do sistema
 │   │   │   │   ├── OngController.java       # Listagem de ONGs
 │   │   │   │   └── FuncionarioController.java
 │   │   │   ├── dto/                         # DTOs de request/response
@@ -592,6 +607,7 @@ Lab_Eng_Software/
 │   │   │   │   ├── Usuario.java
 │   │   │   │   ├── Produto.java
 │   │   │   │   ├── Doacao.java
+│   │   │   │   ├── Notificacao.java
 │   │   │   │   ├── Pedido.java
 │   │   │   │   ├── PedidoItem.java
 │   │   │   │   ├── Funcionario.java
@@ -621,7 +637,7 @@ O sistema **DoaDoa** demonstra a aplicação prática de conceitos de Engenharia
 - **API RESTful** documentada com Swagger/OpenAPI
 - **Segurança** com JWT, BCrypt e proteção contra IDOR
 - **Geolocalização** para conexão eficiente entre doadores e ONGs
-- **Testes automatizados** com 29 casos de teste e relatório de cobertura JaCoCo
+| **Testes automatizados** | 29 casos de teste e relatório de cobertura JaCoCo
 - **Perfis de ambiente** para desenvolvimento (H2) e produção (PostgreSQL)
 
 ### Possíveis Melhorias Futuras
@@ -629,7 +645,7 @@ O sistema **DoaDoa** demonstra a aplicação prática de conceitos de Engenharia
 | Melhoria | Descrição |
 |----------|-----------|
 | Dashboard de impacto | Métricas de kg doados, retiradas realizadas, ranking de ONGs |
-| Notificações | Push/e-mail quando uma doação é aceita ou nova doação disponível |
+| Notificações | ✅ Implementado — alertas em tempo real no sistema ao aceitar, recusar ou confirmar retirada de doações |
 | Docker Compose | Containerização completa (backend + PostgreSQL + nginx) |
 | CI/CD | Pipeline GitHub Actions com build, testes e deploy automático |
 | App Mobile | Versão React Native ou Flutter para maior acessibilidade |

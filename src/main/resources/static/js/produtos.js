@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tabela.innerHTML = produtos.map(p => {
       const validade = p.dataValidade
-        ? new Date(p.dataValidade).toLocaleDateString("pt-BR")
+        ? new Date(p.dataValidade + "T00:00:00").toLocaleDateString("pt-BR")
         : "-";
       const status = p.disponivel ? "Disponível" : "Indisponível";
       const corStatus = p.disponivel ? "text-green-700" : "text-red-700";

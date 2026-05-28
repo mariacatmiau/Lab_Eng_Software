@@ -66,10 +66,13 @@ async function carregarProdutosRecentes() {
 
     produtos.slice(-5).reverse().forEach(produto => {
       const tr = document.createElement("tr");
+      const validade = produto.dataValidade
+        ? new Date(produto.dataValidade + "T00:00:00").toLocaleDateString("pt-BR")
+        : "-";
       tr.innerHTML = `
         <td>${produto.nome || "-"}</td>
         <td>${produto.categoria || "-"}</td>
-        <td>${produto.dataValidade || "-"}</td>
+        <td>${validade}</td>
       `;
       tabela.appendChild(tr);
     });

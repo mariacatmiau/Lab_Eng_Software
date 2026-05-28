@@ -26,6 +26,7 @@ public class PedidoServiceTest {
     private PedidoItemRepository pedidoItemRepository;
     private ProdutoRepository produtoRepository;
     private UsuarioRepository usuarioRepository;
+    private NotificacaoService notificacaoService;
 
     @BeforeEach
     void setup() {
@@ -33,7 +34,9 @@ public class PedidoServiceTest {
         pedidoItemRepository = mock(PedidoItemRepository.class);
         produtoRepository = mock(ProdutoRepository.class);
         usuarioRepository = mock(UsuarioRepository.class);
-        service = new PedidoService(pedidoRepository, pedidoItemRepository, produtoRepository, usuarioRepository);
+        notificacaoService = mock(NotificacaoService.class);
+        doNothing().when(notificacaoService).criar(any(), any());
+        service = new PedidoService(pedidoRepository, pedidoItemRepository, produtoRepository, usuarioRepository, notificacaoService);
     }
 
     @Test
